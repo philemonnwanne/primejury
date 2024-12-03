@@ -1,4 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Download, Share2 } from "lucide-react"
 
 interface Document {
   id: string
@@ -19,7 +21,17 @@ export function DocumentViewer({ document, onClose }: DocumentViewerProps) {
     <Dialog open={!!document} onOpenChange={() => onClose()}>
       <DialogContent className="max-w-4xl">
         <DialogHeader>
-          <DialogTitle>{document.name}</DialogTitle>
+          <DialogTitle className="flex items-center justify-between">
+            <span>{document.name}</span>
+            <div className="flex gap-2">
+              <Button variant="outline" size="icon">
+                <Download className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon">
+                <Share2 className="h-4 w-4" />
+              </Button>
+            </div>
+          </DialogTitle>
         </DialogHeader>
         <div className="aspect-video w-full bg-muted">
           {document.type === "PDF" ? (

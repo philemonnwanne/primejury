@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useToast } from "@/components/ui/use-toast"
+import { Upload } from "lucide-react"
 
 interface DocumentUploadProps {
   onSuccess: () => void
@@ -16,9 +17,29 @@ interface DocumentUploadProps {
 
 export function DocumentUpload({ onSuccess }: DocumentUploadProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [tags, setTags] = useState<string[]>([])
+  const [isDragging, setIsDragging] = useState(false)
   const [selectedCase, setSelectedCase] = useState("")
+  const [accessLevel, setAccessLevel] = useState<string>("")
   const { toast } = useToast()
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+    const file = e.dataTransfer.files[0]
+    if (file) {
+      setSelectedFile(file)
+    }
+  }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -28,10 +49,10 @@ export function DocumentUpload({ onSuccess }: DocumentUploadProps) {
   }
 
   const handleUpload = async () => {
-    if (!selectedFile || !selectedCase) {
+    if (!selectedFile || !selectedCase || !accessLevel) {
       toast({
         title: "Error",
-        description: "Please select a file and assign it to a case",
+        description: "Please fill in all required fields",
         variant: "destructive",
       })
       return
@@ -47,42 +68,67 @@ export function DocumentUpload({ onSuccess }: DocumentUploadProps) {
 
   return (
     <div className="space-y-6 pt-6">
-      <div className="grid w-full max-w-sm items-center gap-1.5">
-        <Input
-          type="file"
-          onChange={handleFileChange}
-          accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-        />
+      <div
+        className={`border-2 border-dashed rounded-lg p-8 text-center ${
+          isDragging ? "border-primary bg-primary/10" : "border-muted"
+        }`}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
+        <div className="mt-4">
+          <p className="text-sm text-muted-foreground">
+            Drag and drop your file here, or
+          </p>
+          <label
+            htmlFor="file-upload"
+            className="mt-2 cursor-pointer text-sm text-primary hover:underline"
+          >
+            browse to upload
+          </label>
+          <Input
+            id="file-upload"
+            type="file"
+            className="hidden"
+            onChange={handleFileChange}
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+          />
+        </div>
+        {selectedFile && (
+          <p className="mt-2 text-sm text-muted-foreground">
+            Selected: {selectedFile.name}
+          </p>
+        )}
       </div>
 
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Assign to Case</label>
-        <Select value={selectedCase} onValueChange={setSelectedCase}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select a case" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="case1">Smith vs. Johnson</SelectItem>
-            <SelectItem value="case2">Tech Corp Merger</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Assign to Case</label>
+          <Select value={selectedCase} onValueChange={setSelectedCase}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select a case" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="case1">Smith vs. Johnson</SelectItem>
+              <SelectItem value="case2">Tech Corp Merger</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
-      <div className="space-y-2">
-        <label className="text-sm font-medium">Tags</label>
-        <Select
-          value={tags[0]}
-          onValueChange={(value) => setTags([...tags, value])}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Add tags" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="evidence">Evidence</SelectItem>
-            <SelectItem value="contract">Contract</SelectItem>
-            <SelectItem value="filing">Filing</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Access Level</label>
+          <Select value={accessLevel} onValueChange={setAccessLevel}>
+            <SelectTrigger>
+              <SelectValue placeholder="Set access level" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="firm-wide">Firm-Wide</SelectItem>
+              <SelectItem value="lawyer-only">Lawyer-Only</SelectItem>
+              <SelectItem value="client-accessible">Client-Accessible</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <Button onClick={handleUpload} className="w-full">

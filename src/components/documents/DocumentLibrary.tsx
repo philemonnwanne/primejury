@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Download, Eye, Trash2 } from "lucide-react"
+import { Download, Eye, Share2, Search } from "lucide-react"
 import { DocumentViewer } from "./DocumentViewer"
 import {
   Select,
@@ -26,8 +26,8 @@ interface Document {
   type: string
   size: string
   uploadDate: string
-  tags: string[]
   case: string
+  accessLevel: "firm-wide" | "lawyer-only" | "client-accessible"
   url: string
 }
 
@@ -38,8 +38,8 @@ const mockDocuments: Document[] = [
     type: "PDF",
     size: "2.5 MB",
     uploadDate: "2024-02-20",
-    tags: ["Contract", "Evidence"],
     case: "Smith vs. Johnson",
+    accessLevel: "lawyer-only",
     url: "/documents/contract.pdf",
   },
   {
@@ -48,34 +48,45 @@ const mockDocuments: Document[] = [
     type: "Image",
     size: "1.2 MB",
     uploadDate: "2024-02-19",
-    tags: ["Evidence"],
     case: "Tech Corp Merger",
+    accessLevel: "firm-wide",
     url: "/documents/evidence.jpg",
   },
 ]
+
+const accessLevelColors = {
+  "firm-wide": "default",
+  "lawyer-only": "secondary",
+  "client-accessible": "outline",
+} as const
 
 export function DocumentLibrary() {
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [filterType, setFilterType] = useState<string>("all")
+  const [filterAccess, setFilterAccess] = useState<string>("all")
 
   const filteredDocuments = mockDocuments.filter((doc) => {
     const matchesSearch = doc.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
     const matchesType = filterType === "all" || doc.type === filterType
-    return matchesSearch && matchesType
+    const matchesAccess = filterAccess === "all" || doc.accessLevel === filterAccess
+    return matchesSearch && matchesType && matchesAccess
   })
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-4">
-        <Input
-          placeholder="Search documents..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-sm"
-        />
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <div className="relative flex-1">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search documents..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-8"
+          />
+        </div>
         <Select value={filterType} onValueChange={setFilterType}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Filter by type" />
@@ -85,6 +96,17 @@ export function DocumentLibrary() {
             <SelectItem value="PDF">PDF</SelectItem>
             <SelectItem value="Image">Image</SelectItem>
             <SelectItem value="Word">Word</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={filterAccess} onValueChange={setFilterAccess}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Access Level" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Access Levels</SelectItem>
+            <SelectItem value="firm-wide">Firm-Wide</SelectItem>
+            <SelectItem value="lawyer-only">Lawyer-Only</SelectItem>
+            <SelectItem value="client-accessible">Client-Accessible</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -97,8 +119,8 @@ export function DocumentLibrary() {
               <TableHead>Type</TableHead>
               <TableHead>Size</TableHead>
               <TableHead>Upload Date</TableHead>
-              <TableHead>Tags</TableHead>
               <TableHead>Case</TableHead>
+              <TableHead>Access Level</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -109,16 +131,12 @@ export function DocumentLibrary() {
                 <TableCell>{doc.type}</TableCell>
                 <TableCell>{doc.size}</TableCell>
                 <TableCell>{doc.uploadDate}</TableCell>
-                <TableCell>
-                  <div className="flex gap-1">
-                    {doc.tags.map((tag) => (
-                      <Badge key={tag} variant="secondary">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </TableCell>
                 <TableCell>{doc.case}</TableCell>
+                <TableCell>
+                  <Badge variant={accessLevelColors[doc.accessLevel]}>
+                    {doc.accessLevel}
+                  </Badge>
+                </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Button
@@ -132,7 +150,7 @@ export function DocumentLibrary() {
                       <Download className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" size="icon">
-                      <Trash2 className="h-4 w-4" />
+                      <Share2 className="h-4 w-4" />
                     </Button>
                   </div>
                 </TableCell>
