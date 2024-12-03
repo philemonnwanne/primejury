@@ -12,6 +12,7 @@ import Tasks from "./pages/dashboard/Tasks"
 import Documents from "./pages/dashboard/Documents"
 import Finance from "./pages/dashboard/Finance"
 import Analytics from "./pages/dashboard/Analytics"
+import Settings from "./pages/dashboard/Settings"
 
 const queryClient = new QueryClient()
 
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/dashboard/documents" element={<Documents />} />
           <Route path="/dashboard/finance" element={<Finance />} />
           <Route path="/dashboard/analytics" element={<Analytics />} />
+          <Route path="/dashboard/settings" element={<Settings />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
