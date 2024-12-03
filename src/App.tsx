@@ -13,7 +13,6 @@ import Documents from "./pages/dashboard/Documents"
 import Finance from "./pages/dashboard/Finance"
 import Analytics from "./pages/dashboard/Analytics"
 import Settings from "./pages/dashboard/Settings"
-import LawyerDashboard from "./pages/lawyer-dashboard/Overview"
 
 const queryClient = new QueryClient()
 
@@ -34,7 +33,6 @@ const App = () => (
           <Route path="/dashboard/finance" element={<Finance />} />
           <Route path="/dashboard/analytics" element={<Analytics />} />
           <Route path="/dashboard/settings" element={<Settings />} />
-          <Route path="/lawyer-dashboard" element={<LawyerDashboard />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
