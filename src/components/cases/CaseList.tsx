@@ -50,14 +50,14 @@ const mockCases: Case[] = [
 
 const priorityColors = {
   high: "destructive",
-  medium: "warning",
+  medium: "default",
   low: "secondary",
 } as const
 
 const statusColors = {
-  active: "success",
-  pending: "warning",
-  closed: "secondary",
+  active: "default",
+  pending: "secondary",
+  closed: "outline",
 } as const
 
 interface CaseListProps {
