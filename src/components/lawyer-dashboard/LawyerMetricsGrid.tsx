@@ -1,30 +1,34 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Briefcase, CheckSquare, Clock, Scale } from "lucide-react"
+import { Briefcase, CheckSquare, Clock, Scale, AlertOctagon, FileText } from "lucide-react"
 
 const metrics = [
   {
-    title: "My Active Cases",
-    value: "8",
-    description: "+1 from last week",
+    title: "Active Cases",
+    value: "14",
+    description: "8 high priority",
     icon: Briefcase,
+    trend: "+2 this month",
   },
   {
-    title: "Pending Tasks",
+    title: "Urgent Tasks",
     value: "5",
-    description: "2 high priority",
-    icon: CheckSquare,
-  },
-  {
-    title: "Next Hearing",
-    value: "2d 4h",
-    description: "Smith vs. Johnson",
-    icon: Clock,
+    description: "3 overdue",
+    icon: AlertOctagon,
+    trend: "-2 from last week",
   },
   {
     title: "Success Rate",
     value: "92%",
-    description: "+5% this quarter",
+    description: "Last 30 cases",
     icon: Scale,
+    trend: "+5% this quarter",
+  },
+  {
+    title: "Pending Reviews",
+    value: "7",
+    description: "Documents waiting",
+    icon: FileText,
+    trend: "2 urgent",
   },
 ]
 
@@ -41,9 +45,14 @@ export function LawyerMetricsGrid() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{metric.value}</div>
-            <p className="text-xs text-muted-foreground">
-              {metric.description}
-            </p>
+            <div className="space-y-1">
+              <p className="text-xs text-muted-foreground">
+                {metric.description}
+              </p>
+              <p className="text-xs font-medium text-primary">
+                {metric.trend}
+              </p>
+            </div>
           </CardContent>
         </Card>
       ))}
