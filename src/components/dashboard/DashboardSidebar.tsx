@@ -24,17 +24,17 @@ const menuItems = [
 export function DashboardSidebar() {
   return (
     <Sidebar>
-      <SidebarContent>
+      <SidebarContent className="pt-6">
         <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
-          <SidebarGroupContent>
+          <SidebarGroupLabel className="px-6 text-sm font-medium">Menu</SidebarGroupLabel>
+          <SidebarGroupContent className="mt-2">
             <SidebarMenu>
               {menuItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.title} className="px-3">
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
+                    <a href={item.url} className="flex items-center gap-3 px-3 py-2">
+                      <item.icon className="h-4 w-4" />
+                      <span className="text-sm">{item.title}</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
