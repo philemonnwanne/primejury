@@ -24,7 +24,7 @@ export function LawyerCalendar() {
   const today = new Date()
 
   return (
-    <Card>
+    <Card className="col-span-4">
       <CardHeader>
         <CardTitle>Calendar</CardTitle>
       </CardHeader>
