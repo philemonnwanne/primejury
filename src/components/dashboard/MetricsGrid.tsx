@@ -3,15 +3,15 @@ import { Briefcase, CheckSquare, Clock, TrendingUp } from "lucide-react"
 
 const metrics = [
   {
-    title: "Total Active Cases",
+    title: "Active Cases",
     value: "24",
     description: "+2 from last month",
     icon: Briefcase,
   },
   {
-    title: "Pending Tasks",
+    title: "Tasks Due",
     value: "12",
-    description: "-3 from last month",
+    description: "4 urgent",
     icon: CheckSquare,
   },
   {
@@ -32,7 +32,7 @@ export function MetricsGrid() {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {metrics.map((metric) => (
-        <Card key={metric.title}>
+        <Card key={metric.title} className="hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               {metric.title}

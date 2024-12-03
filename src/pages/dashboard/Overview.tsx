@@ -21,7 +21,7 @@ export default function DashboardOverview() {
             <CardHeader>
               <CardTitle>Case Status Distribution</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pl-2">
               <CaseStatusChart />
             </CardContent>
           </Card>
@@ -39,7 +39,7 @@ export default function DashboardOverview() {
         <div className="grid gap-4 md:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle>High Priority Tasks</CardTitle>
+              <CardTitle>Upcoming Tasks</CardTitle>
             </CardHeader>
             <CardContent>
               <TaskList />

@@ -1,20 +1,41 @@
 import { Button } from "@/components/ui/button"
-import { Plus, UserPlus, Upload } from "lucide-react"
+import { Plus, Upload, MessageSquare } from "lucide-react"
+import { useToast } from "@/components/ui/use-toast"
 
 export function QuickActions() {
+  const { toast } = useToast()
+
+  const handleAction = (action: string) => {
+    toast({
+      title: "Action Triggered",
+      description: `${action} action will be implemented in the next phase`,
+    })
+  }
+
   return (
-    <div className="flex flex-col gap-4">
-      <Button className="justify-start">
+    <div className="space-y-4">
+      <Button 
+        className="w-full justify-start" 
+        onClick={() => handleAction("New Task")}
+      >
         <Plus className="mr-2 h-4 w-4" />
-        Add New Case
+        Create New Task
       </Button>
-      <Button className="justify-start" variant="secondary">
-        <UserPlus className="mr-2 h-4 w-4" />
-        Assign Lawyer
-      </Button>
-      <Button className="justify-start" variant="secondary">
+      <Button 
+        className="w-full justify-start" 
+        variant="secondary"
+        onClick={() => handleAction("Upload Document")}
+      >
         <Upload className="mr-2 h-4 w-4" />
-        Upload Documents
+        Upload Document
+      </Button>
+      <Button 
+        className="w-full justify-start" 
+        variant="secondary"
+        onClick={() => handleAction("New Message")}
+      >
+        <MessageSquare className="mr-2 h-4 w-4" />
+        Send Message
       </Button>
     </div>
   )
