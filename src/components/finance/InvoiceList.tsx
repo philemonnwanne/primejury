@@ -53,7 +53,7 @@ export function InvoiceList() {
               <TableCell>${invoice.amount.toFixed(2)}</TableCell>
               <TableCell>
                 <Badge
-                  variant={invoice.status === "paid" ? "success" : "secondary"}
+                  variant={invoice.status === "paid" ? "default" : "secondary"}
                 >
                   {invoice.status}
                 </Badge>

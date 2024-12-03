@@ -3,7 +3,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts"
 
 const data = [
   { month: "Jan", revenue: 4000 },
@@ -52,9 +52,23 @@ export function RevenueChart() {
             style: { fill: "hsl(var(--primary))" },
           }}
         />
-        <ChartTooltip>
-          <ChartTooltipContent />
-        </ChartTooltip>
+        <Tooltip
+          content={({ active, payload, label }) => {
+            if (active && payload && payload.length) {
+              return (
+                <div className="rounded-lg border bg-background p-2 shadow-sm">
+                  <div className="grid grid-cols-2 gap-2">
+                    <span className="font-medium">{label}</span>
+                    <span className="font-medium">
+                      ${payload[0].value}
+                    </span>
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          }}
+        />
       </LineChart>
     </ChartContainer>
   )
