@@ -1,4 +1,4 @@
-import { LayoutDashboard, Briefcase, CheckSquare, FileText, BarChart2, Settings, Users } from "lucide-react"
+import { LayoutDashboard, Briefcase, CheckSquare, FileText, BarChart2, Settings, Users, DollarSign } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -16,6 +16,7 @@ const menuItems = [
   { title: "Staff", icon: Users, url: "/dashboard/staff" },
   { title: "Tasks", icon: CheckSquare, url: "/dashboard/tasks" },
   { title: "Documents", icon: FileText, url: "/dashboard/documents" },
+  { title: "Finance", icon: DollarSign, url: "/dashboard/finance" },
   { title: "Analytics", icon: BarChart2, url: "/dashboard/analytics" },
   { title: "Settings", icon: Settings, url: "/dashboard/settings" },
 ]

@@ -10,6 +10,7 @@ import Staff from "./pages/dashboard/Staff"
 import StaffProfile from "./pages/dashboard/StaffProfile"
 import Tasks from "./pages/dashboard/Tasks"
 import Documents from "./pages/dashboard/Documents"
+import Finance from "./pages/dashboard/Finance"
 
 const queryClient = new QueryClient()
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/dashboard/staff/:id" element={<StaffProfile />} />
           <Route path="/dashboard/tasks" element={<Tasks />} />
           <Route path="/dashboard/documents" element={<Documents />} />
+          <Route path="/dashboard/finance" element={<Finance />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
