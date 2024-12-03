@@ -13,6 +13,12 @@ import Documents from "./pages/dashboard/Documents"
 import Finance from "./pages/dashboard/Finance"
 import Analytics from "./pages/dashboard/Analytics"
 import Settings from "./pages/dashboard/Settings"
+import LawyerDashboard from "./pages/lawyer-dashboard/Overview"
+import LawyerCases from "./pages/lawyer-dashboard/Cases"
+import LawyerTasks from "./pages/lawyer-dashboard/Tasks"
+import LawyerDocuments from "./pages/lawyer-dashboard/Documents"
+import LawyerMessages from "./pages/lawyer-dashboard/Messages"
+import LawyerPerformance from "./pages/lawyer-dashboard/Performance"
 
 const queryClient = new QueryClient()
 
@@ -33,6 +39,12 @@ const App = () => (
           <Route path="/dashboard/finance" element={<Finance />} />
           <Route path="/dashboard/analytics" element={<Analytics />} />
           <Route path="/dashboard/settings" element={<Settings />} />
+          <Route path="/lawyer-dashboard" element={<LawyerDashboard />} />
+          <Route path="/lawyer-dashboard/cases" element={<LawyerCases />} />
+          <Route path="/lawyer-dashboard/tasks" element={<LawyerTasks />} />
+          <Route path="/lawyer-dashboard/documents" element={<LawyerDocuments />} />
+          <Route path="/lawyer-dashboard/messages" element={<LawyerMessages />} />
+          <Route path="/lawyer-dashboard/performance" element={<LawyerPerformance />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
