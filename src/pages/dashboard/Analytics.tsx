@@ -4,6 +4,7 @@ import { CaseDistributionChart } from "@/components/analytics/CaseDistributionCh
 import { LawyerPerformanceChart } from "@/components/analytics/LawyerPerformanceChart"
 import { RevenueAnalyticsChart } from "@/components/analytics/RevenueAnalyticsChart"
 import { AnalyticsFilters } from "@/components/analytics/AnalyticsFilters"
+import { ReportGenerator } from "@/components/analytics/ReportGenerator"
 
 export default function Analytics() {
   return (
@@ -22,6 +23,8 @@ export default function Analytics() {
         </div>
         
         <RevenueAnalyticsChart />
+        
+        <ReportGenerator />
       </div>
     </DashboardLayout>
   )
