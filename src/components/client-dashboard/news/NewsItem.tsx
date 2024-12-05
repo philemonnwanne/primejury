@@ -6,6 +6,12 @@ export interface NewsItemType {
   content: string
   date: string
   type: "all" | "legal" | "regulatory" | "industry"
+  scope: {
+    level: "world" | "national" | "state" | "local"
+    country?: string
+    state?: string
+  }
+  industryCategory: string
 }
 
 interface NewsItemProps {
