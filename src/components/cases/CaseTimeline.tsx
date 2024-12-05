@@ -1,12 +1,30 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Calendar, Clock, ArrowRight, Check } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Calendar, Clock, ArrowRight, Check, Info } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useState } from "react"
+import { TimelineEventDetails } from "./TimelineEventDetails"
 
 interface TimelineEvent {
   date: string
   title: string
   description: string
   status: "completed" | "current" | "upcoming"
+  details?: {
+    lawyerNotes?: string
+    evidenceRequests?: Array<{
+      id: string
+      description: string
+      status: "pending" | "received" | "rejected"
+      dueDate: string
+    }>
+    blockers?: Array<{
+      id: string
+      description: string
+      severity: "low" | "medium" | "high"
+      status: "active" | "resolved"
+    }>
+  }
 }
 
 interface CaseTimelineProps {
@@ -14,6 +32,8 @@ interface CaseTimelineProps {
 }
 
 export function CaseTimeline({ events }: CaseTimelineProps) {
+  const [selectedEvent, setSelectedEvent] = useState<TimelineEvent | null>(null)
+
   return (
     <Card>
       <CardHeader>
@@ -50,6 +70,14 @@ export function CaseTimeline({ events }: CaseTimelineProps) {
                   >
                     {event.title}
                   </p>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                    onClick={() => setSelectedEvent(event)}
+                  >
+                    <Info className="h-4 w-4" />
+                  </Button>
                   {index !== events.length - 1 && (
                     <div className="flex items-center text-muted-foreground">
                       <ArrowRight
@@ -96,6 +124,14 @@ export function CaseTimeline({ events }: CaseTimelineProps) {
           ))}
         </div>
       </CardContent>
+
+      {selectedEvent && (
+        <TimelineEventDetails
+          isOpen={!!selectedEvent}
+          onOpenChange={(open) => !open && setSelectedEvent(null)}
+          event={selectedEvent}
+        />
+      )}
     </Card>
   )
 }
