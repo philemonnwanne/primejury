@@ -36,7 +36,7 @@ export function CaseOverview({ estimatedDuration, subject, intakeFormId }: CaseO
               <p className="font-medium">Intake Form</p>
               <Button 
                 variant="link" 
-                className="h-auto p-0 text-blue-600 hover:text-blue-800 hover:underline"
+                className="h-auto p-0 text-primary hover:text-primary/80 hover:underline"
                 onClick={() => window.open(`/intake-forms/${intakeFormId}`, '_blank')}
               >
                 View Initial Intake Details
