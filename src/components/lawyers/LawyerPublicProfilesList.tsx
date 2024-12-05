@@ -1,14 +1,14 @@
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Mail, Phone, Award, Briefcase } from "lucide-react"
 import { publicLawyerProfiles } from "@/data/publicLawyerProfiles"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Checkbox } from "@/components/ui/checkbox"
 import { toast } from "sonner"
 import { useNavigate } from "react-router-dom"
+import { Button } from "@/components/ui/button"
 
 export function LawyerPublicProfilesList() {
   const [selectedLawyers, setSelectedLawyers] = useState<string[]>([])
@@ -115,7 +115,7 @@ export function LawyerPublicProfilesList() {
           disabled={selectedLawyers.length < 2 || selectedLawyers.length > 4}
           onClick={() => setShowComparison(true)}
         >
-          Compare Selected Lawyers ({selectedLawyers.length}/4)
+          Compare Selected ({selectedLawyers.length}/4)
         </Button>
       </div>
 
@@ -123,8 +123,11 @@ export function LawyerPublicProfilesList() {
         <DialogContent className="max-w-7xl">
           <DialogHeader>
             <DialogTitle>Lawyer Comparison</DialogTitle>
+            <DialogDescription>
+              Compare selected lawyers side by side
+            </DialogDescription>
           </DialogHeader>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {selectedLawyersData.map((lawyer) => (
               <div key={lawyer.id} className="space-y-4">
                 <div className="text-center">

@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { Toaster as Sonner } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Index from "./pages/Index"
 import DashboardOverview from "./pages/dashboard/Overview"
 import Cases from "./pages/dashboard/Cases"
@@ -25,7 +25,6 @@ import ClientForms from "./pages/client-dashboard/Forms"
 import ClientDocuments from "./pages/client-dashboard/Documents"
 import ClientInsights from "./pages/client-dashboard/Insights"
 import ClientNewsFeed from "./pages/client-dashboard/NewsFeed"
-import LawyerProfiles from "./pages/lawyers/LawyerProfiles"
 import LawyerPublicProfiles from "./pages/lawyers/LawyerPublicProfiles"
 import LawyerProfile from "./pages/lawyers/LawyerProfile"
 
@@ -60,9 +59,11 @@ const App = () => (
           <Route path="/client-dashboard/documents" element={<ClientDocuments />} />
           <Route path="/client-dashboard/insights" element={<ClientInsights />} />
           <Route path="/client-dashboard/news" element={<ClientNewsFeed />} />
-          <Route path="/lawyers" element={<LawyerProfiles />} />
-          <Route path="/lawyer-marketplace" element={<LawyerPublicProfiles />} />
+          {/* Consolidated lawyer routes */}
+          <Route path="/lawyers" element={<LawyerPublicProfiles />} />
           <Route path="/lawyers/:id" element={<LawyerProfile />} />
+          {/* Redirect old routes to new consolidated ones */}
+          <Route path="/lawyer-marketplace" element={<Navigate to="/lawyers" replace />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
