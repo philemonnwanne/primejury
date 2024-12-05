@@ -18,18 +18,29 @@ export default function ClientNewsFeed() {
   const [selectedScope, setSelectedScope] = useState<ScopeType>({ level: "world" })
   const [selectedIndustry, setSelectedIndustry] = useState<string>("all")
 
-  const filteredNews = mockNews.filter(news => {
-    if (news.sponsored) return true;
-    if (selectedType !== "all" && news.type !== selectedType) return false;
-    if (selectedScope.level !== news.scope.level) return false;
-    if (selectedScope.country && news.scope.country !== selectedScope.country) return false;
-    if (selectedScope.state && news.scope.state !== selectedScope.state) return false;
-    if (selectedIndustry !== "all" && news.industryCategory !== selectedIndustry) return false;
-    return true;
-  });
+  // Get all breaking news, unfiltered
+  const breakingNews = mockNews
+    .filter(news => news.breaking)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-  const breakingNews = filteredNews.filter(news => news.breaking);
-  const regularNews = filteredNews.filter(news => !news.breaking)
+  // Filter regular news according to user preferences
+  const filteredNews = mockNews
+    .filter(news => {
+      // Skip breaking news as they're handled separately
+      if (news.breaking) return false;
+      
+      // Always show sponsored content
+      if (news.sponsored) return true;
+      
+      // Apply filters
+      if (selectedType !== "all" && news.type !== selectedType) return false;
+      if (selectedScope.level !== news.scope.level) return false;
+      if (selectedScope.country && news.scope.country !== selectedScope.country) return false;
+      if (selectedScope.state && news.scope.state !== selectedScope.state) return false;
+      if (selectedIndustry !== "all" && news.industryCategory !== selectedIndustry) return false;
+      
+      return true;
+    })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (
@@ -44,6 +55,31 @@ export default function ClientNewsFeed() {
           </div>
         </div>
 
+        {/* Breaking News Section - Always visible */}
+        {breakingNews.length > 0 && (
+          <Card className="border-red-200 bg-red-50/30">
+            <CardContent className="pt-6">
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <span className="text-red-500">Breaking News</span>
+                <span className="text-xs text-red-500 bg-red-100 px-2 py-1 rounded-full">
+                  {breakingNews.length} Updates
+                </span>
+              </h2>
+              <ScrollArea className="w-full whitespace-nowrap rounded-md">
+                <div className="flex w-max space-x-4 p-4">
+                  {breakingNews.map((news) => (
+                    <div key={news.id} className="w-[600px]">
+                      <NewsItem news={news} />
+                    </div>
+                  ))}
+                </div>
+                <ScrollBar orientation="horizontal" />
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Filters Section */}
         <Card>
           <CardContent className="pt-6">
             <NewsFilters
@@ -55,24 +91,9 @@ export default function ClientNewsFeed() {
           </CardContent>
         </Card>
 
-        {breakingNews.length > 0 && (
-          <div className="relative">
-            <h2 className="text-xl font-semibold mb-4">Breaking News</h2>
-            <ScrollArea className="w-full whitespace-nowrap rounded-md">
-              <div className="flex w-max space-x-4 p-4">
-                {breakingNews.map((news) => (
-                  <div key={news.id} className="w-[600px]">
-                    <NewsItem news={news} />
-                  </div>
-                ))}
-              </div>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-          </div>
-        )}
-
+        {/* Regular News Section */}
         <div className="grid gap-4">
-          {regularNews.map((news) => (
+          {filteredNews.map((news) => (
             <NewsItem key={news.id} news={news} />
           ))}
         </div>
