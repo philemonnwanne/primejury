@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator"
 import { Mail, Phone, Award, BookOpen, Briefcase, GraduationCap, Globe } from "lucide-react"
 import { lawyerProfiles } from "@/data/lawyerProfiles"
 
-export default function LawyerProfileDetails() {
+export default function LawyerPublicProfileDetails() {
   const { id } = useParams()
   const lawyer = lawyerProfiles.find((l) => l.id === id)
 
