@@ -1,18 +1,15 @@
 import { useParams } from "react-router-dom"
-import { publicLawyerProfiles } from "@/data/publicLawyerProfiles"
+import { lawyerProfiles } from "@/data/lawyerProfiles"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Mail, Phone, Award, Briefcase } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { useState } from "react"
-import { toast } from "sonner"
+import { Mail, Phone, Award, Briefcase, Building2, GraduationCap, Globe2 } from "lucide-react"
+import { LawyerCalendar } from "@/components/lawyer-dashboard/LawyerCalendar"
+import { Separator } from "@/components/ui/separator"
 
 export default function LawyerProfile() {
   const { id } = useParams()
-  const lawyer = publicLawyerProfiles.find(l => l.id === id)
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
+  const lawyer = lawyerProfiles.find(l => l.id === id)
 
   if (!lawyer) {
     return (
@@ -20,14 +17,6 @@ export default function LawyerProfile() {
         <h1 className="text-2xl font-bold">Lawyer not found</h1>
       </div>
     )
-  }
-
-  const handleScheduleConsultation = () => {
-    if (selectedDate) {
-      toast.success("Consultation request sent successfully!")
-    } else {
-      toast.error("Please select a date for the consultation")
-    }
   }
 
   return (
@@ -59,12 +48,8 @@ export default function LawyerProfile() {
                     <span>{lawyer.phone}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Award className="h-4 w-4" />
-                    <span>{lawyer.yearsOfExperience} Years Experience</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Briefcase className="h-4 w-4" />
-                    <span>{lawyer.currentCaseload} Active Cases</span>
+                    <Building2 className="h-4 w-4" />
+                    <span>Current Law Firm</span>
                   </div>
                 </div>
               </div>
@@ -80,39 +65,89 @@ export default function LawyerProfile() {
                 </div>
               </div>
 
-              <div className="flex justify-between items-center">
-                <Badge variant="secondary">Success Rate: {lawyer.successRate}%</Badge>
-                {lawyer.proBono && (
-                  <Badge variant="outline" className="bg-green-50">
-                    Pro Bono Cases
-                  </Badge>
+              <Separator />
+
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Education</h3>
+                <div className="space-y-4">
+                  {lawyer.education.map((edu, index) => (
+                    <div key={index} className="flex items-start gap-2">
+                      <GraduationCap className="h-5 w-5 mt-1" />
+                      <div>
+                        <p className="font-medium">{edu.degree}</p>
+                        <p className="text-sm text-muted-foreground">{edu.institution}, {edu.year}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Professional Experience</h3>
+                <div className="space-y-4">
+                  {lawyer.experience.map((exp, index) => (
+                    <div key={index} className="space-y-2">
+                      <div className="flex justify-between">
+                        <p className="font-medium">{exp.position}</p>
+                        <span className="text-sm text-muted-foreground">{exp.duration}</span>
+                      </div>
+                      <p className="text-sm">{exp.company}</p>
+                      <p className="text-sm text-muted-foreground">{exp.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Achievements & Recognition</h3>
+                <ul className="list-disc list-inside space-y-2">
+                  {lawyer.achievements.map((achievement, index) => (
+                    <li key={index} className="text-sm">{achievement}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <Separator />
+
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Bar Admissions</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {lawyer.barAdmissions.map((admission, index) => (
+                      <Badge key={index} variant="outline">{admission}</Badge>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Languages</h3>
+                  <div className="flex items-center gap-2">
+                    <Globe2 className="h-4 w-4" />
+                    <span>{lawyer.languages.join(", ")}</span>
+                  </div>
+                </div>
+
+                {lawyer.publications && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-2">Publications</h3>
+                    <ul className="list-disc list-inside space-y-2">
+                      {lawyer.publications.map((publication, index) => (
+                        <li key={index} className="text-sm">{publication}</li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
               </div>
             </CardContent>
           </Card>
         </div>
 
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Schedule Consultation</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={setSelectedDate}
-                className="rounded-md border"
-                disabled={(date) => date < new Date()}
-              />
-              <Button 
-                className="w-full" 
-                onClick={handleScheduleConsultation}
-              >
-                Schedule Consultation
-              </Button>
-            </CardContent>
-          </Card>
+        <div>
+          <LawyerCalendar lawyerId={lawyer.id} />
         </div>
       </div>
     </div>
