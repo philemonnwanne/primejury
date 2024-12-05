@@ -140,25 +140,119 @@ const mockTimelineEvents = [
     title: "Case Filed",
     description: "Initial case documentation submitted to the court",
     status: "completed" as const,
+    details: {
+      lawyerNotes: "Initial filing completed successfully. All required documentation was properly submitted. Need to follow up on court's initial review timeline.\n\nKey points to address in next phase:\n- Gather additional witness statements\n- Review precedent cases\n- Prepare preliminary evidence list",
+      evidenceRequests: [
+        {
+          id: "er1",
+          description: "Original contract documents",
+          status: "received",
+          dueDate: "2024-01-30"
+        },
+        {
+          id: "er2",
+          description: "Email correspondence from 2023",
+          status: "pending",
+          dueDate: "2024-02-15"
+        }
+      ],
+      blockers: [
+        {
+          id: "b1",
+          description: "Awaiting court clerk verification of submitted documents",
+          severity: "low",
+          status: "resolved"
+        }
+      ]
+    }
   },
   {
     date: "2024-02-01",
     title: "Discovery Phase",
     description: "Started gathering evidence and documentation",
     status: "completed" as const,
+    details: {
+      lawyerNotes: "Discovery process initiated. Multiple document requests sent to opposing counsel.\n\nCritical areas of focus:\n- Financial records from 2020-2023\n- Communication records between parties\n- Expert witness identification",
+      evidenceRequests: [
+        {
+          id: "er3",
+          description: "Financial statements (2020-2023)",
+          status: "received",
+          dueDate: "2024-02-20"
+        },
+        {
+          id: "er4",
+          description: "Expert witness credentials",
+          status: "rejected",
+          dueDate: "2024-02-25"
+        }
+      ],
+      blockers: [
+        {
+          id: "b2",
+          description: "Opposing counsel requesting extension for document production",
+          severity: "medium",
+          status: "resolved"
+        }
+      ]
+    }
   },
   {
     date: "2024-02-15",
     title: "Motion Filed",
     description: "Motion for summary judgment submitted",
     status: "current" as const,
+    details: {
+      lawyerNotes: "Motion for summary judgment filed based on strong documentary evidence. Expecting opposition response within 14 days.\n\nKey arguments:\n- Contract breach clearly documented\n- Damages calculation supported by expert analysis\n- No material facts in dispute",
+      evidenceRequests: [
+        {
+          id: "er5",
+          description: "Updated damage calculation report",
+          status: "pending",
+          dueDate: "2024-03-01"
+        }
+      ],
+      blockers: [
+        {
+          id: "b3",
+          description: "Expert witness availability limited for next hearing",
+          severity: "high",
+          status: "active"
+        },
+        {
+          id: "b4",
+          description: "Missing crucial financial documentation from Q4 2023",
+          severity: "medium",
+          status: "active"
+        }
+      ]
+    }
   },
   {
     date: "2024-03-20",
     title: "Upcoming Hearing",
     description: "Scheduled court appearance for motion hearing",
     status: "upcoming" as const,
-  },
+    details: {
+      lawyerNotes: "Preparing for motion hearing. Need to focus on addressing potential opposition arguments.\n\nPreparation checklist:\n- Review all submitted evidence\n- Prepare oral arguments\n- Coordinate with expert witnesses",
+      evidenceRequests: [
+        {
+          id: "er6",
+          description: "Updated expert witness report",
+          status: "pending",
+          dueDate: "2024-03-15"
+        }
+      ],
+      blockers: [
+        {
+          id: "b5",
+          description: "Court reporter availability uncertain",
+          severity: "low",
+          status: "active"
+        }
+      ]
+    }
+  }
 ]
 
 export default function Insights() {
