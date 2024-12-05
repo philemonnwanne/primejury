@@ -1,5 +1,6 @@
 import { ClientDashboardLayout } from "@/layouts/ClientDashboardLayout"
 import { PreviousCaseCard } from "@/components/cases/PreviousCaseCard"
+import { CaseDetails } from "@/components/cases/CaseDetails"
 import {
   Select,
   SelectContent,
@@ -7,8 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-// Mock data for previous cases
 const mockPreviousCases = [
   {
     id: "1",
@@ -146,51 +147,64 @@ export default function Insights() {
           <h1 className="text-3xl font-bold tracking-tight">Case Insights</h1>
         </div>
 
-        <div className="flex flex-wrap gap-4">
-          <Select defaultValue="all">
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Case Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="civil">Civil</SelectItem>
-              <SelectItem value="criminal">Criminal</SelectItem>
-              <SelectItem value="family">Family Law</SelectItem>
-              <SelectItem value="immigration">Immigration</SelectItem>
-            </SelectContent>
-          </Select>
+        <Tabs defaultValue="current" className="space-y-6">
+          <TabsList>
+            <TabsTrigger value="current">Current Cases</TabsTrigger>
+            <TabsTrigger value="previous">Previous Cases</TabsTrigger>
+          </TabsList>
 
-          <Select defaultValue="all">
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="won">Won</SelectItem>
-              <SelectItem value="lost">Lost</SelectItem>
-              <SelectItem value="settled">Settled</SelectItem>
-              <SelectItem value="dismissed">Dismissed</SelectItem>
-            </SelectContent>
-          </Select>
+          <TabsContent value="current" className="space-y-6">
+            <CaseDetails caseId="1" />
+          </TabsContent>
 
-          <Select defaultValue="all">
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Location" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Locations</SelectItem>
-              <SelectItem value="sacramento">Sacramento</SelectItem>
-              <SelectItem value="san-francisco">San Francisco</SelectItem>
-              <SelectItem value="los-angeles">Los Angeles</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+          <TabsContent value="previous" className="space-y-6">
+            <div className="flex flex-wrap gap-4">
+              <Select defaultValue="all">
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Case Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Types</SelectItem>
+                  <SelectItem value="civil">Civil</SelectItem>
+                  <SelectItem value="criminal">Criminal</SelectItem>
+                  <SelectItem value="family">Family Law</SelectItem>
+                  <SelectItem value="immigration">Immigration</SelectItem>
+                </SelectContent>
+              </Select>
 
-        <div className="grid gap-6">
-          {mockPreviousCases.map((case_) => (
-            <PreviousCaseCard key={case_.id} caseData={case_} />
-          ))}
-        </div>
+              <Select defaultValue="all">
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="won">Won</SelectItem>
+                  <SelectItem value="lost">Lost</SelectItem>
+                  <SelectItem value="settled">Settled</SelectItem>
+                  <SelectItem value="dismissed">Dismissed</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select defaultValue="all">
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Location" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Locations</SelectItem>
+                  <SelectItem value="sacramento">Sacramento</SelectItem>
+                  <SelectItem value="san-francisco">San Francisco</SelectItem>
+                  <SelectItem value="los-angeles">Los Angeles</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid gap-6">
+              {mockPreviousCases.map((case_) => (
+                <PreviousCaseCard key={case_.id} caseData={case_} />
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </ClientDashboardLayout>
   )
