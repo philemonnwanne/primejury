@@ -3,7 +3,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { COUNTRIES, US_STATES, INDUSTRIES } from "./newsConstants"
 
 type NewsType = "all" | "legal" | "regulatory" | "industry"
-type ScopeLevel = "world" | "national" | "state" | "local"
+type ScopeLevel = "world" | "national"
 
 interface NewsFiltersProps {
   selectedType: NewsType
@@ -24,8 +24,9 @@ export function NewsFilters({
 
   const handleScopeLevelChange = (level: ScopeLevel) => {
     setScopeLevel(level)
-    const scope = { level }
-    onScopeChange(scope)
+    setSelectedCountry("")
+    setSelectedState("")
+    onScopeChange({ level })
   }
 
   const handleCountryChange = (country: string) => {
@@ -49,8 +50,6 @@ export function NewsFilters({
           <SelectContent>
             <SelectItem value="world">World</SelectItem>
             <SelectItem value="national">National</SelectItem>
-            <SelectItem value="state">State</SelectItem>
-            <SelectItem value="local">Local</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -72,7 +71,7 @@ export function NewsFilters({
         </div>
       )}
 
-      {scopeLevel === "state" && selectedCountry === "United States" && (
+      {scopeLevel === "national" && selectedCountry === "United States" && (
         <div className="w-[180px]">
           <Select value={selectedState} onValueChange={handleStateChange}>
             <SelectTrigger>
@@ -91,7 +90,7 @@ export function NewsFilters({
       )}
 
       <div className="w-[180px]">
-        <Select defaultValue="all">
+        <Select defaultValue="all" onValueChange={onIndustryChange}>
           <SelectTrigger>
             <SelectValue placeholder="Select Industry" />
           </SelectTrigger>
