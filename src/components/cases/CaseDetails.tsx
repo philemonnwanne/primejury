@@ -7,7 +7,19 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Calendar, User, Clock } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { 
+  Calendar,
+  User,
+  Clock,
+  FileText,
+  Upload,
+  Gavel,
+  MapPin,
+  Scale,
+  ScrollText,
+  DollarSign
+} from "lucide-react"
 
 interface CaseDetailsProps {
   caseId: string
@@ -18,94 +30,192 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
   const caseDetails = {
     title: "Smith vs. Johnson",
     type: "Civil Litigation",
-    client: {
-      name: "John Smith",
-      email: "john.smith@email.com",
-      phone: "(555) 123-4567",
+    estimatedDuration: "6-8 months",
+    subject: "Contract dispute regarding construction project delays",
+    lawyer: {
+      name: "Sarah Parker",
+      email: "sarah.parker@lawfirm.com",
+      phone: "(555) 123-4567"
     },
-    lawyer: "Sarah Parker",
+    judge: "Hon. Michael Roberts",
+    location: {
+      city: "Sacramento",
+      state: "California",
+      county: "Sacramento"
+    },
     status: "active",
     priority: "high",
     filingDate: "2024-01-15",
     nextHearing: "2024-03-20",
-    description: "Contract dispute regarding construction project delays.",
-    tasks: [
-      { id: "1", title: "File Motion", deadline: "2024-03-01", status: "pending" },
-      { id: "2", title: "Client Meeting", deadline: "2024-02-25", status: "completed" },
+    documents: [
+      { id: "1", title: "Initial Complaint", type: "Legal Filing", date: "2024-01-15" },
+      { id: "2", title: "Response to Complaint", type: "Legal Filing", date: "2024-02-01" },
+      { id: "3", title: "Evidence Package A", type: "Evidence", date: "2024-02-15" }
     ],
+    settlementOffers: [
+      { id: "1", amount: "$75,000", status: "pending", date: "2024-02-20" },
+      { id: "2", amount: "$50,000", status: "rejected", date: "2024-01-30" }
+    ],
+    relatedForms: [
+      { id: "1", title: "Motion for Summary Judgment", category: "Civil Procedure" },
+      { id: "2", title: "Discovery Request", category: "Evidence" },
+      { id: "3", title: "Settlement Agreement Template", category: "Settlement" }
+    ]
   }
 
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold">{caseDetails.title}</h2>
-        <p className="text-muted-foreground">{caseDetails.type}</p>
+        <div className="flex items-center gap-2 mt-2">
+          <Badge variant="secondary">{caseDetails.type}</Badge>
+          <Badge variant="outline">{caseDetails.status}</Badge>
+        </div>
       </div>
 
       <Separator />
 
       <Card>
         <CardHeader>
-          <CardTitle>Client Information</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          <div className="flex items-center space-x-2">
-            <User className="h-4 w-4 text-muted-foreground" />
-            <span>{caseDetails.client.name}</span>
-          </div>
-          <div>{caseDetails.client.email}</div>
-          <div>{caseDetails.client.phone}</div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Key Dates</CardTitle>
+          <CardTitle>Case Overview</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-              <span>Filing Date</span>
+          <div className="flex items-center space-x-2">
+            <Clock className="h-4 w-4 text-muted-foreground" />
+            <div>
+              <p className="font-medium">Estimated Duration</p>
+              <p className="text-sm text-muted-foreground">{caseDetails.estimatedDuration}</p>
             </div>
-            <span>{caseDetails.filingDate}</span>
           </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Clock className="h-4 w-4 text-muted-foreground" />
-              <span>Next Hearing</span>
+          <div className="flex items-center space-x-2">
+            <ScrollText className="h-4 w-4 text-muted-foreground" />
+            <div>
+              <p className="font-medium">Case Subject</p>
+              <p className="text-sm text-muted-foreground">{caseDetails.subject}</p>
             </div>
-            <span>{caseDetails.nextHearing}</span>
           </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Tasks</CardTitle>
-          <CardDescription>Associated tasks and deadlines</CardDescription>
+          <CardTitle>Legal Representatives</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center space-x-2">
+            <User className="h-4 w-4 text-muted-foreground" />
+            <div>
+              <p className="font-medium">Assigned Lawyer</p>
+              <p className="text-sm text-muted-foreground">{caseDetails.lawyer.name}</p>
+              <p className="text-sm text-muted-foreground">{caseDetails.lawyer.email}</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Gavel className="h-4 w-4 text-muted-foreground" />
+            <div>
+              <p className="font-medium">Presiding Judge</p>
+              <p className="text-sm text-muted-foreground">{caseDetails.judge}</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Case Location</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {caseDetails.tasks.map((task) => (
-              <div
-                key={task.id}
-                className="flex items-center justify-between rounded-lg border p-4"
-              >
+          <div className="flex items-center space-x-2">
+            <MapPin className="h-4 w-4 text-muted-foreground" />
+            <div>
+              <p className="text-sm text-muted-foreground">
+                {caseDetails.location.city}, {caseDetails.location.state}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {caseDetails.location.county} County
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Documents</CardTitle>
+          <CardDescription>Case-related documents and files</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {caseDetails.documents.map((doc) => (
+            <div
+              key={doc.id}
+              className="flex items-center justify-between rounded-lg border p-4"
+            >
+              <div className="flex items-center space-x-2">
+                <FileText className="h-4 w-4 text-muted-foreground" />
                 <div>
-                  <h4 className="font-medium">{task.title}</h4>
+                  <p className="font-medium">{doc.title}</p>
+                  <p className="text-sm text-muted-foreground">{doc.type} - {doc.date}</p>
+                </div>
+              </div>
+              <Button variant="ghost" size="sm">
+                View
+              </Button>
+            </div>
+          ))}
+          <Button className="w-full" variant="outline">
+            <Upload className="mr-2 h-4 w-4" />
+            Upload New Document
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Settlement Offers</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {caseDetails.settlementOffers.map((offer) => (
+            <div
+              key={offer.id}
+              className="flex items-center justify-between rounded-lg border p-4"
+            >
+              <div className="flex items-center space-x-2">
+                <DollarSign className="h-4 w-4 text-muted-foreground" />
+                <div>
+                  <p className="font-medium">{offer.amount}</p>
                   <p className="text-sm text-muted-foreground">
-                    Due: {task.deadline}
+                    {offer.date} - {offer.status}
                   </p>
                 </div>
-                <Badge
-                  variant={task.status === "completed" ? "secondary" : "default"}
-                >
-                  {task.status}
-                </Badge>
               </div>
-            ))}
-          </div>
+              <Badge variant={offer.status === "pending" ? "default" : "secondary"}>
+                {offer.status}
+              </Badge>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Related Forms</CardTitle>
+          <CardDescription>Forms and templates for your case</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {caseDetails.relatedForms.map((form) => (
+            <div
+              key={form.id}
+              className="flex items-center justify-between rounded-lg border p-4"
+            >
+              <div>
+                <p className="font-medium">{form.title}</p>
+                <p className="text-sm text-muted-foreground">{form.category}</p>
+              </div>
+              <Button variant="outline" size="sm">
+                Download
+              </Button>
+            </div>
+          ))}
         </CardContent>
       </Card>
     </div>
