@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { MessageSquare, Share2, ThumbsUp, Laugh, Frown, ThumbsDown, Heart } from "lucide-react"
+import { MessageSquare, Share2, ThumbsUp, Laugh, Frown, ThumbsDown, Heart, Globe, CheckCircle, AlertCircle } from "lucide-react"
 import { useState } from "react"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 
@@ -16,6 +16,11 @@ export interface NewsItemType {
     state?: string
   }
   industryCategory: string
+  source?: {
+    name: string
+    isVerified: boolean
+    url?: string
+  }
   media?: {
     type: "image" | "video"
     url: string
@@ -82,7 +87,31 @@ export function NewsItem({ news }: NewsItemProps) {
     <Card className="transition-all duration-200 hover:shadow-lg">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xl">{news.title}</CardTitle>
+          <div className="space-y-1">
+            <CardTitle className="text-xl">{news.title}</CardTitle>
+            {news.source && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Globe className="h-4 w-4" />
+                {news.source.url ? (
+                  <a 
+                    href={news.source.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:underline"
+                  >
+                    {news.source.name}
+                  </a>
+                ) : (
+                  <span>{news.source.name}</span>
+                )}
+                {news.source.isVerified ? (
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                ) : (
+                  <AlertCircle className="h-4 w-4 text-yellow-500" />
+                )}
+              </div>
+            )}
+          </div>
           <span className="text-sm text-muted-foreground">
             {new Date(news.date).toLocaleDateString()}
           </span>
