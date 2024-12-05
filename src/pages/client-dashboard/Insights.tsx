@@ -1,13 +1,8 @@
 import { ClientDashboardLayout } from "@/layouts/ClientDashboardLayout"
 import { PreviousCaseCard } from "@/components/cases/PreviousCaseCard"
 import { CaseDetails } from "@/components/cases/CaseDetails"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { InsightFilters } from "@/components/cases/InsightFilters"
+import { CaseTimeline } from "@/components/cases/CaseTimeline"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const mockPreviousCases = [
@@ -139,6 +134,29 @@ const mockPreviousCases = [
   },
 ]
 
+const mockTimelineEvents = [
+  {
+    date: "2024-01-15",
+    title: "Case Filed",
+    description: "Initial case documentation submitted to the court",
+  },
+  {
+    date: "2024-02-01",
+    title: "Discovery Phase",
+    description: "Started gathering evidence and documentation",
+  },
+  {
+    date: "2024-02-15",
+    title: "Motion Filed",
+    description: "Motion for summary judgment submitted",
+  },
+  {
+    date: "2024-03-20",
+    title: "Upcoming Hearing",
+    description: "Scheduled court appearance for motion hearing",
+  },
+]
+
 export default function Insights() {
   return (
     <ClientDashboardLayout>
@@ -154,50 +172,14 @@ export default function Insights() {
           </TabsList>
 
           <TabsContent value="current" className="space-y-6">
-            <CaseDetails caseId="1" />
+            <div className="grid gap-6 md:grid-cols-2">
+              <CaseDetails caseId="1" />
+              <CaseTimeline events={mockTimelineEvents} />
+            </div>
           </TabsContent>
 
           <TabsContent value="previous" className="space-y-6">
-            <div className="flex flex-wrap gap-4">
-              <Select defaultValue="all">
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Case Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="civil">Civil</SelectItem>
-                  <SelectItem value="criminal">Criminal</SelectItem>
-                  <SelectItem value="family">Family Law</SelectItem>
-                  <SelectItem value="immigration">Immigration</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select defaultValue="all">
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="won">Won</SelectItem>
-                  <SelectItem value="lost">Lost</SelectItem>
-                  <SelectItem value="settled">Settled</SelectItem>
-                  <SelectItem value="dismissed">Dismissed</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select defaultValue="all">
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Location" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Locations</SelectItem>
-                  <SelectItem value="sacramento">Sacramento</SelectItem>
-                  <SelectItem value="san-francisco">San Francisco</SelectItem>
-                  <SelectItem value="los-angeles">Los Angeles</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
+            <InsightFilters />
             <div className="grid gap-6">
               {mockPreviousCases.map((case_) => (
                 <PreviousCaseCard key={case_.id} caseData={case_} />
