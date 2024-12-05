@@ -77,3 +77,13 @@
     transform: translateY(0);
   }
 }
+
+.scroll-area-horizontal {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-area-horizontal::-webkit-scrollbar {
+  display: none;
+}
