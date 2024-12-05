@@ -146,13 +146,13 @@ const mockTimelineEvents = [
         {
           id: "er1",
           description: "Original contract documents",
-          status: "received",
+          status: "received" as const,
           dueDate: "2024-01-30"
         },
         {
           id: "er2",
           description: "Email correspondence from 2023",
-          status: "pending",
+          status: "pending" as const,
           dueDate: "2024-02-15"
         }
       ],
@@ -160,8 +160,8 @@ const mockTimelineEvents = [
         {
           id: "b1",
           description: "Awaiting court clerk verification of submitted documents",
-          severity: "low",
-          status: "resolved"
+          severity: "low" as const,
+          status: "resolved" as const
         }
       ]
     }
@@ -177,13 +177,13 @@ const mockTimelineEvents = [
         {
           id: "er3",
           description: "Financial statements (2020-2023)",
-          status: "received",
+          status: "received" as const,
           dueDate: "2024-02-20"
         },
         {
           id: "er4",
           description: "Expert witness credentials",
-          status: "rejected",
+          status: "rejected" as const,
           dueDate: "2024-02-25"
         }
       ],
@@ -191,8 +191,8 @@ const mockTimelineEvents = [
         {
           id: "b2",
           description: "Opposing counsel requesting extension for document production",
-          severity: "medium",
-          status: "resolved"
+          severity: "medium" as const,
+          status: "resolved" as const
         }
       ]
     }
@@ -208,7 +208,7 @@ const mockTimelineEvents = [
         {
           id: "er5",
           description: "Updated damage calculation report",
-          status: "pending",
+          status: "pending" as const,
           dueDate: "2024-03-01"
         }
       ],
@@ -216,14 +216,14 @@ const mockTimelineEvents = [
         {
           id: "b3",
           description: "Expert witness availability limited for next hearing",
-          severity: "high",
-          status: "active"
+          severity: "high" as const,
+          status: "active" as const
         },
         {
           id: "b4",
           description: "Missing crucial financial documentation from Q4 2023",
-          severity: "medium",
-          status: "active"
+          severity: "medium" as const,
+          status: "active" as const
         }
       ]
     }
@@ -239,7 +239,7 @@ const mockTimelineEvents = [
         {
           id: "er6",
           description: "Updated expert witness report",
-          status: "pending",
+          status: "pending" as const,
           dueDate: "2024-03-15"
         }
       ],
@@ -247,8 +247,8 @@ const mockTimelineEvents = [
         {
           id: "b5",
           description: "Court reporter availability uncertain",
-          severity: "low",
-          status: "active"
+          severity: "low" as const,
+          status: "active" as const
         }
       ]
     }
