@@ -2,6 +2,7 @@ import { ClientDashboardLayout } from "@/layouts/ClientDashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
+import { Link } from "react-router-dom"
 import {
   Select,
   SelectContent,
@@ -16,24 +17,48 @@ const cases = [
     title: "Property Dispute Resolution",
     status: "active",
     progress: 50,
+    stage: "Discovery Phase",
+    timeline: [
+      "Case Filed",
+      "Initial Hearing",
+      "Discovery Phase",
+      "Mediation",
+      "Trial Preparation",
+      "Trial",
+      "Resolution"
+    ]
   },
   {
     id: "2",
     title: "Contract Review",
-    status: "pending",
+    status: "active",
     progress: 25,
+    stage: "Initial Hearing",
+    timeline: [
+      "Case Filed",
+      "Initial Hearing",
+      "Document Review",
+      "Negotiation",
+      "Resolution"
+    ]
   },
   {
     id: "3",
     title: "Insurance Claim",
     status: "completed",
     progress: 100,
-  },
+    stage: "Resolved",
+    timeline: [
+      "Claim Filed",
+      "Investigation",
+      "Settlement Negotiation",
+      "Resolution"
+    ]
+  }
 ]
 
 const statusColors = {
   active: "text-green-600 bg-green-50",
-  pending: "text-yellow-600 bg-yellow-50",
   completed: "text-blue-600 bg-blue-50",
 }
 
@@ -66,7 +91,6 @@ export default function ClientCases() {
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
               <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
               <SelectItem value="completed">Completed</SelectItem>
             </SelectContent>
           </Select>
@@ -88,13 +112,18 @@ export default function ClientCases() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span>Progress</span>
+                    <span>{case_.stage}</span>
                     <span>{case_.progress}%</span>
                   </div>
                   <Progress value={case_.progress} />
+                  <div className="text-sm text-muted-foreground">
+                    Stage {case_.timeline.findIndex(stage => stage === case_.stage) + 1} of {case_.timeline.length}
+                  </div>
                 </div>
-                <Button variant="outline" className="w-full">
-                  View Details
+                <Button variant="outline" className="w-full" asChild>
+                  <Link to={`/client-dashboard/insights?caseId=${case_.id}`}>
+                    View Details
+                  </Link>
                 </Button>
               </CardContent>
             </Card>
