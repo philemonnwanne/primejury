@@ -7,7 +7,7 @@ import { MessageSquare, Send, User } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { lawyerProfiles } from "@/data/lawyerProfiles"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { cn } from "@/lib/utils"
 
 interface Message {
   id: string
@@ -81,84 +81,101 @@ export default function Communications() {
           <h1 className="text-3xl font-bold tracking-tight">Communications</h1>
         </div>
 
-        <Card className="h-[600px] flex flex-col">
-          <CardHeader className="space-y-4">
-            <CardTitle className="flex items-center gap-2">
-              <MessageSquare className="h-5 w-5" />
-              Secure Messages
-            </CardTitle>
-            {!lawyerId && (
-              <Select
-                value={selectedLawyer}
-                onValueChange={setSelectedLawyer}
-              >
-                <SelectTrigger className="w-[300px]">
-                  <SelectValue placeholder="Select a lawyer to message" />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableLawyers.map((lawyer) => (
-                    <SelectItem key={lawyer.id} value={lawyer.id}>
-                      <div className="flex items-center gap-2">
-                        <User className="h-4 w-4" />
-                        {lawyer.name}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-            {currentLawyer && (
-              <p className="text-sm text-muted-foreground">
-                Messaging with: {currentLawyer.name}
-              </p>
-            )}
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col">
-            <ScrollArea className="flex-1 pr-4">
-              <div className="space-y-4">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${
-                      message.isLawyer ? "justify-start" : "justify-end"
-                    }`}
+        <div className="grid grid-cols-12 gap-4 h-[600px]">
+          {/* Contacts List */}
+          <Card className="col-span-3 flex flex-col">
+            <CardHeader>
+              <CardTitle className="text-sm">Your Lawyers</CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 p-0">
+              <ScrollArea className="h-full">
+                {availableLawyers.map((lawyer) => (
+                  <button
+                    key={lawyer.id}
+                    onClick={() => setSelectedLawyer(lawyer.id)}
+                    className={cn(
+                      "w-full flex items-center gap-3 p-3 hover:bg-accent transition-colors",
+                      selectedLawyer === lawyer.id && "bg-accent"
+                    )}
                   >
+                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <User className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-medium">{lawyer.name}</p>
+                      <p className="text-xs text-muted-foreground">{lawyer.specialization}</p>
+                    </div>
+                  </button>
+                ))}
+              </ScrollArea>
+            </CardContent>
+          </Card>
+
+          {/* Messages Area */}
+          <Card className="col-span-9 flex flex-col">
+            <CardHeader className="border-b">
+              {currentLawyer ? (
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <User className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <CardTitle>{currentLawyer.name}</CardTitle>
+                    <p className="text-sm text-muted-foreground">{currentLawyer.specialization}</p>
+                  </div>
+                </div>
+              ) : (
+                <CardTitle>Select a lawyer to start messaging</CardTitle>
+              )}
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col p-4">
+              <ScrollArea className="flex-1 pr-4">
+                <div className="space-y-4">
+                  {messages.map((message) => (
                     <div
-                      className={`max-w-[80%] rounded-lg p-3 ${
-                        message.isLawyer
-                          ? "bg-muted"
-                          : "bg-primary text-primary-foreground"
+                      key={message.id}
+                      className={`flex ${
+                        message.isLawyer ? "justify-start" : "justify-end"
                       }`}
                     >
-                      <p className="text-sm font-medium">{message.senderName}</p>
-                      <p className="text-sm">{message.content}</p>
-                      <p className="text-xs opacity-70 mt-1">
-                        {message.timestamp.toLocaleTimeString()}
-                      </p>
+                      <div
+                        className={cn(
+                          "max-w-[80%] rounded-lg p-3",
+                          message.isLawyer
+                            ? "bg-muted"
+                            : "bg-primary text-primary-foreground"
+                        )}
+                      >
+                        <p className="text-sm font-medium">{message.senderName}</p>
+                        <p className="text-sm">{message.content}</p>
+                        <p className="text-xs opacity-70 mt-1">
+                          {message.timestamp.toLocaleTimeString()}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+              </ScrollArea>
+              <div className="flex gap-2 mt-4">
+                <Input
+                  placeholder="Type your message..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault()
+                      handleSendMessage()
+                    }
+                  }}
+                  disabled={!selectedLawyer}
+                />
+                <Button onClick={handleSendMessage} disabled={!selectedLawyer}>
+                  <Send className="h-4 w-4" />
+                </Button>
               </div>
-            </ScrollArea>
-            <div className="flex gap-2 mt-4">
-              <Input
-                placeholder="Type your message..."
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault()
-                    handleSendMessage()
-                  }
-                }}
-                disabled={!selectedLawyer}
-              />
-              <Button onClick={handleSendMessage} disabled={!selectedLawyer}>
-                <Send className="h-4 w-4" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </ClientDashboardLayout>
   )
