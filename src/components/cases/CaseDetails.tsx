@@ -120,61 +120,91 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
 
       <CaseLocation location={caseDetails.location} />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Settlement Offers</CardTitle>
-          <CardDescription>Review and manage settlement offers</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {caseDetails.settlementOffers.map((offer) => (
-            <div
-              key={offer.id}
-              className="flex items-center justify-between rounded-lg border p-4"
-            >
-              <div className="flex items-center space-x-4">
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
-                <div>
-                  <p className="font-medium">{offer.amount}</p>
-                  <p className="text-sm text-muted-foreground">
-                    Offered on {offer.date}
-                  </p>
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Settlement Offers</CardTitle>
+            <CardDescription>Review and manage settlement offers</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {caseDetails.settlementOffers.map((offer) => (
+              <div
+                key={offer.id}
+                className="flex flex-col sm:flex-row sm:items-center justify-between rounded-lg border p-4 space-y-2 sm:space-y-0"
+              >
+                <div className="flex items-center space-x-4">
+                  <DollarSign className="h-4 w-4 text-muted-foreground" />
+                  <div>
+                    <p className="font-medium">{offer.amount}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Offered on {offer.date}
+                    </p>
+                  </div>
                 </div>
+                {offer.status === "pending" && (
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        handleSettlementAction(offer.id, offer.amount, "accept")
+                      }
+                      className="text-green-600 hover:text-green-700"
+                    >
+                      Accept
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        handleSettlementAction(offer.id, offer.amount, "reject")
+                      }
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      Decline
+                    </Button>
+                  </div>
+                )}
+                {offer.status !== "pending" && (
+                  <Badge
+                    variant={offer.status === "accepted" ? "default" : "secondary"}
+                  >
+                    {offer.status}
+                  </Badge>
+                )}
               </div>
-              {offer.status === "pending" && (
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() =>
-                      handleSettlementAction(offer.id, offer.amount, "accept")
-                    }
-                    className="text-green-600 hover:text-green-700"
-                  >
-                    Accept
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() =>
-                      handleSettlementAction(offer.id, offer.amount, "reject")
-                    }
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    Decline
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Related Forms</CardTitle>
+            <CardDescription>Forms and templates for your case</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {caseDetails.relatedForms.map((form) => (
+              <div
+                key={form.id}
+                className="flex flex-col space-y-2 rounded-lg border p-4"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium">{form.title}</p>
+                    <p className="text-sm text-muted-foreground">{form.category}</p>
+                  </div>
+                  <Button variant="outline" size="sm">
+                    Download
                   </Button>
                 </div>
-              )}
-              {offer.status !== "pending" && (
-                <Badge
-                  variant={offer.status === "accepted" ? "default" : "secondary"}
-                >
-                  {offer.status}
-                </Badge>
-              )}
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+                <p className="text-sm text-muted-foreground">
+                  {formDescriptions[form.title as keyof typeof formDescriptions]}
+                </p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
 
       <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
         <AlertDialogContent>
