@@ -16,6 +16,8 @@ import {
   Scale,
   Clock
 } from "lucide-react"
+import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button"
 
 interface CaseDocument {
   id: string
@@ -45,6 +47,11 @@ interface PreviousCase {
     city: string
     state: string
     county: string
+    courthouse?: {
+      name: string
+      address: string
+      phone: string
+    }
   }
   status: "won" | "lost" | "settled" | "dismissed"
 }
@@ -100,7 +107,12 @@ export function PreviousCaseCard({ caseData }: PreviousCaseCardProps) {
               <User className="h-4 w-4 text-muted-foreground" />
               <div>
                 <p className="text-sm font-medium">Assigned Lawyer</p>
-                <p className="text-sm text-muted-foreground">{caseData.lawyer.name}</p>
+                <Link 
+                  to={`/lawyers/${caseData.lawyer.id}`}
+                  className="text-primary hover:text-primary/80 hover:underline"
+                >
+                  {caseData.lawyer.name}
+                </Link>
               </div>
             </div>
 
@@ -119,9 +131,11 @@ export function PreviousCaseCard({ caseData }: PreviousCaseCardProps) {
               <div>
                 <p className="text-sm font-medium">Location</p>
                 <p className="text-sm text-muted-foreground">
-                  {caseData.location.city}, {caseData.location.state}
+                  {caseData.location.courthouse?.name}
                   <br />
-                  {caseData.location.county} County
+                  {caseData.location.courthouse?.address}
+                  <br />
+                  {caseData.location.courthouse?.phone}
                 </p>
               </div>
             </div>
@@ -153,7 +167,13 @@ export function PreviousCaseCard({ caseData }: PreviousCaseCardProps) {
                     <p className="text-xs text-muted-foreground">{doc.type}</p>
                   </div>
                 </div>
-                <p className="text-xs text-muted-foreground">{doc.dateAdded}</p>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => window.open(`/documents/${doc.id}`, '_blank')}
+                >
+                  View
+                </Button>
               </div>
             ))}
           </div>
