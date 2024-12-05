@@ -32,21 +32,25 @@ export function CaseTypeForm() {
         if (findLawyerType === "self") {
           navigate(`/lawyers?state=${answers["State"] || ""}&caseType=${caseType || ""}`)
         } else {
-          // Store case with pending status and details
-          const caseData = {
-            ...answers,
-            caseType,
-            status: "pending",
-            details: caseDetails,
-          }
-          console.log("Submitting case for lawyer review:", caseData)
-          // Here you would typically make an API call to store the case
-          navigate("/client-dashboard/cases")
+          setCurrentStep(currentStep + 1)
         }
       } else {
         setCurrentStep(currentStep + 1)
       }
     }
+  }
+
+  const handleSubmit = () => {
+    // Store case with pending status and details
+    const caseData = {
+      ...answers,
+      caseType,
+      status: "pending_review",
+      details: caseDetails,
+    }
+    console.log("Submitting case for lawyer review:", caseData)
+    // Here you would typically make an API call to store the case
+    navigate("/client-dashboard/cases")
   }
 
   const initialFindLawyerOptions = [
@@ -111,17 +115,22 @@ export function CaseTypeForm() {
          currentStep > questions.length + 1 && (
           <div className="w-full px-4">
             <Textarea
-              placeholder="Please provide as much detail about your case as possible..."
+              placeholder="Please provide as much detail about your case as possible (max 700 characters)..."
               value={caseDetails}
-              onChange={(e) => setCaseDetails(e.target.value)}
+              onChange={(e) => setCaseDetails(e.target.value.slice(0, 700))}
               className="min-h-[200px]"
             />
-            <Button 
-              onClick={() => handleSelect("complete", "final")}
-              className="mt-4"
-            >
-              Submit Case for Review
-            </Button>
+            <div className="flex justify-between items-center mt-2">
+              <span className="text-sm text-muted-foreground">
+                {caseDetails.length}/700 characters
+              </span>
+              <Button 
+                onClick={handleSubmit}
+                className="mt-4"
+              >
+                Submit Case for Review
+              </Button>
+            </div>
           </div>
         )}
       </div>

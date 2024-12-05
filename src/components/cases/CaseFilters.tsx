@@ -25,6 +25,7 @@ export function CaseFilters() {
         <SelectContent>
           <SelectItem value="active">Active</SelectItem>
           <SelectItem value="pending">Pending</SelectItem>
+          <SelectItem value="pending_review">Pending Lawyer Review</SelectItem>
           <SelectItem value="closed">Closed</SelectItem>
         </SelectContent>
       </Select>

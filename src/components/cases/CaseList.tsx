@@ -14,7 +14,7 @@ interface Case {
   type: string
   client: string
   lawyer: string
-  status: "active" | "pending" | "closed"
+  status: "active" | "pending" | "pending_review" | "closed"
   priority: "high" | "medium" | "low"
 }
 
@@ -52,7 +52,7 @@ const mockCases: Case[] = [
     type: "Civil",
     client: "Jane Doe",
     lawyer: "Pending Assignment",
-    status: "pending",
+    status: "pending_review",
     priority: "medium",
   }
 ]
@@ -66,6 +66,7 @@ const priorityColors = {
 const statusColors = {
   active: "default",
   pending: "secondary",
+  pending_review: "secondary",
   closed: "outline",
 } as const
 
@@ -100,7 +101,9 @@ export function CaseList({ onCaseSelect }: CaseListProps) {
               <TableCell>{case_.lawyer}</TableCell>
               <TableCell>
                 <Badge variant={statusColors[case_.status]}>
-                  {case_.status === "pending" ? "Pending Acceptance" : case_.status}
+                  {case_.status === "pending" ? "Pending Acceptance" : 
+                   case_.status === "pending_review" ? "Pending Lawyer Review" :
+                   case_.status}
                 </Badge>
               </TableCell>
               <TableCell>
