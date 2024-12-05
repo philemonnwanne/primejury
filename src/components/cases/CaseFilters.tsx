@@ -24,9 +24,8 @@ export function CaseFilters() {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="active">Active</SelectItem>
-          <SelectItem value="pending">Pending</SelectItem>
           <SelectItem value="pending_review">Pending Lawyer Review</SelectItem>
-          <SelectItem value="closed">Closed</SelectItem>
+          <SelectItem value="completed">Completed</SelectItem>
         </SelectContent>
       </Select>
       <Select>

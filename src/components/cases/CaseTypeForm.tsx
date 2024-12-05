@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { CaseTypeSelect } from "./CaseTypeSelect"
 import { Textarea } from "@/components/ui/textarea"
 import { caseTypeQuestions, type CaseType } from "./questions/caseTypeQuestions"
+import { toast } from "sonner"
 
 export function CaseTypeForm() {
   const navigate = useNavigate()
@@ -50,6 +51,7 @@ export function CaseTypeForm() {
     }
     console.log("Submitting case for lawyer review:", caseData)
     // Here you would typically make an API call to store the case
+    toast.success("Case submitted successfully for lawyer review")
     navigate("/client-dashboard/cases")
   }
 
