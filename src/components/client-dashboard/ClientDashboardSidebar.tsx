@@ -26,7 +26,7 @@ const menuItems = [
 
 export function ClientDashboardSidebar() {
   return (
-    <Sidebar>
+    <Sidebar className="sticky top-0 h-screen">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
