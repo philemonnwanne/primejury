@@ -122,61 +122,55 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Documents</CardTitle>
-          <CardDescription>Case-related documents and files</CardDescription>
+          <CardTitle>Settlement Offers</CardTitle>
+          <CardDescription>Review and manage settlement offers</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {caseDetails.documents.map((doc) => (
+          {caseDetails.settlementOffers.map((offer) => (
             <div
-              key={doc.id}
+              key={offer.id}
               className="flex items-center justify-between rounded-lg border p-4"
             >
-              <div className="flex items-center space-x-2">
-                <FileText className="h-4 w-4 text-muted-foreground" />
+              <div className="flex items-center space-x-4">
+                <DollarSign className="h-4 w-4 text-muted-foreground" />
                 <div>
-                  <p className="font-medium">{doc.title}</p>
-                  <p className="text-sm text-muted-foreground">{doc.type} - {doc.date}</p>
+                  <p className="font-medium">{offer.amount}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Offered on {offer.date}
+                  </p>
                 </div>
               </div>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => window.open(`/documents/${doc.id}`, '_blank')}
-              >
-                View
-              </Button>
-            </div>
-          ))}
-          <Button className="w-full" variant="outline">
-            <Upload className="mr-2 h-4 w-4" />
-            Upload New Document
-          </Button>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Related Forms</CardTitle>
-          <CardDescription>Forms and templates for your case</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {caseDetails.relatedForms.map((form) => (
-            <div
-              key={form.id}
-              className="flex flex-col space-y-2 rounded-lg border p-4"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">{form.title}</p>
-                  <p className="text-sm text-muted-foreground">{form.category}</p>
+              {offer.status === "pending" && (
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      handleSettlementAction(offer.id, offer.amount, "accept")
+                    }
+                    className="text-green-600 hover:text-green-700"
+                  >
+                    Accept
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      handleSettlementAction(offer.id, offer.amount, "reject")
+                    }
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    Decline
+                  </Button>
                 </div>
-                <Button variant="outline" size="sm">
-                  Download
-                </Button>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                {formDescriptions[form.title as keyof typeof formDescriptions]}
-              </p>
+              )}
+              {offer.status !== "pending" && (
+                <Badge
+                  variant={offer.status === "accepted" ? "default" : "secondary"}
+                >
+                  {offer.status}
+                </Badge>
+              )}
             </div>
           ))}
         </CardContent>
