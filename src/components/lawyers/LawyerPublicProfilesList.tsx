@@ -6,20 +6,28 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Mail, Phone, Award, Briefcase } from "lucide-react"
 import { publicLawyerProfiles } from "@/data/publicLawyerProfiles"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Checkbox } from "@/components/ui/checkbox"
 import { toast } from "sonner"
+import { useNavigate } from "react-router-dom"
 
 export function LawyerPublicProfilesList() {
   const [selectedLawyers, setSelectedLawyers] = useState<string[]>([])
   const [showComparison, setShowComparison] = useState(false)
+  const navigate = useNavigate()
 
-  const handleToggleSelect = (lawyerId: string) => {
+  const handleToggleSelect = (event: React.MouseEvent, lawyerId: string) => {
+    event.stopPropagation()
     if (selectedLawyers.includes(lawyerId)) {
       setSelectedLawyers(selectedLawyers.filter(id => id !== lawyerId))
-    } else if (selectedLawyers.length < 3) {
+    } else if (selectedLawyers.length < 4) {
       setSelectedLawyers([...selectedLawyers, lawyerId])
     } else {
-      toast.error("You can only compare up to 3 lawyers at a time")
+      toast.error("You can only compare up to 4 lawyers at a time")
     }
+  }
+
+  const handleCardClick = (lawyerId: string) => {
+    navigate(`/lawyers/${lawyerId}`)
   }
 
   const selectedLawyersData = publicLawyerProfiles.filter(lawyer => 
@@ -30,15 +38,21 @@ export function LawyerPublicProfilesList() {
     <>
       <div className="grid gap-6 md:grid-cols-2">
         {publicLawyerProfiles.map((lawyer) => (
-          <Card key={lawyer.id} className="hover:shadow-lg transition-shadow relative">
-            <Button
-              variant={selectedLawyers.includes(lawyer.id) ? "default" : "outline"}
-              size="sm"
-              className="absolute top-2 right-2 z-10 text-xs px-2 py-1 h-7"
-              onClick={() => handleToggleSelect(lawyer.id)}
-            >
-              {selectedLawyers.includes(lawyer.id) ? "Selected" : "Compare"}
-            </Button>
+          <Card 
+            key={lawyer.id} 
+            className="hover:shadow-lg transition-shadow relative cursor-pointer"
+            onClick={() => handleCardClick(lawyer.id)}
+          >
+            <div className="absolute top-2 right-2 z-10">
+              <Checkbox
+                checked={selectedLawyers.includes(lawyer.id)}
+                onCheckedChange={(checked) => {
+                  const event = { stopPropagation: () => {} } as React.MouseEvent
+                  handleToggleSelect(event, lawyer.id)
+                }}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
             <CardHeader>
               <div className="flex items-center gap-4">
                 <Avatar className="h-16 w-16">
@@ -98,10 +112,10 @@ export function LawyerPublicProfilesList() {
       <div className="fixed bottom-6 right-6">
         <Button 
           className="px-4 py-2 shadow-lg"
-          disabled={selectedLawyers.length !== 3}
+          disabled={selectedLawyers.length < 2 || selectedLawyers.length > 4}
           onClick={() => setShowComparison(true)}
         >
-          Compare Selected Lawyers ({selectedLawyers.length}/3)
+          Compare Selected Lawyers ({selectedLawyers.length}/4)
         </Button>
       </div>
 

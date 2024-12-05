@@ -1,6 +1,7 @@
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { addMonths } from "date-fns"
 
 const events = [
   {
@@ -22,17 +23,20 @@ const events = [
 
 export function LawyerCalendar() {
   const today = new Date()
+  const sixMonthsFromNow = addMonths(today, 6)
 
   return (
     <Card className="col-span-4">
       <CardHeader>
-        <CardTitle>Calendar</CardTitle>
+        <CardTitle>Schedule a Consultation</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4 md:grid-cols-[1fr_250px]">
           <Calendar
             mode="single"
             selected={today}
+            fromDate={today}
+            toDate={sixMonthsFromNow}
             className="rounded-md border"
           />
           <div className="space-y-4">
