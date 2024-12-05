@@ -37,7 +37,6 @@ export default function LawyerProfiles() {
     if (filters.successRate[0] > lawyer.successRate || filters.successRate[1] < lawyer.successRate) {
       return false;
     }
-    // Add more filter conditions as needed
     return true;
   });
 
