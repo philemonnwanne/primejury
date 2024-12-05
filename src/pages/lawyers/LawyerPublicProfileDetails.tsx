@@ -8,6 +8,9 @@ import { lawyerProfiles } from "@/data/lawyerProfiles"
 
 export default function LawyerPublicProfileDetails() {
   const { id } = useParams()
+  console.log("Looking for lawyer with ID:", id)
+  console.log("Available lawyers:", lawyerProfiles.map(l => l.id))
+  
   const lawyer = lawyerProfiles.find((l) => l.id === id)
 
   if (!lawyer) {
@@ -15,6 +18,7 @@ export default function LawyerPublicProfileDetails() {
       <DashboardLayout>
         <div className="text-center py-12">
           <h2 className="text-2xl font-bold">Lawyer not found</h2>
+          <p className="text-muted-foreground mt-2">The lawyer profile you're looking for doesn't exist.</p>
         </div>
       </DashboardLayout>
     )
