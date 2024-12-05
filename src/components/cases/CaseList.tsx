@@ -46,6 +46,15 @@ const mockCases: Case[] = [
     status: "closed",
     priority: "low",
   },
+  {
+    id: "4",
+    title: "Personal Injury Case",
+    type: "Civil",
+    client: "Jane Doe",
+    lawyer: "Pending Assignment",
+    status: "pending",
+    priority: "medium",
+  }
 ]
 
 const priorityColors = {
@@ -56,7 +65,7 @@ const priorityColors = {
 
 const statusColors = {
   active: "default",
-  pending: "secondary",
+  pending: "warning",
   closed: "outline",
 } as const
 
@@ -90,7 +99,9 @@ export function CaseList({ onCaseSelect }: CaseListProps) {
               <TableCell>{case_.client}</TableCell>
               <TableCell>{case_.lawyer}</TableCell>
               <TableCell>
-                <Badge variant={statusColors[case_.status]}>{case_.status}</Badge>
+                <Badge variant={statusColors[case_.status]}>
+                  {case_.status === "pending" ? "Pending Acceptance" : case_.status}
+                </Badge>
               </TableCell>
               <TableCell>
                 <Badge variant={priorityColors[case_.priority]}>

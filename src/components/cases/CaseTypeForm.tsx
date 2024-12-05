@@ -2,36 +2,56 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Progress } from "@/components/ui/progress"
 import { CaseTypeSelect } from "./CaseTypeSelect"
+import { Textarea } from "@/components/ui/textarea"
 import { caseTypeQuestions, type CaseType } from "./questions/caseTypeQuestions"
 
 export function CaseTypeForm() {
   const navigate = useNavigate()
+  const [findLawyerType, setFindLawyerType] = useState<string | null>(null)
   const [caseType, setCaseType] = useState<CaseType | null>(null)
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [currentStep, setCurrentStep] = useState(0)
+  const [caseDetails, setCaseDetails] = useState("")
 
   const handleSelect = (value: string, question: string) => {
     const newAnswers = { ...answers, [question]: value }
     setAnswers(newAnswers)
 
-    if (question === "Case Type") {
-      setCaseType(value as CaseType)
+    if (question === "Find Lawyer Type") {
+      setFindLawyerType(value)
       setCurrentStep(1)
+    } else if (question === "Case Type") {
+      setCaseType(value as CaseType)
+      setCurrentStep(2)
     } else {
       const questions = caseType ? caseTypeQuestions[caseType] : []
-      const isLastQuestion = currentStep === questions.length
-      
+      const isLastQuestion = currentStep === questions.length + 1
+
       if (isLastQuestion) {
-        navigate(`/lawyer-marketplace?state=${answers["State"] || ""}&caseType=${caseType || ""}`)
+        if (findLawyerType === "self") {
+          navigate(`/lawyers?state=${answers["State"] || ""}&caseType=${caseType || ""}`)
+        } else {
+          // Store case with pending status and details
+          const caseData = {
+            ...answers,
+            caseType,
+            status: "pending",
+            details: caseDetails,
+          }
+          console.log("Submitting case for lawyer review:", caseData)
+          // Here you would typically make an API call to store the case
+          navigate("/client-dashboard/cases")
+        }
       } else {
         setCurrentStep(currentStep + 1)
       }
     }
   }
 
-  const questions = caseType ? caseTypeQuestions[caseType] : []
-  const totalSteps = questions.length + 1
-  const progress = (currentStep / totalSteps) * 100
+  const initialFindLawyerOptions = [
+    { value: "self", label: "I want to find a lawyer myself" },
+    { value: "review", label: "I want lawyers to review my case" },
+  ]
 
   const initialCaseTypeOptions = [
     { value: "criminal", label: "Criminal Law" },
@@ -43,6 +63,10 @@ export function CaseTypeForm() {
     { value: "family", label: "Family Law" },
   ]
 
+  const questions = caseType ? caseTypeQuestions[caseType] : []
+  const totalSteps = questions.length + (findLawyerType === "review" ? 3 : 2)
+  const progress = (currentStep / totalSteps) * 100
+
   return (
     <div className="space-y-6">
       <div className="w-full px-4">
@@ -51,15 +75,27 @@ export function CaseTypeForm() {
       
       <div className="flex gap-4 flex-wrap items-start px-4">
         <div className="flex-none">
-          <CaseTypeSelect
-            question="Case Type"
-            options={initialCaseTypeOptions}
-            onValueChange={(value) => handleSelect(value, "Case Type")}
-          />
+          {currentStep === 0 && (
+            <CaseTypeSelect
+              question="Find Lawyer Type"
+              options={initialFindLawyerOptions}
+              onValueChange={(value) => handleSelect(value, "Find Lawyer Type")}
+            />
+          )}
         </div>
 
+        {findLawyerType && currentStep >= 1 && (
+          <div className="flex-none">
+            <CaseTypeSelect
+              question="Case Type"
+              options={initialCaseTypeOptions}
+              onValueChange={(value) => handleSelect(value, "Case Type")}
+            />
+          </div>
+        )}
+
         {caseType && questions.map((step, index) => (
-          currentStep > index && (
+          currentStep > index + 1 && (
             <div key={step.question} className="flex-none">
               <CaseTypeSelect
                 question={step.question}
@@ -69,6 +105,24 @@ export function CaseTypeForm() {
             </div>
           )
         ))}
+
+        {findLawyerType === "review" && 
+         currentStep > questions.length + 1 && (
+          <div className="w-full px-4">
+            <Textarea
+              placeholder="Please provide as much detail about your case as possible..."
+              value={caseDetails}
+              onChange={(e) => setCaseDetails(e.target.value)}
+              className="min-h-[200px]"
+            />
+            <Button 
+              onClick={() => handleSelect("complete", "final")}
+              className="mt-4"
+            >
+              Submit Case for Review
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   )
