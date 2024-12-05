@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { NewsFilters } from "@/components/client-dashboard/news/NewsFilters"
-import { NewsItem, NewsItemType } from "@/components/client-dashboard/news/NewsItem"
+import { NewsItem } from "@/components/client-dashboard/news/NewsItem"
+import { NewsItemType } from "@/components/client-dashboard/news/types"
 import { mockNews } from "@/components/client-dashboard/news/mockData"
 import { ClientDashboardLayout } from "@/layouts/ClientDashboardLayout"
 

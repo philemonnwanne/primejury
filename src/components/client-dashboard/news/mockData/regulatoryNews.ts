@@ -1,4 +1,4 @@
-import { NewsItemType } from "../NewsItem"
+import { NewsItemType } from "../types"
 
 export const regulatoryNews: NewsItemType[] = [
   {
