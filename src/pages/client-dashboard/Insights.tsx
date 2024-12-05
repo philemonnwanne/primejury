@@ -52,7 +52,7 @@ const mockPreviousCases = [
       state: "California",
       county: "Sacramento",
     },
-    status: "settled",
+    status: "settled" as const,
   },
   {
     id: "2",
@@ -90,7 +90,7 @@ const mockPreviousCases = [
       state: "California",
       county: "San Francisco",
     },
-    status: "won",
+    status: "won" as const,
   },
   {
     id: "3",
@@ -134,7 +134,7 @@ const mockPreviousCases = [
       state: "California",
       county: "Los Angeles",
     },
-    status: "won",
+    status: "won" as const,
   },
 ]
 
