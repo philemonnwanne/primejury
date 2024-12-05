@@ -4,10 +4,6 @@ import { LawyerQuickActions } from "@/components/lawyer-dashboard/LawyerQuickAct
 import { LawyerCalendar } from "@/components/lawyer-dashboard/LawyerCalendar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
-// For demo purposes, we're using a hardcoded lawyer ID
-// In a real application, this would come from authentication or context
-const DEMO_LAWYER_ID = "1"
-
 export default function LawyerDashboard() {
   return (
     <LawyerDashboardLayout>
@@ -19,7 +15,7 @@ export default function LawyerDashboard() {
         <LawyerMetricsGrid />
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <LawyerCalendar lawyerId={DEMO_LAWYER_ID} />
+          <LawyerCalendar />
           
           <Card className="col-span-3">
             <CardHeader>
