@@ -139,21 +139,25 @@ const mockTimelineEvents = [
     date: "2024-01-15",
     title: "Case Filed",
     description: "Initial case documentation submitted to the court",
+    status: "completed" as const,
   },
   {
     date: "2024-02-01",
     title: "Discovery Phase",
     description: "Started gathering evidence and documentation",
+    status: "completed" as const,
   },
   {
     date: "2024-02-15",
     title: "Motion Filed",
     description: "Motion for summary judgment submitted",
+    status: "current" as const,
   },
   {
     date: "2024-03-20",
     title: "Upcoming Hearing",
     description: "Scheduled court appearance for motion hearing",
+    status: "upcoming" as const,
   },
 ]
 
