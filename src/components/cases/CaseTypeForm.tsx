@@ -52,7 +52,7 @@ export function CaseTypeForm() {
     console.log("Submitting case for lawyer review:", caseData)
     // Here you would typically make an API call to store the case
     toast.success("Case submitted successfully for lawyer review")
-    navigate("/client-dashboard/cases")
+    navigate("/client-dashboard/cases", { replace: true })
   }
 
   const initialFindLawyerOptions = [
