@@ -1,78 +1,55 @@
 export interface PublicLawyerProfile {
-  id: string
-  name: string
-  title: string
-  email: string
-  phone: string
-  specialization: string[]
-  yearsOfExperience: number
-  successRate: number
-  proBono: boolean
-  currentCaseload: number
-  gender: string
-  ethnicity: string
-  stateLicensed: string[]
+  id: string;
+  name: string;
+  title: string;
+  email: string;
+  phone: string;
+  yearsOfExperience: number;
+  currentCaseload: number;
+  specialization: string[];
+  successRate: number;
+  proBono: boolean;
+  imageUrl: string;
 }
 
 export const publicLawyerProfiles: PublicLawyerProfile[] = [
   {
-    id: "sarah-parker",
-    name: "Sarah Parker",
+    id: "1",
+    name: "Sarah Johnson",
     title: "Senior Partner",
-    email: "sarah.parker@lawfirm.com",
+    email: "sarah.j@lawfirm.com",
     phone: "(555) 123-4567",
-    specialization: ["Civil Litigation", "Product Liability", "Corporate Law"],
     yearsOfExperience: 15,
+    currentCaseload: 8,
+    specialization: ["Criminal Law", "Civil Rights"],
     successRate: 92,
     proBono: true,
-    currentCaseload: 15,
-    gender: "female",
-    ethnicity: "white",
-    stateLicensed: ["CA", "NY"]
+    imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
   },
   {
-    id: "michael-chang",
-    name: "Michael Chang",
-    title: "Partner",
-    email: "michael.chang@lawfirm.com",
+    id: "2",
+    name: "Michael Chen",
+    title: "Associate",
+    email: "m.chen@lawfirm.com",
     phone: "(555) 234-5678",
-    specialization: ["Corporate Law", "Mergers & Acquisitions"],
-    yearsOfExperience: 12,
+    yearsOfExperience: 8,
+    currentCaseload: 12,
+    specialization: ["Corporate Law", "Intellectual Property"],
     successRate: 88,
     proBono: false,
-    currentCaseload: 12,
-    gender: "male",
-    ethnicity: "asian",
-    stateLicensed: ["CA", "WA"]
+    imageUrl: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952"
   },
   {
-    id: "maria-rodriguez",
-    name: "Maria Rodriguez",
-    title: "Immigration Specialist",
-    email: "maria.r@immigrationlaw.com",
+    id: "3",
+    name: "Emily Rodriguez",
+    title: "Partner",
+    email: "e.rodriguez@lawfirm.com",
     phone: "(555) 345-6789",
-    specialization: ["Immigration Law", "Family Law"],
-    yearsOfExperience: 8,
+    yearsOfExperience: 12,
+    currentCaseload: 10,
+    specialization: ["Family Law", "Immigration"],
     successRate: 95,
     proBono: true,
-    currentCaseload: 20,
-    gender: "female",
-    ethnicity: "hispanic",
-    stateLicensed: ["TX", "AZ"]
-  },
-  {
-    id: "james-wilson",
-    name: "James Wilson",
-    title: "Criminal Defense Attorney",
-    email: "jwilson@criminaldefense.com",
-    phone: "(555) 456-7890",
-    specialization: ["Criminal Law", "Civil Rights"],
-    yearsOfExperience: 20,
-    successRate: 85,
-    proBono: true,
-    currentCaseload: 8,
-    gender: "male",
-    ethnicity: "black",
-    stateLicensed: ["NY", "NJ"]
+    imageUrl: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2"
   }
 ]

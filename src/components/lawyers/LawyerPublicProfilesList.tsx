@@ -34,7 +34,7 @@ export function LawyerPublicProfilesList() {
             <Button
               variant={selectedLawyers.includes(lawyer.id) ? "default" : "outline"}
               size="sm"
-              className="absolute top-4 right-4 z-10"
+              className="absolute top-2 right-2 z-10 text-xs px-2 py-1 h-7"
               onClick={() => handleToggleSelect(lawyer.id)}
             >
               {selectedLawyers.includes(lawyer.id) ? "Selected" : "Compare"}
@@ -42,7 +42,7 @@ export function LawyerPublicProfilesList() {
             <CardHeader>
               <div className="flex items-center gap-4">
                 <Avatar className="h-16 w-16">
-                  <AvatarImage src={lawyer.imageUrl || "/placeholder.svg"} alt={lawyer.name} />
+                  <AvatarImage src={lawyer.imageUrl} alt={lawyer.name} />
                   <AvatarFallback>{lawyer.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
@@ -95,16 +95,14 @@ export function LawyerPublicProfilesList() {
         ))}
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t">
-        <div className="container max-w-7xl mx-auto">
-          <Button 
-            className="w-full"
-            disabled={selectedLawyers.length !== 3}
-            onClick={() => setShowComparison(true)}
-          >
-            Compare Selected Lawyers ({selectedLawyers.length}/3)
-          </Button>
-        </div>
+      <div className="fixed bottom-6 right-6">
+        <Button 
+          className="px-4 py-2 shadow-lg"
+          disabled={selectedLawyers.length !== 3}
+          onClick={() => setShowComparison(true)}
+        >
+          Compare Selected Lawyers ({selectedLawyers.length}/3)
+        </Button>
       </div>
 
       <Dialog open={showComparison} onOpenChange={setShowComparison}>
@@ -117,7 +115,7 @@ export function LawyerPublicProfilesList() {
               <div key={lawyer.id} className="space-y-4">
                 <div className="text-center">
                   <Avatar className="h-20 w-20 mx-auto mb-2">
-                    <AvatarImage src={lawyer.imageUrl || "/placeholder.svg"} alt={lawyer.name} />
+                    <AvatarImage src={lawyer.imageUrl} alt={lawyer.name} />
                     <AvatarFallback>{lawyer.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                   </Avatar>
                   <h3 className="font-semibold">{lawyer.name}</h3>
