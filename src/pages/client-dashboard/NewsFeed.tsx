@@ -3,7 +3,7 @@ import { ClientDashboardLayout } from "@/layouts/ClientDashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-type NewsType = "all" | "legal" | "regulatory" | "industry"
+type NewsType = "all" | "legal" | "regulatory" | "industry" | "world" | "national" | "federal" | "state" | "local"
 
 interface NewsItem {
   id: string
@@ -35,6 +35,41 @@ const mockNews: NewsItem[] = [
     content: "The legal industry is seeing rapid adoption of AI-powered tools...",
     date: "2024-02-18",
   },
+  {
+    id: "4",
+    type: "world",
+    title: "International Legal Framework Updates",
+    content: "Major changes in international law affecting global business operations...",
+    date: "2024-02-17",
+  },
+  {
+    id: "5",
+    type: "national",
+    title: "US Legal System Reforms",
+    content: "New nationwide legal reforms set to transform the justice system...",
+    date: "2024-02-16",
+  },
+  {
+    id: "6",
+    type: "federal",
+    title: "Federal Law Amendment",
+    content: "Congress passes new amendments to federal regulations...",
+    date: "2024-02-15",
+  },
+  {
+    id: "7",
+    type: "state",
+    title: "State Legislature Update",
+    content: "New state laws affecting local businesses and residents...",
+    date: "2024-02-14",
+  },
+  {
+    id: "8",
+    type: "local",
+    title: "Local Ordinance Changes",
+    content: "City council approves new local regulations...",
+    date: "2024-02-13",
+  }
 ]
 
 export default function ClientNewsFeed() {
@@ -63,6 +98,11 @@ export default function ClientNewsFeed() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All News</SelectItem>
+              <SelectItem value="world">World News</SelectItem>
+              <SelectItem value="national">National News</SelectItem>
+              <SelectItem value="federal">Federal Law Changes</SelectItem>
+              <SelectItem value="state">State Law Changes</SelectItem>
+              <SelectItem value="local">Local Law Changes</SelectItem>
               <SelectItem value="legal">Legal Updates</SelectItem>
               <SelectItem value="regulatory">Regulatory Changes</SelectItem>
               <SelectItem value="industry">Industry News</SelectItem>
