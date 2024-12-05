@@ -1,8 +1,9 @@
 import { ClientDashboardLayout } from "@/layouts/ClientDashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button"
+import { AddCaseDialog } from "@/components/cases/AddCaseDialog"
 import {
   Select,
   SelectContent,
@@ -68,7 +69,7 @@ export default function ClientCases() {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold tracking-tight">My Cases</h1>
-          <Button>Add Case</Button>
+          <AddCaseDialog />
         </div>
 
         <div className="flex gap-4">
