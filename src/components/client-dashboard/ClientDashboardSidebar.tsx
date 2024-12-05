@@ -4,6 +4,7 @@ import {
   Folder,
   BarChart2,
   Rss,
+  Users,
 } from "lucide-react"
 import {
   Sidebar,
@@ -22,6 +23,7 @@ const menuItems = [
   { title: "Document Center", icon: Folder, url: "/client-dashboard/documents" },
   { title: "Case Insights", icon: BarChart2, url: "/client-dashboard/insights" },
   { title: "News Feed", icon: Rss, url: "/client-dashboard/news" },
+  { title: "Lawyer Profiles", icon: Users, url: "/lawyers" },
 ]
 
 export function ClientDashboardSidebar() {
