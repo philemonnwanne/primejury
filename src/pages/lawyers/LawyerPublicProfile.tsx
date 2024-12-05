@@ -8,22 +8,90 @@ import { Building2, Mail, Phone, Award, Scale, GraduationCap, Calendar } from "l
 
 // Mock data fetch function - replace with actual API call
 const fetchLawyerProfile = async (id: string) => {
-  // Simulated API response
-  return {
-    id,
-    name: "Sarah Parker",
-    email: "sarah.parker@example.com",
-    phone: "(555) 123-4567",
-    avatar: "/placeholder.svg",
-    firm: "Palmer & Associates",
-    specialization: "Corporate Law",
-    yearsOfExperience: 15,
-    education: "Harvard Law School, J.D.",
-    barAdmission: "California State Bar",
-    successRate: "92%",
-    activeCases: 8,
-    awards: ["Best Corporate Lawyer 2023", "Legal Excellence Award"],
+  // Simulated lawyer profiles database
+  const lawyerProfiles = {
+    "sp001": {
+      id: "sp001",
+      name: "Sarah Parker",
+      email: "sarah.parker@example.com",
+      phone: "(555) 123-4567",
+      avatar: "/placeholder.svg",
+      firm: "Parker & Associates",
+      specialization: "Civil Litigation",
+      yearsOfExperience: 15,
+      education: "Harvard Law School, J.D.",
+      barAdmission: "California State Bar",
+      successRate: "92%",
+      activeCases: 8,
+      awards: ["Best Civil Litigator 2023", "Legal Excellence Award"],
+    },
+    "mc002": {
+      id: "mc002",
+      name: "Michael Chang",
+      email: "michael.chang@example.com",
+      phone: "(555) 234-5678",
+      avatar: "/placeholder.svg",
+      firm: "Chang Legal Group",
+      specialization: "Corporate Law",
+      yearsOfExperience: 12,
+      education: "Stanford Law School, J.D.",
+      barAdmission: "California State Bar",
+      successRate: "88%",
+      activeCases: 6,
+      awards: ["Rising Star in Corporate Law 2023"],
+    },
+    "ew003": {
+      id: "ew003",
+      name: "Emily Wilson",
+      email: "emily.wilson@example.com",
+      phone: "(555) 345-6789",
+      avatar: "/placeholder.svg",
+      firm: "Wilson Law Partners",
+      specialization: "Family Law",
+      yearsOfExperience: 10,
+      education: "UCLA School of Law, J.D.",
+      barAdmission: "California State Bar",
+      successRate: "90%",
+      activeCases: 7,
+      awards: ["Family Law Advocate of the Year 2023"],
+    },
+    "jd002": {
+      id: "jd002",
+      name: "John Davis",
+      email: "john.davis@example.com",
+      phone: "(555) 456-7890",
+      avatar: "/placeholder.svg",
+      firm: "Davis & Partners",
+      specialization: "Estate Planning",
+      yearsOfExperience: 18,
+      education: "Yale Law School, J.D.",
+      barAdmission: "California State Bar",
+      successRate: "95%",
+      activeCases: 5,
+      awards: ["Top Estate Planning Attorney 2023", "Lifetime Achievement Award"],
+    },
+    "er003": {
+      id: "er003",
+      name: "Emma Roberts",
+      email: "emma.roberts@example.com",
+      phone: "(555) 567-8901",
+      avatar: "/placeholder.svg",
+      firm: "Roberts Criminal Defense",
+      specialization: "Criminal Defense",
+      yearsOfExperience: 14,
+      education: "Columbia Law School, J.D.",
+      barAdmission: "California State Bar",
+      successRate: "87%",
+      activeCases: 9,
+      awards: ["Criminal Defense Excellence Award 2023"],
+    }
+  };
+
+  const profile = lawyerProfiles[id];
+  if (!profile) {
+    throw new Error("Lawyer profile not found");
   }
+  return profile;
 }
 
 export default function LawyerPublicProfile() {
