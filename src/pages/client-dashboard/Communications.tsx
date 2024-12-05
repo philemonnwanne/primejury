@@ -3,9 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { MessageSquare, Send } from "lucide-react"
-import { useState } from "react"
+import { MessageSquare, Send, User } from "lucide-react"
+import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
+import { lawyerProfiles } from "@/data/lawyerProfiles"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface Message {
   id: string
@@ -40,6 +42,19 @@ export default function Communications() {
   const [messages, setMessages] = useState<Message[]>(mockMessages)
   const [newMessage, setNewMessage] = useState("")
   const { lawyerId } = useParams()
+  const [selectedLawyer, setSelectedLawyer] = useState<string | undefined>(lawyerId)
+
+  // Filter lawyers to only show those the client has worked with
+  const availableLawyers = lawyerProfiles.filter(lawyer => 
+    // In a real app, this would check against actual case history
+    ["sarah-parker", "michael-chang", "emily-wilson"].includes(lawyer.id)
+  )
+
+  useEffect(() => {
+    if (lawyerId) {
+      setSelectedLawyer(lawyerId)
+    }
+  }, [lawyerId])
 
   const handleSendMessage = () => {
     if (!newMessage.trim()) return
@@ -57,6 +72,8 @@ export default function Communications() {
     setNewMessage("")
   }
 
+  const currentLawyer = availableLawyers.find(l => l.id === selectedLawyer)
+
   return (
     <ClientDashboardLayout>
       <div className="space-y-6">
@@ -65,11 +82,36 @@ export default function Communications() {
         </div>
 
         <Card className="h-[600px] flex flex-col">
-          <CardHeader>
+          <CardHeader className="space-y-4">
             <CardTitle className="flex items-center gap-2">
               <MessageSquare className="h-5 w-5" />
               Secure Messages
             </CardTitle>
+            {!lawyerId && (
+              <Select
+                value={selectedLawyer}
+                onValueChange={setSelectedLawyer}
+              >
+                <SelectTrigger className="w-[300px]">
+                  <SelectValue placeholder="Select a lawyer to message" />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableLawyers.map((lawyer) => (
+                    <SelectItem key={lawyer.id} value={lawyer.id}>
+                      <div className="flex items-center gap-2">
+                        <User className="h-4 w-4" />
+                        {lawyer.name}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+            {currentLawyer && (
+              <p className="text-sm text-muted-foreground">
+                Messaging with: {currentLawyer.name}
+              </p>
+            )}
           </CardHeader>
           <CardContent className="flex-1 flex flex-col">
             <ScrollArea className="flex-1 pr-4">
@@ -109,8 +151,9 @@ export default function Communications() {
                     handleSendMessage()
                   }
                 }}
+                disabled={!selectedLawyer}
               />
-              <Button onClick={handleSendMessage}>
+              <Button onClick={handleSendMessage} disabled={!selectedLawyer}>
                 <Send className="h-4 w-4" />
               </Button>
             </div>

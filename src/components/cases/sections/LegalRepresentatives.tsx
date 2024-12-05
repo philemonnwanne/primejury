@@ -45,11 +45,12 @@ export function LegalRepresentatives({ lawyer, judge }: LegalRepresentativesProp
           <Button
             variant="outline"
             size="sm"
+            className="h-8 px-3"
             asChild
           >
             <Link to={`/client-dashboard/communications/${lawyer.id}`}>
-              <MessageSquare className="h-4 w-4 mr-2" />
-              Message
+              <MessageSquare className="h-4 w-4" />
+              <span className="ml-2">Message</span>
             </Link>
           </Button>
         </div>
