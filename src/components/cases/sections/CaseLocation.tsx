@@ -31,8 +31,8 @@ export function CaseLocation({ location }: CaseLocationProps) {
         <CardTitle>Case Location</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex items-center space-x-2">
-          <MapPin className="h-4 w-4 text-muted-foreground" />
+        <div className="flex items-start space-x-2">
+          <MapPin className="h-4 w-4 text-muted-foreground mt-1" />
           <div>
             <p className="text-sm text-muted-foreground">
               {location.city}, {location.state}
@@ -42,21 +42,21 @@ export function CaseLocation({ location }: CaseLocationProps) {
             </p>
           </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <Building2 className="h-4 w-4 text-muted-foreground" />
-          <div>
+        <div className="flex items-start space-x-2">
+          <Building2 className="h-4 w-4 text-muted-foreground mt-1" />
+          <div className="flex-1">
             <p className="font-medium">{location.courthouse.name}</p>
             <Button
               variant="link"
-              className="h-auto p-0 text-sm text-primary hover:underline"
+              className="h-auto p-0 text-sm text-primary hover:underline break-words whitespace-normal text-left"
               onClick={() => window.open(getMapUrl(location.courthouse.address), '_blank')}
             >
               {location.courthouse.address}
             </Button>
           </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <Phone className="h-4 w-4 text-muted-foreground" />
+        <div className="flex items-start space-x-2">
+          <Phone className="h-4 w-4 text-muted-foreground mt-1" />
           <div>
             <p className="text-sm text-muted-foreground">{location.courthouse.phone}</p>
           </div>
