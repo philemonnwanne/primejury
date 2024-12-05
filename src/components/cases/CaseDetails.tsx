@@ -1,25 +1,11 @@
 import { Badge } from "@/components/ui/badge"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
-import { 
-  Calendar,
-  User,
-  Clock,
-  FileText,
-  Upload,
-  Gavel,
-  MapPin,
-  Scale,
-  ScrollText,
-  DollarSign
-} from "lucide-react"
+import { FileText, Upload, DollarSign } from "lucide-react"
+import { CaseOverview } from "./sections/CaseOverview"
+import { LegalRepresentatives } from "./sections/LegalRepresentatives"
+import { CaseLocation } from "./sections/CaseLocation"
 
 interface CaseDetailsProps {
   caseId: string
@@ -41,7 +27,12 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
     location: {
       city: "Sacramento",
       state: "California",
-      county: "Sacramento"
+      county: "Sacramento",
+      courthouse: {
+        name: "Sacramento County Superior Court",
+        address: "720 9th Street, Sacramento, CA 95814",
+        phone: "(916) 874-5522"
+      }
     },
     status: "active",
     priority: "high",
@@ -75,69 +66,17 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
 
       <Separator />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Case Overview</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <Clock className="h-4 w-4 text-muted-foreground" />
-            <div>
-              <p className="font-medium">Estimated Duration</p>
-              <p className="text-sm text-muted-foreground">{caseDetails.estimatedDuration}</p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <ScrollText className="h-4 w-4 text-muted-foreground" />
-            <div>
-              <p className="font-medium">Case Subject</p>
-              <p className="text-sm text-muted-foreground">{caseDetails.subject}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <CaseOverview 
+        estimatedDuration={caseDetails.estimatedDuration}
+        subject={caseDetails.subject}
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Legal Representatives</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <User className="h-4 w-4 text-muted-foreground" />
-            <div>
-              <p className="font-medium">Assigned Lawyer</p>
-              <p className="text-sm text-muted-foreground">{caseDetails.lawyer.name}</p>
-              <p className="text-sm text-muted-foreground">{caseDetails.lawyer.email}</p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Gavel className="h-4 w-4 text-muted-foreground" />
-            <div>
-              <p className="font-medium">Presiding Judge</p>
-              <p className="text-sm text-muted-foreground">{caseDetails.judge}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <LegalRepresentatives 
+        lawyer={caseDetails.lawyer}
+        judge={caseDetails.judge}
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Case Location</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center space-x-2">
-            <MapPin className="h-4 w-4 text-muted-foreground" />
-            <div>
-              <p className="text-sm text-muted-foreground">
-                {caseDetails.location.city}, {caseDetails.location.state}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {caseDetails.location.county} County
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <CaseLocation location={caseDetails.location} />
 
       <Card>
         <CardHeader>
