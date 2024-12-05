@@ -1,18 +1,43 @@
 import { useParams } from "react-router-dom"
-import { publicLawyerProfiles } from "@/data/publicLawyerProfiles"
+import { lawyerProfiles } from "@/data/lawyerProfiles"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Mail, Phone, Award, Briefcase } from "lucide-react"
+import { Mail, Phone, Award, Briefcase, Building2, GraduationCap, Scale } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { useState } from "react"
 import { toast } from "sonner"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Separator } from "@/components/ui/separator"
+
+// Available time slots for consultations
+const TIME_SLOTS = [
+  "09:00 AM", "10:00 AM", "11:00 AM",
+  "02:00 PM", "03:00 PM", "04:00 PM"
+]
+
+// Get next 5 available dates (excluding weekends)
+const getNextAvailableDates = () => {
+  const dates: Date[] = [];
+  let currentDate = new Date();
+  
+  while (dates.length < 5) {
+    currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
+    if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
+      dates.push(new Date(currentDate));
+    }
+  }
+  
+  return dates;
+};
 
 export default function LawyerProfile() {
   const { id } = useParams()
-  const lawyer = publicLawyerProfiles.find(l => l.id === id)
+  const lawyer = lawyerProfiles.find(l => l.id === id)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
+  const [selectedTime, setSelectedTime] = useState<string>("")
+  const availableDates = getNextAvailableDates()
 
   if (!lawyer) {
     return (
@@ -23,10 +48,12 @@ export default function LawyerProfile() {
   }
 
   const handleScheduleConsultation = () => {
-    if (selectedDate) {
-      toast.success("Consultation request sent successfully!")
+    if (selectedDate && selectedTime) {
+      toast.success("Consultation scheduled successfully!")
+      setSelectedDate(undefined)
+      setSelectedTime("")
     } else {
-      toast.error("Please select a date for the consultation")
+      toast.error("Please select both a date and time for the consultation")
     }
   }
 
@@ -59,34 +86,90 @@ export default function LawyerProfile() {
                     <span>{lawyer.phone}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Award className="h-4 w-4" />
-                    <span>{lawyer.yearsOfExperience} Years Experience</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Briefcase className="h-4 w-4" />
-                    <span>{lawyer.currentCaseload} Active Cases</span>
+                    <Building2 className="h-4 w-4" />
+                    <span>{lawyer.experience[0].company}</span>
                   </div>
                 </div>
               </div>
 
+              <Separator />
+
               <div>
-                <h3 className="text-lg font-semibold mb-2">Specializations</h3>
-                <div className="flex flex-wrap gap-2">
-                  {lawyer.specialization.map((spec) => (
-                    <Badge key={spec} variant="secondary">
-                      {spec}
-                    </Badge>
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <GraduationCap className="h-5 w-5" />
+                  Education
+                </h3>
+                <div className="space-y-2">
+                  {lawyer.education.map((edu, index) => (
+                    <div key={index} className="space-y-1">
+                      <div className="font-medium">{edu.degree}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {edu.institution}, {edu.year}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
 
-              <div className="flex justify-between items-center">
-                <Badge variant="secondary">Success Rate: {lawyer.successRate}%</Badge>
-                {lawyer.proBono && (
-                  <Badge variant="outline" className="bg-green-50">
-                    Pro Bono Cases
-                  </Badge>
-                )}
+              <Separator />
+
+              <div>
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <Briefcase className="h-5 w-5" />
+                  Experience
+                </h3>
+                <div className="space-y-4">
+                  {lawyer.experience.map((exp, index) => (
+                    <div key={index} className="space-y-1">
+                      <div className="font-medium">{exp.position}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {exp.company} • {exp.duration}
+                      </div>
+                      <p className="text-sm">{exp.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <Award className="h-5 w-5" />
+                  Achievements & Certifications
+                </h3>
+                <ul className="list-disc list-inside space-y-2">
+                  {lawyer.achievements.map((achievement, index) => (
+                    <li key={index} className="text-sm">{achievement}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <Scale className="h-5 w-5" />
+                  Bar Admissions & Languages
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <div className="font-medium mb-2">Bar Admissions</div>
+                    <div className="flex flex-wrap gap-2">
+                      {lawyer.barAdmissions.map((admission, index) => (
+                        <Badge key={index} variant="secondary">{admission}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-medium mb-2">Languages</div>
+                    <div className="flex flex-wrap gap-2">
+                      {lawyer.languages.map((language, index) => (
+                        <Badge key={index} variant="outline">{language}</Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -103,11 +186,53 @@ export default function LawyerProfile() {
                 selected={selectedDate}
                 onSelect={setSelectedDate}
                 className="rounded-md border"
-                disabled={(date) => date < new Date()}
+                disabled={(date) => {
+                  return (
+                    date < new Date() || 
+                    !availableDates.some(d => 
+                      d.toDateString() === date.toDateString()
+                    )
+                  )
+                }}
               />
+              
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium">Next Available Dates:</h4>
+                <div className="text-sm text-muted-foreground space-y-1">
+                  {availableDates.map((date, index) => (
+                    <div key={index}>
+                      {date.toLocaleDateString('en-US', { 
+                        weekday: 'long', 
+                        month: 'long', 
+                        day: 'numeric' 
+                      })}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {selectedDate && (
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium">Available Times:</h4>
+                  <Select value={selectedTime} onValueChange={setSelectedTime}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a time" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {TIME_SLOTS.map((time) => (
+                        <SelectItem key={time} value={time}>
+                          {time}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
               <Button 
                 className="w-full" 
                 onClick={handleScheduleConsultation}
+                disabled={!selectedDate || !selectedTime}
               >
                 Schedule Consultation
               </Button>
