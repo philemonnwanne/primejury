@@ -18,6 +18,11 @@ export const industryNews: NewsItemType[] = [
       url: "https://techcrunch.com"
     },
     industryCategory: "Technology",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1518770660439-4636190af475",
+      caption: "Advanced AI systems in development"
+    },
     interactions: {
       likes: 67,
       comments: 15,
@@ -39,6 +44,11 @@ export const industryNews: NewsItemType[] = [
       url: "https://www.autonews.com"
     },
     industryCategory: "Automotive",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1624296433274-7bdddc5c9d12",
+      caption: "Electric vehicles on the manufacturing line"
+    },
     interactions: {
       likes: 55,
       comments: 10,
@@ -62,6 +72,11 @@ export const industryNews: NewsItemType[] = [
       url: "https://www.travelweekly.com"
     },
     industryCategory: "Tourism & Hospitality",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1615413390490-3f0f52efc3f1",
+      caption: "Tourists enjoying the beaches in Florida"
+    },
     interactions: {
       likes: 30,
       comments: 8,
@@ -83,6 +98,11 @@ export const industryNews: NewsItemType[] = [
       url: "https://www.reuters.com"
     },
     industryCategory: "Energy",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1618929530802-64c12bafc401",
+      caption: "New solar energy technology demonstration"
+    },
     interactions: {
       likes: 26,
       comments: 8,

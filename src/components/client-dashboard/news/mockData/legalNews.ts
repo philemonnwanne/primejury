@@ -16,6 +16,11 @@ export const legalNews: NewsItemType[] = [
       url: "https://www.wto.org"
     },
     industryCategory: "International Trade",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
+      caption: "Global trade representatives discussing new regulations"
+    },
     interactions: {
       likes: 45,
       comments: 12,
@@ -38,6 +43,11 @@ export const legalNews: NewsItemType[] = [
       url: "https://ec.europa.eu"
     },
     industryCategory: "Data Privacy",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+      caption: "Data protection and cybersecurity concept"
+    },
     interactions: {
       likes: 10,
       comments: 3,
@@ -61,6 +71,11 @@ export const legalNews: NewsItemType[] = [
       url: "https://www.nytimes.com"
     },
     industryCategory: "Banking & Finance",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1551782001-1241591612445",
+      caption: "Wall Street's latest compliance updates"
+    },
     interactions: {
       likes: 25,
       comments: 5,
@@ -83,6 +98,11 @@ export const legalNews: NewsItemType[] = [
       url: "https://www.canada.ca"
     },
     industryCategory: "Cannabis",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1587831563162-3a1c579bbf63",
+      caption: "New regulations for the cannabis industry"
+    },
     interactions: {
       likes: 15,
       comments: 4,

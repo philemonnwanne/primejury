@@ -18,6 +18,11 @@ export const regulatoryNews: NewsItemType[] = [
       url: "https://www.sec.gov"
     },
     industryCategory: "Banking & Finance",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1524230572899-a752b3835840",
+      caption: "Financial district where new regulations take effect"
+    },
     interactions: {
       likes: 32,
       comments: 8,
@@ -41,6 +46,11 @@ export const regulatoryNews: NewsItemType[] = [
       url: "https://www.tceq.texas.gov"
     },
     industryCategory: "Energy",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1501594907351-4b941fa4fcba",
+      caption: "Renewable energy sources in Texas"
+    },
     interactions: {
       likes: 20,
       comments: 7,
@@ -62,6 +72,11 @@ export const regulatoryNews: NewsItemType[] = [
       url: "https://www.who.int"
     },
     industryCategory: "Healthcare",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
+      caption: "Medical professionals discussing healthcare standards"
+    },
     interactions: {
       likes: 75,
       comments: 20,
@@ -83,6 +98,11 @@ export const regulatoryNews: NewsItemType[] = [
       url: "https://www.epa.gov"
     },
     industryCategory: "Environmental",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1515378802500-12b7c1d3d0d8",
+      caption: "Marine life conservation efforts"
+    },
     interactions: {
       likes: 32,
       comments: 3,
@@ -105,6 +125,11 @@ export const regulatoryNews: NewsItemType[] = [
       url: "https://ec.europa.eu"
     },
     industryCategory: "Data Privacy",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1601092107313-b6bcd5b7ff1e",
+      caption: "Data privacy in the digital age"
+    },
     interactions: {
       likes: 14,
       comments: 6,
@@ -126,6 +151,11 @@ export const regulatoryNews: NewsItemType[] = [
       url: "https://www.fsb.org"
     },
     industryCategory: "Banking & Finance",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1573164574575-5b75f9e1a479",
+      caption: "Cryptocurrency trading platforms"
+    },
     interactions: {
       likes: 9,
       comments: 2,
@@ -147,6 +177,11 @@ export const regulatoryNews: NewsItemType[] = [
       url: "https://www.istassociation.org"
     },
     industryCategory: "Tourism & Hospitality",
+    media: {
+      type: "image",
+      url: "https://images.unsplash.com/photo-1525202040064-a7c5c540a6c0",
+      caption: "Space tourism initiatives and safety"
+    },
     interactions: {
       likes: 8,
       comments: 3,
