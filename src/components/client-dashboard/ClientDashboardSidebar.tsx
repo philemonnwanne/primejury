@@ -3,6 +3,7 @@ import {
   FileText,
   Folder,
   BarChart2,
+  Rss,
 } from "lucide-react"
 import {
   Sidebar,
@@ -20,6 +21,7 @@ const menuItems = [
   { title: "Legal Forms", icon: FileText, url: "/client-dashboard/forms" },
   { title: "Document Center", icon: Folder, url: "/client-dashboard/documents" },
   { title: "Case Insights", icon: BarChart2, url: "/client-dashboard/insights" },
+  { title: "News Feed", icon: Rss, url: "/client-dashboard/news" },
 ]
 
 export function ClientDashboardSidebar() {
