@@ -1,4 +1,3 @@
-import { DashboardLayout } from "@/layouts/DashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -8,8 +7,8 @@ import { Link } from "react-router-dom"
 
 export default function LawyerProfiles() {
   return (
-    <DashboardLayout>
-      <div className="space-y-6">
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto py-6 space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold tracking-tight">Lawyer Profiles</h1>
         </div>
@@ -54,6 +53,6 @@ export default function LawyerProfiles() {
           ))}
         </div>
       </div>
-    </DashboardLayout>
+    </div>
   )
 }
