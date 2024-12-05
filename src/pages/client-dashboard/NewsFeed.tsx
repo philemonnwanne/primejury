@@ -18,6 +18,10 @@ export default function ClientNewsFeed() {
   const [selectedIndustry, setSelectedIndustry] = useState<string>("all")
 
   const filteredNews = mockNews.filter(news => {
+    // Always show sponsored content
+    if (news.sponsored) return true;
+    
+    // Apply filters for non-sponsored content
     // Filter by type
     if (selectedType !== "all" && news.type !== selectedType) return false;
     
