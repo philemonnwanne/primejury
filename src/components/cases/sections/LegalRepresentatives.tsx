@@ -1,8 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { User, Gavel } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Link } from "react-router-dom"
 
 interface LegalRepresentativesProps {
   lawyer: {
+    id: string
     name: string
     email: string
     phone: string
@@ -21,7 +24,12 @@ export function LegalRepresentatives({ lawyer, judge }: LegalRepresentativesProp
           <User className="h-4 w-4 text-muted-foreground" />
           <div>
             <p className="font-medium">Assigned Lawyer</p>
-            <p className="text-sm text-muted-foreground">{lawyer.name}</p>
+            <Link 
+              to={`/dashboard/staff/${lawyer.id}`}
+              className="text-sm text-primary hover:underline"
+            >
+              {lawyer.name}
+            </Link>
             <p className="text-sm text-muted-foreground">{lawyer.email}</p>
           </div>
         </div>

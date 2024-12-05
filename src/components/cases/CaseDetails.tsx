@@ -37,7 +37,8 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
     lawyer: {
       name: "Sarah Parker",
       email: "sarah.parker@lawfirm.com",
-      phone: "(555) 123-4567"
+      phone: "(555) 123-4567",
+      id: "lawyer_id_1"
     },
     judge: "Hon. Michael Roberts",
     location: {
@@ -69,6 +70,12 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
       { id: "3", title: "Settlement Agreement Template", category: "Settlement" }
     ]
   }
+
+  const formDescriptions = {
+    "Motion for Summary Judgment": "Used when seeking judgment without a full trial. Ideal for cases with clear evidence and no disputed material facts.",
+    "Discovery Request": "Template for requesting evidence and information from opposing parties. Essential for gathering case-related documentation.",
+    "Settlement Agreement Template": "Standard template for documenting settlement terms between parties. Useful when reaching an out-of-court resolution."
+  };
 
   const handleSettlementAction = (offerId: string, amount: string, action: 'accept' | 'reject') => {
     setSelectedOffer({ id: offerId, amount, action })
@@ -103,6 +110,7 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
       <CaseOverview 
         estimatedDuration={caseDetails.estimatedDuration}
         subject={caseDetails.subject}
+        intakeFormId="intake_form_id_1"
       />
 
       <LegalRepresentatives 
@@ -130,7 +138,11 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
                   <p className="text-sm text-muted-foreground">{doc.type} - {doc.date}</p>
                 </div>
               </div>
-              <Button variant="ghost" size="sm">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => window.open(`/documents/${doc.id}`, '_blank')}
+              >
                 View
               </Button>
             </div>
@@ -144,53 +156,6 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Settlement Offers</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {caseDetails.settlementOffers.map((offer) => (
-            <div
-              key={offer.id}
-              className="flex items-center justify-between rounded-lg border p-4"
-            >
-              <div className="flex items-center space-x-2">
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
-                <div>
-                  <p className="font-medium">{offer.amount}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {offer.date} - {offer.status}
-                  </p>
-                </div>
-              </div>
-              {offer.status === "pending" && (
-                <div className="flex gap-2">
-                  <Button
-                    variant="default"
-                    size="sm"
-                    onClick={() => handleSettlementAction(offer.id, offer.amount, 'accept')}
-                  >
-                    Accept
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => handleSettlementAction(offer.id, offer.amount, 'reject')}
-                  >
-                    Reject
-                  </Button>
-                </div>
-              )}
-              {offer.status !== "pending" && (
-                <Badge variant={offer.status === "pending" ? "default" : "secondary"}>
-                  {offer.status}
-                </Badge>
-              )}
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
           <CardTitle>Related Forms</CardTitle>
           <CardDescription>Forms and templates for your case</CardDescription>
         </CardHeader>
@@ -198,15 +163,20 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
           {caseDetails.relatedForms.map((form) => (
             <div
               key={form.id}
-              className="flex items-center justify-between rounded-lg border p-4"
+              className="flex flex-col space-y-2 rounded-lg border p-4"
             >
-              <div>
-                <p className="font-medium">{form.title}</p>
-                <p className="text-sm text-muted-foreground">{form.category}</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">{form.title}</p>
+                  <p className="text-sm text-muted-foreground">{form.category}</p>
+                </div>
+                <Button variant="outline" size="sm">
+                  Download
+                </Button>
               </div>
-              <Button variant="outline" size="sm">
-                Download
-              </Button>
+              <p className="text-sm text-muted-foreground">
+                {formDescriptions[form.title as keyof typeof formDescriptions]}
+              </p>
             </div>
           ))}
         </CardContent>

@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MapPin, Building2, Phone } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface CaseLocationProps {
   location: {
@@ -15,6 +16,15 @@ interface CaseLocationProps {
 }
 
 export function CaseLocation({ location }: CaseLocationProps) {
+  const getMapUrl = (address: string) => {
+    const encodedAddress = encodeURIComponent(address);
+    // Check if user is on iOS for Apple Maps
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    return isIOS
+      ? `maps://maps.apple.com/?q=${encodedAddress}`
+      : `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -36,7 +46,13 @@ export function CaseLocation({ location }: CaseLocationProps) {
           <Building2 className="h-4 w-4 text-muted-foreground" />
           <div>
             <p className="font-medium">{location.courthouse.name}</p>
-            <p className="text-sm text-muted-foreground">{location.courthouse.address}</p>
+            <Button
+              variant="link"
+              className="h-auto p-0 text-sm text-primary hover:underline"
+              onClick={() => window.open(getMapUrl(location.courthouse.address), '_blank')}
+            >
+              {location.courthouse.address}
+            </Button>
           </div>
         </div>
         <div className="flex items-center space-x-2">
