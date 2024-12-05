@@ -25,6 +25,7 @@ import ClientForms from "./pages/client-dashboard/Forms"
 import ClientDocuments from "./pages/client-dashboard/Documents"
 import ClientInsights from "./pages/client-dashboard/Insights"
 import ClientNewsFeed from "./pages/client-dashboard/NewsFeed"
+import ClientCommunications from "./pages/client-dashboard/Communications"
 import LawyerPublicProfiles from "./pages/lawyers/LawyerPublicProfiles"
 import LawyerProfile from "./pages/lawyers/LawyerProfile"
 
@@ -59,10 +60,9 @@ const App = () => (
           <Route path="/client-dashboard/documents" element={<ClientDocuments />} />
           <Route path="/client-dashboard/insights" element={<ClientInsights />} />
           <Route path="/client-dashboard/news" element={<ClientNewsFeed />} />
-          {/* Consolidated lawyer routes */}
+          <Route path="/client-dashboard/communications/:lawyerId?" element={<ClientCommunications />} />
           <Route path="/lawyers" element={<LawyerPublicProfiles />} />
           <Route path="/lawyers/:id" element={<LawyerProfile />} />
-          {/* Redirect old routes to new consolidated ones */}
           <Route path="/lawyer-marketplace" element={<Navigate to="/lawyers" replace />} />
         </Routes>
       </BrowserRouter>
