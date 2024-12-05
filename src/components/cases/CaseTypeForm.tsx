@@ -113,7 +113,7 @@ export function CaseTypeForm() {
 
         {findLawyerType === "review" && 
          currentStep > questions.length + 1 && (
-          <div className="w-full px-4">
+          <div className="w-full">
             <Textarea
               placeholder="Please provide as much detail about your case as possible (max 700 characters)..."
               value={caseDetails}
