@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Progress } from "@/components/ui/progress"
+import { Button } from "@/components/ui/button"
 import { CaseTypeSelect } from "./CaseTypeSelect"
 import { Textarea } from "@/components/ui/textarea"
 import { caseTypeQuestions, type CaseType } from "./questions/caseTypeQuestions"

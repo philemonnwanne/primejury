@@ -65,7 +65,7 @@ const priorityColors = {
 
 const statusColors = {
   active: "default",
-  pending: "warning",
+  pending: "secondary",
   closed: "outline",
 } as const
 
