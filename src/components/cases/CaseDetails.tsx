@@ -3,6 +3,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { FileText, Upload, DollarSign } from "lucide-react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { useState } from "react"
+import { useToast } from "@/hooks/use-toast"
 import { CaseOverview } from "./sections/CaseOverview"
 import { LegalRepresentatives } from "./sections/LegalRepresentatives"
 import { CaseLocation } from "./sections/CaseLocation"
@@ -12,6 +24,10 @@ interface CaseDetailsProps {
 }
 
 export function CaseDetails({ caseId }: CaseDetailsProps) {
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false)
+  const [selectedOffer, setSelectedOffer] = useState<{ id: string; amount: string; action: 'accept' | 'reject' } | null>(null)
+  const { toast } = useToast()
+
   // Mock data - in a real app, this would be fetched based on the caseId
   const caseDetails = {
     title: "Smith vs. Johnson",
@@ -52,6 +68,24 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
       { id: "2", title: "Discovery Request", category: "Evidence" },
       { id: "3", title: "Settlement Agreement Template", category: "Settlement" }
     ]
+  }
+
+  const handleSettlementAction = (offerId: string, amount: string, action: 'accept' | 'reject') => {
+    setSelectedOffer({ id: offerId, amount, action })
+    setShowConfirmDialog(true)
+  }
+
+  const handleConfirmAction = () => {
+    if (!selectedOffer) return
+
+    // In a real app, this would make an API call
+    toast({
+      title: `Settlement Offer ${selectedOffer.action}ed`,
+      description: `You have ${selectedOffer.action}ed the settlement offer of ${selectedOffer.amount}`,
+    })
+
+    setShowConfirmDialog(false)
+    setSelectedOffer(null)
   }
 
   return (
@@ -127,9 +161,29 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
                   </p>
                 </div>
               </div>
-              <Badge variant={offer.status === "pending" ? "default" : "secondary"}>
-                {offer.status}
-              </Badge>
+              {offer.status === "pending" && (
+                <div className="flex gap-2">
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={() => handleSettlementAction(offer.id, offer.amount, 'accept')}
+                  >
+                    Accept
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => handleSettlementAction(offer.id, offer.amount, 'reject')}
+                  >
+                    Reject
+                  </Button>
+                </div>
+              )}
+              {offer.status !== "pending" && (
+                <Badge variant={offer.status === "pending" ? "default" : "secondary"}>
+                  {offer.status}
+                </Badge>
+              )}
             </div>
           ))}
         </CardContent>
@@ -157,6 +211,26 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
           ))}
         </CardContent>
       </Card>
+
+      <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Confirm {selectedOffer?.action} Settlement Offer
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to {selectedOffer?.action} the settlement offer of {selectedOffer?.amount}? 
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmAction}>
+              Confirm {selectedOffer?.action}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
