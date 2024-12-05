@@ -23,14 +23,14 @@ export default function ClientNewsFeed() {
     .filter(news => news.breaking)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
+  // Get sponsored news
+  const sponsoredNews = mockNews.filter(news => news.sponsored);
+
   // Filter regular news according to user preferences
   const filteredNews = mockNews
     .filter(news => {
-      // Skip breaking news as they're handled separately
-      if (news.breaking) return false;
-      
-      // Always show sponsored content
-      if (news.sponsored) return true;
+      // Skip breaking and sponsored news as they're handled separately
+      if (news.breaking || news.sponsored) return false;
       
       // Apply filters
       if (selectedType !== "all" && news.type !== selectedType) return false;
@@ -92,6 +92,15 @@ export default function ClientNewsFeed() {
             />
           </CardContent>
         </Card>
+
+        {/* Sponsored News Section */}
+        {sponsoredNews.length > 0 && (
+          <div className="grid gap-4">
+            {sponsoredNews.map((news) => (
+              <NewsItem key={news.id} news={news} />
+            ))}
+          </div>
+        )}
 
         {/* Regular News Section */}
         <div className="grid gap-4">
