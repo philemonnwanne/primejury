@@ -9,51 +9,44 @@ import { SidebarProvider } from "@/components/ui/sidebar"
 import { LawyerProfilesSidebar } from "@/components/lawyers/LawyerProfilesSidebar"
 
 export default function LawyerProfiles() {
-  const [selectedSpecializations, setSelectedSpecializations] = useState<string[]>([])
-  const [successRateRange, setSuccessRateRange] = useState<[number, number]>([0, 100])
-  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
+  const [filters, setFilters] = useState({
+    state: 'all',
+    specialty: 'all',
+    yearsOfExperience: 'all',
+    successRate: [0, 100] as [number, number],
+    proBono: false,
+    workload: 'all',
+    gender: 'all',
+    ethnicity: 'all'
+  });
 
-  const handleSpecializationChange = (specialization: string) => {
-    setSelectedSpecializations((prev) =>
-      prev.includes(specialization)
-        ? prev.filter((s) => s !== specialization)
-        : [...prev, specialization]
-    )
-  }
+  const handleFilterChange = (key: string, value: any) => {
+    setFilters(prev => ({
+      ...prev,
+      [key]: value
+    }));
+  };
 
-  const handleLanguageChange = (language: string) => {
-    setSelectedLanguages((prev) =>
-      prev.includes(language)
-        ? prev.filter((l) => l !== language)
-        : [...prev, language]
-    )
-  }
-
-  const filteredLawyers = lawyerProfiles.filter((lawyer) => {
-    const matchesSpecialization =
-      selectedSpecializations.length === 0 ||
-      lawyer.specialization.some((s) => selectedSpecializations.includes(s))
-
-    const matchesSuccessRate =
-      lawyer.successRate >= successRateRange[0] && lawyer.successRate <= successRateRange[1]
-
-    const matchesLanguage =
-      selectedLanguages.length === 0 ||
-      lawyer.languages.some((l) => selectedLanguages.includes(l))
-
-    return matchesSpecialization && matchesSuccessRate && matchesLanguage
-  })
+  const filteredLawyers = lawyerProfiles.filter(lawyer => {
+    if (filters.state !== 'all' && !lawyer.barAdmissions.some(admission => admission.includes(filters.state))) {
+      return false;
+    }
+    if (filters.specialty !== 'all' && !lawyer.specialization.some(s => s.toLowerCase().includes(filters.specialty))) {
+      return false;
+    }
+    if (filters.successRate[0] > lawyer.successRate || filters.successRate[1] < lawyer.successRate) {
+      return false;
+    }
+    // Add more filter conditions as needed
+    return true;
+  });
 
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
         <LawyerProfilesSidebar
-          selectedSpecializations={selectedSpecializations}
-          onSpecializationChange={handleSpecializationChange}
-          successRateRange={successRateRange}
-          onSuccessRateChange={setSuccessRateRange}
-          selectedLanguages={selectedLanguages}
-          onLanguageChange={handleLanguageChange}
+          filters={filters}
+          onFilterChange={handleFilterChange}
         />
         <div className="flex-1">
           <div className="container py-6 space-y-6">
