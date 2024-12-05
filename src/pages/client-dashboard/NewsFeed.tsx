@@ -57,26 +57,28 @@ export default function ClientNewsFeed() {
 
         {/* Breaking News Section - Always visible */}
         {breakingNews.length > 0 && (
-          <Card className="border-red-200 bg-red-50/30">
-            <CardContent className="pt-6">
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <span className="text-red-500">Breaking News</span>
-                <span className="text-xs text-red-500 bg-red-100 px-2 py-1 rounded-full">
-                  {breakingNews.length} Updates
-                </span>
-              </h2>
-              <ScrollArea className="w-full whitespace-nowrap rounded-md">
-                <div className="flex w-max space-x-4 p-4">
-                  {breakingNews.map((news) => (
-                    <div key={news.id} className="w-[600px]">
-                      <NewsItem news={news} />
-                    </div>
-                  ))}
-                </div>
-                <ScrollBar orientation="horizontal" />
-              </ScrollArea>
-            </CardContent>
-          </Card>
+          <div className="mb-8">
+            <Card className="border-red-200 bg-red-50/30 shadow-lg">
+              <CardContent className="pt-6">
+                <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <span className="text-red-500">Breaking News</span>
+                  <span className="text-xs text-red-500 bg-red-100 px-2 py-1 rounded-full">
+                    {breakingNews.length} Updates
+                  </span>
+                </h2>
+                <ScrollArea className="w-full whitespace-nowrap rounded-md">
+                  <div className="flex w-max space-x-4 p-4">
+                    {breakingNews.map((news) => (
+                      <div key={news.id} className="w-[400px] shrink-0">
+                        <NewsItem news={news} />
+                      </div>
+                    ))}
+                  </div>
+                  <ScrollBar orientation="horizontal" className="mt-2" />
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
         )}
 
         {/* Filters Section */}
