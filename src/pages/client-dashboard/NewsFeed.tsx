@@ -5,12 +5,31 @@ import { NewsItem, NewsItemType } from "@/components/client-dashboard/news/NewsI
 import { mockNews } from "@/components/client-dashboard/news/mockData"
 import { ClientDashboardLayout } from "@/layouts/ClientDashboardLayout"
 
+type ScopeType = {
+  level: "world" | "national" | "state" | "local"
+  country?: string
+  state?: string
+}
+
 export default function ClientNewsFeed() {
   const [selectedType, setSelectedType] = useState<NewsItemType["type"]>("all")
+  const [selectedScope, setSelectedScope] = useState<ScopeType>({ level: "world" })
+  const [selectedIndustry, setSelectedIndustry] = useState<string>("all")
 
-  const filteredNews = mockNews.filter(news => 
-    selectedType === "all" || news.type === selectedType
-  )
+  const filteredNews = mockNews.filter(news => {
+    // Filter by type
+    if (selectedType !== "all" && news.type !== selectedType) return false;
+    
+    // Filter by scope
+    if (selectedScope.level !== news.scope.level) return false;
+    if (selectedScope.country && news.scope.country !== selectedScope.country) return false;
+    if (selectedScope.state && news.scope.state !== selectedScope.state) return false;
+    
+    // Filter by industry
+    if (selectedIndustry !== "all" && news.industryCategory !== selectedIndustry) return false;
+    
+    return true;
+  });
 
   return (
     <ClientDashboardLayout>
@@ -29,6 +48,8 @@ export default function ClientNewsFeed() {
             <NewsFilters
               selectedType={selectedType}
               onTypeChange={setSelectedType}
+              onScopeChange={setSelectedScope}
+              onIndustryChange={setSelectedIndustry}
             />
           </CardContent>
         </Card>
