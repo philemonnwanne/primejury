@@ -11,8 +11,8 @@ const fetchLawyerProfile = async (id: string) => {
   // Simulated API response
   return {
     id,
-    name: "Sarah Palmer",
-    email: "sarah.palmer@example.com",
+    name: "Sarah Parker",
+    email: "sarah.parker@example.com",
     phone: "(555) 123-4567",
     avatar: "/placeholder.svg",
     firm: "Palmer & Associates",
