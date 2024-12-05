@@ -11,7 +11,7 @@ interface NewsItemProps {
 
 export function NewsItem({ news }: NewsItemProps) {
   return (
-    <Card className={`transition-all duration-200 hover:shadow-lg ${news.sponsored ? 'border-primary/20' : ''}`}>
+    <Card className={`transition-all duration-200 hover:shadow-lg border-0 ${news.sponsored ? 'border-primary/20' : ''}`}>
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="space-y-1">
