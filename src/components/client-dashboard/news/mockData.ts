@@ -10,7 +10,12 @@ export const mockNews: NewsItemType[] = [
     scope: {
       level: "world"
     },
-    industryCategory: "International Trade"
+    industryCategory: "International Trade",
+    interactions: {
+      likes: 45,
+      comments: 12,
+      shares: 8
+    }
   },
   {
     id: "2",
@@ -23,7 +28,12 @@ export const mockNews: NewsItemType[] = [
       country: "United States",
       state: "All States"
     },
-    industryCategory: "Banking & Finance"
+    industryCategory: "Banking & Finance",
+    interactions: {
+      likes: 32,
+      comments: 8,
+      shares: 5
+    }
   },
   {
     id: "3",
@@ -36,7 +46,12 @@ export const mockNews: NewsItemType[] = [
       country: "United States",
       state: "California"
     },
-    industryCategory: "Technology"
+    industryCategory: "Technology",
+    interactions: {
+      likes: 67,
+      comments: 15,
+      shares: 23
+    }
   },
   {
     id: "4",
@@ -48,7 +63,12 @@ export const mockNews: NewsItemType[] = [
       level: "national",
       country: "European Union"
     },
-    industryCategory: "Data Privacy"
+    industryCategory: "Data Privacy",
+    interactions: {
+      likes: 10,
+      comments: 3,
+      shares: 1
+    }
   },
   {
     id: "5",
@@ -61,7 +81,12 @@ export const mockNews: NewsItemType[] = [
       country: "United States",
       state: "Texas"
     },
-    industryCategory: "Energy"
+    industryCategory: "Energy",
+    interactions: {
+      likes: 20,
+      comments: 7,
+      shares: 4
+    }
   },
   {
     id: "6",
@@ -72,7 +97,12 @@ export const mockNews: NewsItemType[] = [
     scope: {
       level: "world"
     },
-    industryCategory: "Automotive"
+    industryCategory: "Automotive",
+    interactions: {
+      likes: 55,
+      comments: 10,
+      shares: 6
+    }
   },
   {
     id: "7",
@@ -85,7 +115,12 @@ export const mockNews: NewsItemType[] = [
       country: "United States",
       state: "New York"
     },
-    industryCategory: "Banking & Finance"
+    industryCategory: "Banking & Finance",
+    interactions: {
+      likes: 25,
+      comments: 5,
+      shares: 2
+    }
   },
   {
     id: "8",
@@ -96,7 +131,12 @@ export const mockNews: NewsItemType[] = [
     scope: {
       level: "world"
     },
-    industryCategory: "Healthcare"
+    industryCategory: "Healthcare",
+    interactions: {
+      likes: 75,
+      comments: 20,
+      shares: 10
+    }
   },
   {
     id: "9",
@@ -109,7 +149,12 @@ export const mockNews: NewsItemType[] = [
       country: "United States",
       state: "Florida"
     },
-    industryCategory: "Tourism & Hospitality"
+    industryCategory: "Tourism & Hospitality",
+    interactions: {
+      likes: 30,
+      comments: 8,
+      shares: 5
+    }
   },
   {
     id: "10",
@@ -121,7 +166,12 @@ export const mockNews: NewsItemType[] = [
       level: "national",
       country: "Canada"
     },
-    industryCategory: "Cannabis"
+    industryCategory: "Cannabis",
+    interactions: {
+      likes: 15,
+      comments: 4,
+      shares: 1
+    }
   },
   {
     id: "11",
@@ -137,6 +187,11 @@ export const mockNews: NewsItemType[] = [
       type: "image",
       url: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
       caption: "The new AI research facility in Silicon Valley"
+    },
+    interactions: {
+      likes: 44,
+      comments: 11,
+      shares: 7
     }
   },
   {
@@ -153,6 +208,11 @@ export const mockNews: NewsItemType[] = [
       type: "image",
       url: "https://images.unsplash.com/photo-1518877593221-1f28583780b4",
       caption: "Humpback whales during migration season"
+    },
+    interactions: {
+      likes: 32,
+      comments: 3,
+      shares: 1
     }
   },
   {
@@ -171,6 +231,11 @@ export const mockNews: NewsItemType[] = [
       type: "image",
       url: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
       caption: "Remote workers adapting to new policies"
+    },
+    interactions: {
+      likes: 22,
+      comments: 15,
+      shares: 5
     }
   },
   {
@@ -187,6 +252,11 @@ export const mockNews: NewsItemType[] = [
       type: "image",
       url: "https://images.unsplash.com/photo-1517022812141-23620dba5c23",
       caption: "Innovative sustainable farming methods in action"
+    },
+    interactions: {
+      likes: 18,
+      comments: 5,
+      shares: 2
     }
   },
   {
@@ -204,6 +274,11 @@ export const mockNews: NewsItemType[] = [
       type: "video",
       url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
       caption: "Expert analysis of new privacy regulations"
+    },
+    interactions: {
+      likes: 14,
+      comments: 6,
+      shares: 3
     }
   },
   {
@@ -220,6 +295,11 @@ export const mockNews: NewsItemType[] = [
       type: "video",
       url: "https://www.youtube.com/embed/jkaMiaRLgvY",
       caption: "Demonstration of new solar storage technology"
+    },
+    interactions: {
+      likes: 26,
+      comments: 8,
+      shares: 2
     }
   },
   {
@@ -238,6 +318,11 @@ export const mockNews: NewsItemType[] = [
       type: "image",
       url: "https://images.unsplash.com/photo-1485833077593-4278bba3f11f",
       caption: "Modern healthcare facilities implementing new standards"
+    },
+    interactions: {
+      likes: 10,
+      comments: 4,
+      shares: 1
     }
   },
   {
@@ -254,6 +339,11 @@ export const mockNews: NewsItemType[] = [
       type: "video",
       url: "https://www.youtube.com/embed/Yb6825iv0Vk",
       caption: "Analysis of new cryptocurrency regulations"
+    },
+    interactions: {
+      likes: 9,
+      comments: 2,
+      shares: 0
     }
   },
   {
@@ -270,6 +360,11 @@ export const mockNews: NewsItemType[] = [
       type: "video",
       url: "https://www.youtube.com/embed/C4VHfmiwuv4",
       caption: "Overview of space tourism safety protocols"
+    },
+    interactions: {
+      likes: 8,
+      comments: 3,
+      shares: 1
     }
   },
   {
@@ -286,6 +381,11 @@ export const mockNews: NewsItemType[] = [
       type: "image",
       url: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1",
       caption: "AI systems under new ethical guidelines"
+    },
+    interactions: {
+      likes: 50,
+      comments: 20,
+      shares: 10
     }
   }
 ]

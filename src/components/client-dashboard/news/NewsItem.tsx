@@ -1,4 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { MessageSquare, Share2, ThumbsUp } from "lucide-react"
+import { useState } from "react"
 
 export interface NewsItemType {
   id: string
@@ -17,6 +20,11 @@ export interface NewsItemType {
     url: string
     caption?: string
   }
+  interactions?: {
+    likes: number
+    comments: number
+    shares: number
+  }
 }
 
 interface NewsItemProps {
@@ -24,8 +32,32 @@ interface NewsItemProps {
 }
 
 export function NewsItem({ news }: NewsItemProps) {
+  const [likes, setLikes] = useState(news.interactions?.likes || 0)
+  const [comments, setComments] = useState(news.interactions?.comments || 0)
+  const [shares, setShares] = useState(news.interactions?.shares || 0)
+  const [hasLiked, setHasLiked] = useState(false)
+
+  const handleLike = () => {
+    if (hasLiked) {
+      setLikes(prev => prev - 1)
+    } else {
+      setLikes(prev => prev + 1)
+    }
+    setHasLiked(!hasLiked)
+  }
+
+  const handleComment = () => {
+    // Increment comment count when comment feature is implemented
+    setComments(prev => prev + 1)
+  }
+
+  const handleShare = () => {
+    // Increment share count when share feature is implemented
+    setShares(prev => prev + 1)
+  }
+
   return (
-    <Card>
+    <Card className="transition-all duration-200 hover:shadow-lg">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-xl">{news.title}</CardTitle>
@@ -61,6 +93,35 @@ export function NewsItem({ news }: NewsItemProps) {
         )}
         <p className="text-muted-foreground">{news.content}</p>
       </CardContent>
+      <CardFooter className="border-t pt-4 space-x-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          className={`gap-2 ${hasLiked ? 'text-primary' : ''}`}
+          onClick={handleLike}
+        >
+          <ThumbsUp className="h-4 w-4" />
+          <span>{likes}</span>
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="gap-2"
+          onClick={handleComment}
+        >
+          <MessageSquare className="h-4 w-4" />
+          <span>{comments}</span>
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="gap-2"
+          onClick={handleShare}
+        >
+          <Share2 className="h-4 w-4" />
+          <span>{shares}</span>
+        </Button>
+      </CardFooter>
     </Card>
   )
 }
