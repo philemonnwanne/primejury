@@ -4,6 +4,7 @@ import { NewsItemType } from "./types"
 import { NewsMedia } from "./NewsMedia"
 import { NewsSource } from "./NewsSource"
 import { NewsInteractions } from "./NewsInteractions"
+import { AlertTriangle } from "lucide-react"
 
 interface NewsItemProps {
   news: NewsItemType
@@ -16,6 +17,12 @@ export function NewsItem({ news }: NewsItemProps) {
         <div className="flex items-center justify-between">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
+              {news.breaking && (
+                <span className="text-xs font-medium text-red-500 bg-red-100 px-2 py-1 rounded-full flex items-center gap-1">
+                  <AlertTriangle className="h-3 w-3" />
+                  Breaking News
+                </span>
+              )}
               {news.sponsored && (
                 <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
                   Sponsored by {news.sponsored.advertiser}

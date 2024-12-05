@@ -17,24 +17,33 @@ export default function ClientNewsFeed() {
   const [selectedScope, setSelectedScope] = useState<ScopeType>({ level: "world" })
   const [selectedIndustry, setSelectedIndustry] = useState<string>("all")
 
-  const filteredNews = mockNews.filter(news => {
-    // Always show sponsored content
-    if (news.sponsored) return true;
-    
-    // Apply filters for non-sponsored content
-    // Filter by type
-    if (selectedType !== "all" && news.type !== selectedType) return false;
-    
-    // Filter by scope
-    if (selectedScope.level !== news.scope.level) return false;
-    if (selectedScope.country && news.scope.country !== selectedScope.country) return false;
-    if (selectedScope.state && news.scope.state !== selectedScope.state) return false;
-    
-    // Filter by industry
-    if (selectedIndustry !== "all" && news.industryCategory !== selectedIndustry) return false;
-    
-    return true;
-  });
+  const filteredNews = mockNews
+    .filter(news => {
+      // Always show sponsored content
+      if (news.sponsored) return true;
+      
+      // Apply filters for non-sponsored content
+      // Filter by type
+      if (selectedType !== "all" && news.type !== selectedType) return false;
+      
+      // Filter by scope
+      if (selectedScope.level !== news.scope.level) return false;
+      if (selectedScope.country && news.scope.country !== selectedScope.country) return false;
+      if (selectedScope.state && news.scope.state !== selectedScope.state) return false;
+      
+      // Filter by industry
+      if (selectedIndustry !== "all" && news.industryCategory !== selectedIndustry) return false;
+      
+      return true;
+    })
+    .sort((a, b) => {
+      // Sort breaking news to the top
+      if (a.breaking && !b.breaking) return -1;
+      if (!a.breaking && b.breaking) return 1;
+      
+      // Then sort by date (most recent first)
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
 
   return (
     <ClientDashboardLayout>

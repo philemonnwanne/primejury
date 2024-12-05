@@ -33,6 +33,7 @@ export interface NewsItemType {
   source?: Source
   media?: MediaContent
   interactions?: Interactions
+  breaking?: boolean
   sponsored?: {
     advertiser: string
     cta?: {
