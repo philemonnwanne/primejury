@@ -6,6 +6,7 @@ import {
   Rss,
   LayoutDashboard,
   MessageSquare,
+  CreditCard,
 } from "lucide-react"
 import {
   Sidebar,
@@ -26,6 +27,7 @@ const menuItems = [
   { title: "Case Insights", icon: BarChart2, url: "/client-dashboard/insights" },
   { title: "News Feed", icon: Rss, url: "/client-dashboard/news" },
   { title: "Communications", icon: MessageSquare, url: "/client-dashboard/communications" },
+  { title: "Billing", icon: CreditCard, url: "/client-dashboard/billing" },
 ]
 
 export function ClientDashboardSidebar() {

@@ -62,6 +62,7 @@ function App() {
             <Route path="/client-dashboard/insights" element={<ClientInsights />} />
             <Route path="/client-dashboard/news" element={<ClientNewsFeed />} />
             <Route path="/client-dashboard/communications/:lawyerId?" element={<ClientCommunications />} />
+            <Route path="/client-dashboard/billing" element={<ClientBilling />} />
             <Route path="/lawyers" element={<LawyerPublicProfiles />} />
             <Route path="/lawyers/:id" element={<LawyerProfile />} />
             <Route path="/lawyer-marketplace" element={<Navigate to="/lawyers" replace />} />
