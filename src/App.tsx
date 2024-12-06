@@ -26,6 +26,7 @@ import ClientDocuments from "./pages/client-dashboard/Documents"
 import ClientInsights from "./pages/client-dashboard/Insights"
 import ClientNewsFeed from "./pages/client-dashboard/NewsFeed"
 import ClientCommunications from "./pages/client-dashboard/Communications"
+import ClientBilling from "./pages/client-dashboard/Billing"
 import LawyerPublicProfiles from "./pages/lawyers/LawyerPublicProfiles"
 import LawyerProfile from "./pages/lawyers/LawyerProfile"
 

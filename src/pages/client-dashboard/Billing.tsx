@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { CreditCard, Bank, FileCheck, AlertCircle } from "lucide-react"
+import { CreditCard, Banknote, FileCheck, AlertCircle } from "lucide-react"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 
@@ -155,7 +155,7 @@ export default function ClientBilling() {
                         </div>
                       ) : (
                         <div className="flex items-center gap-2">
-                          <Bank className="h-4 w-4" />
+                          <Banknote className="h-4 w-4" />
                           <span>****{invoice.paymentMethod.last4}</span>
                         </div>
                       )}
@@ -230,7 +230,7 @@ export default function ClientBilling() {
                           </>
                         ) : (
                           <>
-                            <Bank className="h-4 w-4" />
+                            <Banknote className="h-4 w-4" />
                             <div>
                               <p>{method.bankName}</p>
                               <p className="text-sm text-muted-foreground">
