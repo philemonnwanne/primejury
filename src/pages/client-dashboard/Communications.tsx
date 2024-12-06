@@ -2,13 +2,13 @@ import { ClientDashboardLayout } from "@/layouts/ClientDashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { MessageSquare, Send, User, Video, Mic, Camera, PhoneCall } from "lucide-react"
-import { useState, useEffect } from "react"
+import { Send } from "lucide-react"
+import { useState } from "react"
 import { useParams } from "react-router-dom"
 import { lawyerProfiles } from "@/data/lawyerProfiles"
-import { cn } from "@/lib/utils"
-import { useToast } from "@/hooks/use-toast"
+import { VideoCall } from "@/components/client-dashboard/communications/VideoCall"
+import { MessageList } from "@/components/client-dashboard/communications/MessageList"
+import { LawyerList } from "@/components/client-dashboard/communications/LawyerList"
 
 interface Message {
   id: string
@@ -19,26 +19,34 @@ interface Message {
   isLawyer: boolean
 }
 
+// Mock scheduled meetings data
+const scheduledMeetings = [
+  {
+    lawyerId: "sarah-parker",
+    startTime: new Date(2024, 3, 15, 14, 0), // April 15, 2024, 2:00 PM
+    endTime: new Date(2024, 3, 15, 15, 0),   // April 15, 2024, 3:00 PM
+  },
+  {
+    lawyerId: "michael-chang",
+    startTime: new Date(2024, 3, 16, 10, 0), // April 16, 2024, 10:00 AM
+    endTime: new Date(2024, 3, 16, 11, 0),   // April 16, 2024, 11:00 AM
+  },
+]
+
 export default function Communications() {
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState("")
   const { lawyerId } = useParams()
   const [selectedLawyer, setSelectedLawyer] = useState<string | undefined>(lawyerId)
-  const [isInCall, setIsInCall] = useState(false)
-  const [isMuted, setIsMuted] = useState(false)
-  const [isVideoOn, setIsVideoOn] = useState(true)
-  const { toast } = useToast()
 
   // Filter lawyers to only show those the client has worked with
   const availableLawyers = lawyerProfiles.filter(lawyer => 
     ["sarah-parker", "michael-chang", "emily-wilson"].includes(lawyer.id)
   )
 
-  useEffect(() => {
-    if (lawyerId) {
-      setSelectedLawyer(lawyerId)
-    }
-  }, [lawyerId])
+  const currentMeeting = scheduledMeetings.find(
+    meeting => meeting.lawyerId === selectedLawyer
+  )
 
   const handleSendMessage = () => {
     if (!newMessage.trim()) return
@@ -54,47 +62,6 @@ export default function Communications() {
 
     setMessages(prev => [...prev, message])
     setNewMessage("")
-  }
-
-  const startVideoCall = () => {
-    if (!selectedLawyer) {
-      toast({
-        title: "Cannot start call",
-        description: "Please select a lawyer first",
-        variant: "destructive",
-      })
-      return
-    }
-
-    setIsInCall(true)
-    toast({
-      title: "Video call started",
-      description: "Connected with your lawyer",
-    })
-  }
-
-  const endVideoCall = () => {
-    setIsInCall(false)
-    setIsMuted(false)
-    setIsVideoOn(true)
-    toast({
-      title: "Call ended",
-      description: "Video call has been terminated",
-    })
-  }
-
-  const toggleMute = () => {
-    setIsMuted(!isMuted)
-    toast({
-      title: isMuted ? "Microphone unmuted" : "Microphone muted",
-    })
-  }
-
-  const toggleVideo = () => {
-    setIsVideoOn(!isVideoOn)
-    toast({
-      title: isVideoOn ? "Camera turned off" : "Camera turned on",
-    })
   }
 
   const currentLawyer = availableLawyers.find(l => l.id === selectedLawyer)
@@ -113,26 +80,11 @@ export default function Communications() {
               <CardTitle className="text-sm">Your Lawyers</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 p-0">
-              <ScrollArea className="h-full">
-                {availableLawyers.map((lawyer) => (
-                  <button
-                    key={lawyer.id}
-                    onClick={() => setSelectedLawyer(lawyer.id)}
-                    className={cn(
-                      "w-full flex items-center gap-3 p-3 hover:bg-accent transition-colors",
-                      selectedLawyer === lawyer.id && "bg-accent"
-                    )}
-                  >
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <User className="h-5 w-5 text-primary" />
-                    </div>
-                    <div className="text-left">
-                      <p className="font-medium">{lawyer.name}</p>
-                      <p className="text-xs text-muted-foreground">{lawyer.specialization}</p>
-                    </div>
-                  </button>
-                ))}
-              </ScrollArea>
+              <LawyerList 
+                lawyers={availableLawyers}
+                selectedLawyer={selectedLawyer}
+                onSelectLawyer={setSelectedLawyer}
+              />
             </CardContent>
           </Card>
 
@@ -147,81 +99,27 @@ export default function Communications() {
                     </div>
                     <div>
                       <CardTitle>{currentLawyer.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground">{currentLawyer.specialization}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {currentLawyer.specialization}
+                      </p>
+                      {currentMeeting && (
+                        <p className="text-xs text-muted-foreground">
+                          Next meeting: {currentMeeting.startTime.toLocaleString()}
+                        </p>
+                      )}
                     </div>
                   </div>
-                  {!isInCall ? (
-                    <Button onClick={startVideoCall} className="gap-2">
-                      <Video className="h-4 w-4" />
-                      Start Video Call
-                    </Button>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={toggleMute}
-                        className={cn(isMuted && "bg-destructive hover:bg-destructive")}
-                      >
-                        <Mic className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={toggleVideo}
-                        className={cn(!isVideoOn && "bg-destructive hover:bg-destructive")}
-                      >
-                        <Camera className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        onClick={endVideoCall}
-                      >
-                        <PhoneCall className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  )}
+                  <VideoCall 
+                    selectedLawyer={selectedLawyer}
+                    currentMeeting={currentMeeting}
+                  />
                 </div>
               ) : (
                 <CardTitle>Select a lawyer to start messaging</CardTitle>
               )}
             </CardHeader>
             <CardContent className="flex-1 flex flex-col p-4">
-              {isInCall && (
-                <div className="bg-muted rounded-lg mb-4 h-[300px] flex items-center justify-center">
-                  <p className="text-muted-foreground">
-                    {isVideoOn ? "Video call in progress" : "Camera is turned off"}
-                  </p>
-                </div>
-              )}
-              <ScrollArea className="flex-1 pr-4">
-                <div className="space-y-4">
-                  {messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`flex ${
-                        message.isLawyer ? "justify-start" : "justify-end"
-                      }`}
-                    >
-                      <div
-                        className={cn(
-                          "max-w-[80%] rounded-lg p-3",
-                          message.isLawyer
-                            ? "bg-muted"
-                            : "bg-primary text-primary-foreground"
-                        )}
-                      >
-                        <p className="text-sm font-medium">{message.senderName}</p>
-                        <p className="text-sm">{message.content}</p>
-                        <p className="text-xs opacity-70 mt-1">
-                          {message.timestamp.toLocaleTimeString()}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
+              <MessageList messages={messages} />
               <div className="flex gap-2 mt-4">
                 <Input
                   placeholder="Type your message..."
