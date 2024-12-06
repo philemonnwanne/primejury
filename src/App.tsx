@@ -31,43 +31,45 @@ import LawyerProfile from "./pages/lawyers/LawyerProfile"
 
 const queryClient = new QueryClient()
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<DashboardOverview />} />
-          <Route path="/dashboard/cases" element={<Cases />} />
-          <Route path="/dashboard/staff" element={<Staff />} />
-          <Route path="/dashboard/staff/:id" element={<StaffProfile />} />
-          <Route path="/dashboard/tasks" element={<Tasks />} />
-          <Route path="/dashboard/documents" element={<Documents />} />
-          <Route path="/dashboard/finance" element={<Finance />} />
-          <Route path="/dashboard/analytics" element={<Analytics />} />
-          <Route path="/dashboard/settings" element={<Settings />} />
-          <Route path="/lawyer-dashboard" element={<LawyerDashboard />} />
-          <Route path="/lawyer-dashboard/cases" element={<LawyerCases />} />
-          <Route path="/lawyer-dashboard/tasks" element={<LawyerTasks />} />
-          <Route path="/lawyer-dashboard/documents" element={<LawyerDocuments />} />
-          <Route path="/lawyer-dashboard/messages" element={<LawyerMessages />} />
-          <Route path="/lawyer-dashboard/performance" element={<LawyerPerformance />} />
-          <Route path="/client-dashboard" element={<ClientDashboard />} />
-          <Route path="/client-dashboard/cases" element={<ClientCases />} />
-          <Route path="/client-dashboard/forms" element={<ClientForms />} />
-          <Route path="/client-dashboard/documents" element={<ClientDocuments />} />
-          <Route path="/client-dashboard/insights" element={<ClientInsights />} />
-          <Route path="/client-dashboard/news" element={<ClientNewsFeed />} />
-          <Route path="/client-dashboard/communications/:lawyerId?" element={<ClientCommunications />} />
-          <Route path="/lawyers" element={<LawyerPublicProfiles />} />
-          <Route path="/lawyers/:id" element={<LawyerProfile />} />
-          <Route path="/lawyer-marketplace" element={<Navigate to="/lawyers" replace />} />
-        </Routes>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/dashboard" element={<DashboardOverview />} />
+            <Route path="/dashboard/cases" element={<Cases />} />
+            <Route path="/dashboard/staff" element={<Staff />} />
+            <Route path="/dashboard/staff/:id" element={<StaffProfile />} />
+            <Route path="/dashboard/tasks" element={<Tasks />} />
+            <Route path="/dashboard/documents" element={<Documents />} />
+            <Route path="/dashboard/finance" element={<Finance />} />
+            <Route path="/dashboard/analytics" element={<Analytics />} />
+            <Route path="/dashboard/settings" element={<Settings />} />
+            <Route path="/lawyer-dashboard" element={<LawyerDashboard />} />
+            <Route path="/lawyer-dashboard/cases" element={<LawyerCases />} />
+            <Route path="/lawyer-dashboard/tasks" element={<LawyerTasks />} />
+            <Route path="/lawyer-dashboard/documents" element={<LawyerDocuments />} />
+            <Route path="/lawyer-dashboard/messages" element={<LawyerMessages />} />
+            <Route path="/lawyer-dashboard/performance" element={<LawyerPerformance />} />
+            <Route path="/client-dashboard" element={<ClientDashboard />} />
+            <Route path="/client-dashboard/cases" element={<ClientCases />} />
+            <Route path="/client-dashboard/forms" element={<ClientForms />} />
+            <Route path="/client-dashboard/documents" element={<ClientDocuments />} />
+            <Route path="/client-dashboard/insights" element={<ClientInsights />} />
+            <Route path="/client-dashboard/news" element={<ClientNewsFeed />} />
+            <Route path="/client-dashboard/communications/:lawyerId?" element={<ClientCommunications />} />
+            <Route path="/lawyers" element={<LawyerPublicProfiles />} />
+            <Route path="/lawyers/:id" element={<LawyerProfile />} />
+            <Route path="/lawyer-marketplace" element={<Navigate to="/lawyers" replace />} />
+          </Routes>
+        </TooltipProvider>
       </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-)
+    </QueryClientProvider>
+  )
+}
 
 export default App
