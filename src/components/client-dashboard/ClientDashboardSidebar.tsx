@@ -78,12 +78,12 @@ export function ClientDashboardSidebar() {
                         </span>
                         {item.badge && (
                           <div className="relative">
-                            <span className="absolute -inset-1.5">
-                              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${item.badge.variant === 'destructive' ? 'bg-destructive' : 'bg-primary'}`}></span>
+                            <span className="absolute -inset-1">
+                              <span className={`animate-pulse absolute inline-flex h-full w-full rounded-full opacity-40 ${item.badge.variant === 'destructive' ? 'bg-destructive' : 'bg-primary'}`}></span>
                             </span>
                             <Badge 
                               variant={item.badge.variant}
-                              className="relative inline-flex transition-transform duration-200 group-hover:scale-110"
+                              className="relative inline-flex transition-transform duration-200 group-hover:scale-105"
                             >
                               {item.badge.count}
                             </Badge>
