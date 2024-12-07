@@ -5,6 +5,7 @@ import { LegalRepresentatives } from "./sections/LegalRepresentatives"
 import { CaseLocation } from "./sections/CaseLocation"
 import { SettlementOffers } from "./sections/SettlementOffers"
 import { RelatedForms } from "./sections/RelatedForms"
+import { PendingItems } from "./sections/PendingItems"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 
@@ -75,6 +76,8 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
           <Badge variant="outline">{caseDetails.status}</Badge>
         </div>
       </div>
+
+      <PendingItems />
 
       <Separator />
 

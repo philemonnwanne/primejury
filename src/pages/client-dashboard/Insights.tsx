@@ -1,9 +1,7 @@
 import { ClientDashboardLayout } from "@/layouts/ClientDashboardLayout"
-import { PreviousCaseCard } from "@/components/cases/PreviousCaseCard"
 import { CaseDetails } from "@/components/cases/CaseDetails"
 import { InsightFilters } from "@/components/cases/InsightFilters"
 import { CaseTimeline } from "@/components/cases/CaseTimeline"
-import { PendingItems } from "@/components/cases/sections/PendingItems"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const mockPreviousCases = [
@@ -274,7 +272,6 @@ export default function Insights() {
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-6">
                 <CaseDetails caseId="1" />
-                <PendingItems />
               </div>
               <CaseTimeline events={mockTimelineEvents} />
             </div>
