@@ -4,47 +4,88 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Search } from "lucide-react"
+import { useState } from "react"
+import { PendingFormsSection } from "@/components/forms/PendingFormsSection"
+import { FormSuggestions } from "@/components/forms/FormSuggestions"
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
 
 const formCategories = {
-  federal: [
+  criminal: [
     {
-      title: "Federal Tax Form",
-      description: "Standard federal tax documentation for legal proceedings",
-      category: "Tax Law",
+      title: "Criminal Defense Questionnaire",
+      description: "Initial case assessment form for criminal defense cases",
+      category: "Criminal Law",
     },
     {
-      title: "Bankruptcy Petition",
-      description: "Official bankruptcy filing documentation",
-      category: "Bankruptcy Law",
+      title: "Witness Statement Form",
+      description: "Standard form for documenting witness testimonies",
+      category: "Criminal Law",
     },
   ],
-  state: [
+  civil: [
     {
-      title: "State Court Complaint",
-      description: "Initial filing document for state court proceedings",
+      title: "Civil Complaint Form",
+      description: "Initial filing document for civil lawsuits",
       category: "Civil Law",
     },
     {
-      title: "Divorce Petition",
-      description: "State-specific divorce filing documentation",
-      category: "Family Law",
+      title: "Settlement Agreement",
+      description: "Template for documenting settlement terms",
+      category: "Civil Law",
     },
   ],
-  local: [
+  immigration: [
     {
-      title: "Local Business License",
-      description: "Municipal business registration form",
-      category: "Business Law",
+      title: "Visa Application Support",
+      description: "Supporting documentation for visa applications",
+      category: "Immigration Law",
     },
     {
-      title: "Zoning Permit",
-      description: "Local zoning and planning documentation",
-      category: "Property Law",
+      title: "Citizenship Application",
+      description: "Forms required for citizenship process",
+      category: "Immigration Law",
+    },
+  ],
+  family: [
+    {
+      title: "Divorce Petition",
+      description: "Standard divorce filing documentation",
+      category: "Family Law",
+    },
+    {
+      title: "Child Custody Agreement",
+      description: "Template for custody arrangements",
+      category: "Family Law",
     },
   ],
 }
 
 export default function ClientForms() {
+  const [showCommandDialog, setShowCommandDialog] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState("")
+
+  const handleSearch = (value: string) => {
+    setSearchTerm(value)
+    setSelectedCategory(null)
+  }
+
+  const filteredForms = selectedCategory
+    ? formCategories[selectedCategory as keyof typeof formCategories]
+    : Object.values(formCategories).flat()
+
+  const displayedForms = filteredForms.filter((form) =>
+    form.title.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
   return (
     <ClientDashboardLayout>
       <div className="space-y-6">
@@ -60,18 +101,27 @@ export default function ClientForms() {
           <Input
             placeholder="Search forms..."
             className="pl-10"
+            onClick={() => setShowCommandDialog(true)}
+            value={searchTerm}
+            onChange={(e) => handleSearch(e.target.value)}
           />
         </div>
 
-        <Tabs defaultValue="federal">
+        <PendingFormsSection />
+
+        <FormSuggestions />
+
+        <Tabs defaultValue="criminal">
           <TabsList>
-            <TabsTrigger value="federal">Federal</TabsTrigger>
-            <TabsTrigger value="state">State</TabsTrigger>
-            <TabsTrigger value="local">Local</TabsTrigger>
+            <TabsTrigger value="criminal">Criminal Law</TabsTrigger>
+            <TabsTrigger value="civil">Civil Law</TabsTrigger>
+            <TabsTrigger value="immigration">Immigration Law</TabsTrigger>
+            <TabsTrigger value="family">Family Law</TabsTrigger>
           </TabsList>
-          {(Object.keys(formCategories) as Array<keyof typeof formCategories>).map((tab) => (
-            <TabsContent key={tab} value={tab} className="space-y-4">
-              {formCategories[tab].map((form) => (
+          <TabsContent value="criminal" className="space-y-4">
+            {displayedForms
+              .filter((form) => form.category === "Criminal Law")
+              .map((form) => (
                 <Card key={form.title}>
                   <CardHeader>
                     <CardTitle className="text-xl">{form.title}</CardTitle>
@@ -87,9 +137,88 @@ export default function ClientForms() {
                   </CardContent>
                 </Card>
               ))}
-            </TabsContent>
-          ))}
+          </TabsContent>
+          <TabsContent value="civil" className="space-y-4">
+            {displayedForms
+              .filter((form) => form.category === "Civil Law")
+              .map((form) => (
+                <Card key={form.title}>
+                  <CardHeader>
+                    <CardTitle className="text-xl">{form.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-muted-foreground">{form.description}</p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">
+                        {form.category}
+                      </span>
+                      <Button>Fill Out Form</Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+          </TabsContent>
+          <TabsContent value="immigration" className="space-y-4">
+            {displayedForms
+              .filter((form) => form.category === "Immigration Law")
+              .map((form) => (
+                <Card key={form.title}>
+                  <CardHeader>
+                    <CardTitle className="text-xl">{form.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-muted-foreground">{form.description}</p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">
+                        {form.category}
+                      </span>
+                      <Button>Fill Out Form</Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+          </TabsContent>
+          <TabsContent value="family" className="space-y-4">
+            {displayedForms
+              .filter((form) => form.category === "Family Law")
+              .map((form) => (
+                <Card key={form.title}>
+                  <CardHeader>
+                    <CardTitle className="text-xl">{form.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-muted-foreground">{form.description}</p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">
+                        {form.category}
+                      </span>
+                      <Button>Fill Out Form</Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+          </TabsContent>
         </Tabs>
+
+        <CommandDialog open={showCommandDialog} onOpenChange={setShowCommandDialog}>
+          <CommandInput placeholder="Search forms by category..." />
+          <CommandList>
+            <CommandEmpty>No results found.</CommandEmpty>
+            <CommandGroup heading="Categories">
+              {Object.entries(formCategories).map(([key, forms]) => (
+                <CommandItem
+                  key={key}
+                  onSelect={() => {
+                    setSelectedCategory(key)
+                    setShowCommandDialog(false)
+                  }}
+                >
+                  {key.charAt(0).toUpperCase() + key.slice(1)} Law ({forms.length})
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </CommandDialog>
       </div>
     </ClientDashboardLayout>
   )
