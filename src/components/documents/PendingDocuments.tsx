@@ -1,8 +1,9 @@
-import { AlertTriangle, Clock, Upload } from "lucide-react"
+import { AlertTriangle, Clock, Upload, Trash2, RefreshCw } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
+import { useState } from "react"
 
 interface PendingDocument {
   id: string
@@ -10,9 +11,11 @@ interface PendingDocument {
   caseTitle: string
   dueDate: string
   status: "urgent" | "upcoming" | "overdue"
+  uploaded?: boolean
+  fileName?: string
 }
 
-const mockPendingDocuments: PendingDocument[] = [
+const initialMockPendingDocuments: PendingDocument[] = [
   {
     id: "1",
     title: "Signed Settlement Agreement",
@@ -38,6 +41,7 @@ const mockPendingDocuments: PendingDocument[] = [
 
 export function PendingDocuments() {
   const { toast } = useToast()
+  const [pendingDocuments, setPendingDocuments] = useState<PendingDocument[]>(initialMockPendingDocuments)
 
   const getStatusColor = (status: PendingDocument["status"]) => {
     switch (status) {
@@ -65,6 +69,13 @@ export function PendingDocuments() {
     input.onchange = (e) => {
       const file = (e.target as HTMLInputElement).files?.[0]
       if (file) {
+        setPendingDocuments(docs => 
+          docs.map(d => 
+            d.id === doc.id 
+              ? { ...d, uploaded: true, fileName: file.name }
+              : d
+          )
+        )
         toast({
           title: "Document Uploaded",
           description: `${file.name} has been uploaded for ${doc.title}`,
@@ -72,6 +83,20 @@ export function PendingDocuments() {
       }
     }
     input.click()
+  }
+
+  const handleDelete = (doc: PendingDocument) => {
+    setPendingDocuments(docs =>
+      docs.map(d =>
+        d.id === doc.id
+          ? { ...d, uploaded: false, fileName: undefined }
+          : d
+      )
+    )
+    toast({
+      title: "Document Deleted",
+      description: `Document has been removed from ${doc.title}`,
+    })
   }
 
   return (
@@ -83,7 +108,7 @@ export function PendingDocuments() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {mockPendingDocuments.map((doc) => {
+        {pendingDocuments.map((doc) => {
           const daysRemaining = getDaysRemaining(doc.dueDate)
           return (
             <div
@@ -98,6 +123,11 @@ export function PendingDocuments() {
                 <p className="text-sm text-muted-foreground">
                   Case: {doc.caseTitle}
                 </p>
+                {doc.uploaded && (
+                  <p className="text-sm text-green-600">
+                    Uploaded: {doc.fileName}
+                  </p>
+                )}
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
@@ -110,15 +140,40 @@ export function PendingDocuments() {
                       : `${daysRemaining} days remaining`}
                   </span>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleUpload(doc)}
-                  className="gap-2"
-                >
-                  <Upload className="h-4 w-4" />
-                  Upload
-                </Button>
+                <div className="flex gap-2">
+                  {doc.uploaded ? (
+                    <>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDelete(doc)}
+                        className="gap-2"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Delete
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleUpload(doc)}
+                        className="gap-2"
+                      >
+                        <RefreshCw className="h-4 w-4" />
+                        Replace
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleUpload(doc)}
+                      className="gap-2"
+                    >
+                      <Upload className="h-4 w-4" />
+                      Upload
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           )
