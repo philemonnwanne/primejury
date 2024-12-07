@@ -72,17 +72,24 @@ export function ClientDashboardSidebar() {
                       className="group flex items-center gap-3 px-4 py-3 relative rounded-lg transition-all duration-200 hover:bg-sidebar-accent/10"
                     >
                       <item.icon className="h-4 w-4 transition-colors duration-200 group-hover:text-primary" />
-                      <span className="text-sm font-medium transition-colors duration-200 group-hover:text-primary">
-                        {item.title}
-                      </span>
-                      {item.badge && (
-                        <Badge 
-                          variant={item.badge.variant}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 transition-transform duration-200 group-hover:scale-110"
-                        >
-                          {item.badge.count}
-                        </Badge>
-                      )}
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium transition-colors duration-200 group-hover:text-primary">
+                          {item.title}
+                        </span>
+                        {item.badge && (
+                          <div className="relative">
+                            <span className="absolute -inset-1.5">
+                              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${item.badge.variant === 'destructive' ? 'bg-destructive' : 'bg-primary'}`}></span>
+                            </span>
+                            <Badge 
+                              variant={item.badge.variant}
+                              className="relative inline-flex transition-transform duration-200 group-hover:scale-110"
+                            >
+                              {item.badge.count}
+                            </Badge>
+                          </div>
+                        )}
+                      </div>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
