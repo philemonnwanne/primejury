@@ -58,18 +58,16 @@ export function PendingDocuments() {
     return diffDays
   }
 
-  const handleUpload = (document: PendingDocument) => {
-    // Open file input
-    const input = document.createElement('input')
+  const handleUpload = (doc: PendingDocument) => {
+    const input = window.document.createElement('input')
     input.type = 'file'
     input.accept = '.pdf,.doc,.docx,.jpg,.jpeg,.png'
     input.onchange = (e) => {
       const file = (e.target as HTMLInputElement).files?.[0]
       if (file) {
-        // Mock upload success
         toast({
           title: "Document Uploaded",
-          description: `${file.name} has been uploaded for ${document.title}`,
+          description: `${file.name} has been uploaded for ${doc.title}`,
         })
       }
     }
