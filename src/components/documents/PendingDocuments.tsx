@@ -69,16 +69,19 @@ export function PendingDocuments() {
     input.onchange = (e) => {
       const file = (e.target as HTMLInputElement).files?.[0]
       if (file) {
-        setPendingDocuments(docs => 
-          docs.map(d => 
-            d.id === doc.id 
-              ? { ...d, uploaded: true, fileName: file.name }
-              : d
-          )
-        )
+        // Remove document from pending list
+        setPendingDocuments(docs => docs.filter(d => d.id !== doc.id))
+        
+        // Show success message
         toast({
           title: "Document Uploaded",
-          description: `${file.name} has been uploaded for ${doc.title}`,
+          description: `${file.name} has been uploaded to ${doc.caseTitle}`,
+        })
+
+        // Mock adding to case folder (in a real app, this would interact with your backend)
+        toast({
+          title: "Document Added to Case",
+          description: `${file.name} has been added to ${doc.caseTitle} folder`,
         })
       }
     }
