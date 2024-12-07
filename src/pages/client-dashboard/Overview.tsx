@@ -3,6 +3,7 @@ import { UrgentNotifications } from "@/components/client-dashboard/overview/Urge
 import { CaseProgressList } from "@/components/client-dashboard/overview/CaseProgressList"
 import { NewsFeedOverview } from "@/components/client-dashboard/overview/NewsFeedOverview"
 import { BillingOverview } from "@/components/client-dashboard/overview/BillingOverview"
+import { CaseBidsOverview } from "@/components/client-dashboard/overview/CaseBidsOverview"
 
 export default function ClientDashboard() {
   return (
@@ -15,7 +16,10 @@ export default function ClientDashboard() {
           </p>
         </div>
 
-        <UrgentNotifications />
+        <div className="grid gap-6 md:grid-cols-2">
+          <UrgentNotifications />
+          <CaseBidsOverview />
+        </div>
 
         <div className="grid gap-6 md:grid-cols-2">
           <CaseProgressList />
