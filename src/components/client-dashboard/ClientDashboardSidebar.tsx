@@ -73,7 +73,7 @@ export function ClientDashboardSidebar() {
                     >
                       <item.icon className="h-4 w-4 transition-colors duration-200 group-hover:text-primary" />
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium transition-colors duration-200 group-hover:text-primary">
+                        <span className="text-sm font-medium transition-colors duration-200 hover:text-primary">
                           {item.title}
                         </span>
                         {item.badge && (
