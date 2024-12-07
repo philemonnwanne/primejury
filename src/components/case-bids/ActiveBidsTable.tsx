@@ -42,7 +42,66 @@ export function ActiveBidsTable() {
       rating: 4.8,
       reviewCount: 127,
     },
-    // Add more mock bids as needed
+    {
+      id: 2,
+      lawyerId: "michael-rodriguez",
+      lawyerName: "Michael Rodriguez",
+      caseTitle: "Contract Dispute Resolution",
+      amount: "$6,800",
+      proposedTimeline: "2-3 months",
+      status: "Pending",
+      bidDate: "2024-03-13",
+      experience: "12 years in business litigation",
+      successRate: "92%",
+      similarCases: 38,
+      strategy: "My approach would focus on swift resolution through strategic negotiation and mediation:",
+      strategyPoints: [
+        "Initial comprehensive case evaluation",
+        "Development of strong negotiating position",
+        "Strategic use of mediation techniques",
+        "Cost-effective dispute resolution path"
+      ],
+      availability: "Can start within one week",
+      credentials: [
+        "State Bar of California",
+        "Business Law Specialist",
+        "AAA Certified Arbitrator"
+      ],
+      proposedPaymentStructure: "Monthly installments available",
+      additionalNotes: "Specialized in quick, cost-effective dispute resolutions with high success rate in mediation.",
+      rating: 4.6,
+      reviewCount: 98,
+    },
+    {
+      id: 3,
+      lawyerId: "jennifer-chen",
+      lawyerName: "Jennifer Chen",
+      caseTitle: "Contract Dispute Resolution",
+      amount: "$8,200",
+      proposedTimeline: "4-5 months",
+      status: "Pending",
+      bidDate: "2024-03-14",
+      experience: "18 years in commercial litigation",
+      successRate: "94%",
+      similarCases: 62,
+      strategy: "I propose a comprehensive approach focusing on both immediate resolution and long-term business relationship preservation:",
+      strategyPoints: [
+        "Detailed contract analysis and precedent review",
+        "Multi-phase negotiation strategy",
+        "Risk assessment and mitigation planning",
+        "Business relationship preservation tactics"
+      ],
+      availability: "Available for immediate start",
+      credentials: [
+        "Commercial Law Specialist",
+        "Harvard Law School Graduate",
+        "Former Corporate Counsel"
+      ],
+      proposedPaymentStructure: "Flexible payment plans available, including success-based fees",
+      additionalNotes: "Strong track record in preserving business relationships while resolving disputes effectively.",
+      rating: 4.9,
+      reviewCount: 156,
+    }
   ]
 
   const handleBidAction = (bidId: number, action: 'accept' | 'decline' | 'counter') => {
