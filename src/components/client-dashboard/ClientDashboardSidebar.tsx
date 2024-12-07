@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   MessageSquare,
   CreditCard,
+  Gavel,
 } from "lucide-react"
 import {
   Sidebar,
@@ -22,6 +23,7 @@ import { Badge } from "@/components/ui/badge"
 
 const menuItems = [
   { title: "Overview", icon: LayoutDashboard, url: "/client-dashboard" },
+  { title: "Case Bids", icon: Gavel, url: "/client-dashboard/case-bids" },
   { 
     title: "My Cases", 
     icon: Briefcase, 
