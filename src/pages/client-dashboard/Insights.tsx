@@ -1,4 +1,5 @@
 import { ClientDashboardLayout } from "@/layouts/ClientDashboardLayout"
+import { PreviousCaseCard } from "@/components/cases/PreviousCaseCard"
 import { CaseDetails } from "@/components/cases/CaseDetails"
 import { InsightFilters } from "@/components/cases/InsightFilters"
 import { CaseTimeline } from "@/components/cases/CaseTimeline"
