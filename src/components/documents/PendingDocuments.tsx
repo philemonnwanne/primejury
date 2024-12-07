@@ -1,6 +1,8 @@
-import { AlertTriangle, Clock } from "lucide-react"
+import { AlertTriangle, Clock, Upload } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/use-toast"
 
 interface PendingDocument {
   id: string
@@ -35,6 +37,8 @@ const mockPendingDocuments: PendingDocument[] = [
 ]
 
 export function PendingDocuments() {
+  const { toast } = useToast()
+
   const getStatusColor = (status: PendingDocument["status"]) => {
     switch (status) {
       case "urgent":
@@ -52,6 +56,24 @@ export function PendingDocuments() {
     const diffTime = due.getTime() - today.getTime()
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
     return diffDays
+  }
+
+  const handleUpload = (document: PendingDocument) => {
+    // Open file input
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = '.pdf,.doc,.docx,.jpg,.jpeg,.png'
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0]
+      if (file) {
+        // Mock upload success
+        toast({
+          title: "Document Uploaded",
+          description: `${file.name} has been uploaded for ${document.title}`,
+        })
+      }
+    }
+    input.click()
   }
 
   return (
@@ -79,15 +101,26 @@ export function PendingDocuments() {
                   Case: {doc.caseTitle}
                 </p>
               </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                <span className="text-sm font-medium">
-                  {daysRemaining < 0
-                    ? `${Math.abs(daysRemaining)} days overdue`
-                    : daysRemaining === 0
-                    ? "Due today"
-                    : `${daysRemaining} days remaining`}
-                </span>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  <span className="text-sm font-medium">
+                    {daysRemaining < 0
+                      ? `${Math.abs(daysRemaining)} days overdue`
+                      : daysRemaining === 0
+                      ? "Due today"
+                      : `${daysRemaining} days remaining`}
+                  </span>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleUpload(doc)}
+                  className="gap-2"
+                >
+                  <Upload className="h-4 w-4" />
+                  Upload
+                </Button>
               </div>
             </div>
           )
