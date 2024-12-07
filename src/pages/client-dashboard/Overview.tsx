@@ -2,6 +2,7 @@ import { ClientDashboardLayout } from "@/layouts/ClientDashboardLayout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Briefcase, CheckSquare, Calendar } from "lucide-react"
+import { CaseOverviewPanel } from "@/components/client-dashboard/CaseOverviewPanel"
 
 const metrics = [
   {
@@ -22,6 +23,60 @@ const metrics = [
     icon: Calendar,
     link: "/client-dashboard/cases",
   },
+]
+
+const mockCases = [
+  {
+    id: "1",
+    title: "Smith vs. Johnson Manufacturing",
+    status: "active",
+    progress: 65,
+    nextDeadline: "2024-03-15",
+    lawyer: {
+      name: "Sarah Parker",
+      imageUrl: "/placeholder.svg"
+    },
+    recentActivities: [
+      {
+        id: "a1",
+        action: "Document uploaded: Evidence Package",
+        date: "2024-02-28"
+      },
+      {
+        id: "a2",
+        action: "Court hearing scheduled",
+        date: "2024-02-27"
+      },
+      {
+        id: "a3",
+        action: "Motion filed",
+        date: "2024-02-26"
+      }
+    ]
+  },
+  {
+    id: "2",
+    title: "Estate Planning - Brown Family",
+    status: "pending",
+    progress: 30,
+    nextDeadline: "2024-03-20",
+    lawyer: {
+      name: "Michael Chang",
+      imageUrl: "/placeholder.svg"
+    },
+    recentActivities: [
+      {
+        id: "a4",
+        action: "Initial consultation completed",
+        date: "2024-02-28"
+      },
+      {
+        id: "a5",
+        action: "Documents requested",
+        date: "2024-02-27"
+      }
+    ]
+  }
 ]
 
 export default function ClientDashboard() {
@@ -56,6 +111,11 @@ export default function ClientDashboard() {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold tracking-tight">Active Cases</h2>
+          <CaseOverviewPanel cases={mockCases} />
         </div>
       </div>
     </ClientDashboardLayout>
