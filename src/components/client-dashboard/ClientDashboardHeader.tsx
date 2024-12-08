@@ -10,10 +10,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { UserRound, Settings, Lock, HelpCircle, FileText, Bell } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export function ClientDashboardHeader() {
   const { toast } = useToast()
+  const navigate = useNavigate()
 
   const handleNotificationClick = () => {
     toast({
@@ -22,11 +23,8 @@ export function ClientDashboardHeader() {
     })
   }
 
-  const handleMenuItemClick = (action: string) => {
-    toast({
-      title: action,
-      description: `${action} feature coming soon`,
-    })
+  const handleMenuItemClick = (path: string) => {
+    navigate(path)
   }
 
   return (
@@ -53,26 +51,26 @@ export function ClientDashboardHeader() {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => handleMenuItemClick("Profile Settings")}>
+              <DropdownMenuItem onClick={() => handleMenuItemClick("/client-dashboard/settings/profile")}>
                 <UserRound className="mr-2 h-4 w-4" />
                 <span>Profile Settings</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleMenuItemClick("Account Settings")}>
+              <DropdownMenuItem onClick={() => handleMenuItemClick("/client-dashboard/settings/account")}>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Account Settings</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleMenuItemClick("Privacy & Security")}>
+              <DropdownMenuItem onClick={() => handleMenuItemClick("/client-dashboard/settings/privacy")}>
                 <Lock className="mr-2 h-4 w-4" />
                 <span>Privacy & Security</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => handleMenuItemClick("Help & Support")}>
+              <DropdownMenuItem onClick={() => handleMenuItemClick("/client-dashboard/help")}>
                 <HelpCircle className="mr-2 h-4 w-4" />
                 <span>Help & Support</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleMenuItemClick("Terms & Conditions")}>
+              <DropdownMenuItem onClick={() => handleMenuItemClick("/client-dashboard/terms")}>
                 <FileText className="mr-2 h-4 w-4" />
                 <span>Terms & Conditions</span>
               </DropdownMenuItem>
