@@ -31,6 +31,11 @@ const mockInvoices = [
     },
     isIncremental: true,
     nextPaymentDate: "2024-04-15",
+    feeStructure: {
+      type: "hourly",
+      rate: 350,
+      details: "Billed at $350/hour with detailed time tracking"
+    }
   },
   {
     id: "INV002",
@@ -45,7 +50,31 @@ const mockInvoices = [
       last4: "9876",
     },
     isIncremental: false,
+    feeStructure: {
+      type: "flat_fee",
+      amount: 3000,
+      details: "One-time flat fee for entire case representation"
+    }
   },
+  {
+    id: "INV003",
+    caseId: "CASE003",
+    caseTitle: "Personal Injury Claim",
+    amount: "TBD",
+    paid: 0,
+    dueDate: "Upon settlement",
+    status: "pending",
+    paymentMethod: {
+      type: "contingency",
+      percentage: 33
+    },
+    isIncremental: false,
+    feeStructure: {
+      type: "contingency",
+      percentage: 33,
+      details: "33% of settlement amount upon successful resolution"
+    }
+  }
 ]
 
 const mockPaymentMethods = [
@@ -76,27 +105,24 @@ export default function ClientBilling() {
     })
   }
 
-  const handleRemovePaymentMethod = (paymentMethodId: string) => {
-    if (mockPaymentMethods.length <= 1) {
-      toast({
-        title: "Cannot remove payment method",
-        description: "You must maintain at least one payment method.",
-        variant: "destructive",
-      })
-      return
-    }
-    toast({
-      title: "Payment method removed",
-      description: "The payment method has been removed successfully.",
-    })
-  }
-
-  const handleAddPaymentMethod = () => {
-    toast({
-      title: "Add payment method",
-      description: "This would open a modal to add a new payment method.",
-    })
-  }
+  const getFeeStructureBadge = (feeStructure: any) => {
+    const variants = {
+      hourly: "default",
+      flat_fee: "secondary",
+      contingency: "outline"
+    } as const;
+    
+    return (
+      <div className="flex flex-col gap-1">
+        <Badge variant={variants[feeStructure.type as keyof typeof variants]}>
+          {feeStructure.type === 'hourly' && `Hourly Rate: $${feeStructure.rate}`}
+          {feeStructure.type === 'flat_fee' && 'Flat Fee'}
+          {feeStructure.type === 'contingency' && `${feeStructure.percentage}% Contingency`}
+        </Badge>
+        <span className="text-xs text-muted-foreground">{feeStructure.details}</span>
+      </div>
+    );
+  };
 
   return (
     <ClientDashboardLayout>
@@ -120,6 +146,7 @@ export default function ClientBilling() {
                 <TableRow>
                   <TableHead>Invoice ID</TableHead>
                   <TableHead>Case</TableHead>
+                  <TableHead>Fee Structure</TableHead>
                   <TableHead>Amount</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Payment Method</TableHead>
@@ -132,12 +159,19 @@ export default function ClientBilling() {
                   <TableRow key={invoice.id}>
                     <TableCell>{invoice.id}</TableCell>
                     <TableCell>{invoice.caseTitle}</TableCell>
+                    <TableCell>{getFeeStructureBadge(invoice.feeStructure)}</TableCell>
                     <TableCell>
-                      ${invoice.amount.toFixed(2)}
-                      {invoice.status === "partial" && (
-                        <div className="text-sm text-muted-foreground">
-                          Paid: ${invoice.paid.toFixed(2)}
-                        </div>
+                      {typeof invoice.amount === 'number' ? (
+                        <>
+                          ${invoice.amount.toFixed(2)}
+                          {invoice.status === "partial" && (
+                            <div className="text-sm text-muted-foreground">
+                              Paid: ${invoice.paid.toFixed(2)}
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        invoice.amount
                       )}
                     </TableCell>
                     <TableCell>
@@ -152,6 +186,11 @@ export default function ClientBilling() {
                         <div className="flex items-center gap-2">
                           <CreditCard className="h-4 w-4" />
                           <span>****{invoice.paymentMethod.last4}</span>
+                        </div>
+                      ) : invoice.paymentMethod.type === "contingency" ? (
+                        <div className="flex items-center gap-2">
+                          <FileCheck className="h-4 w-4" />
+                          <span>Contingency Based</span>
                         </div>
                       ) : (
                         <div className="flex items-center gap-2">
@@ -173,7 +212,7 @@ export default function ClientBilling() {
                       )}
                     </TableCell>
                     <TableCell>
-                      {invoice.status !== "paid" && (
+                      {invoice.status !== "paid" && invoice.paymentMethod.type !== "contingency" && (
                         <div className="space-x-2">
                           <Button
                             variant="outline"
