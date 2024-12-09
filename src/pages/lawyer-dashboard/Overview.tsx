@@ -2,6 +2,7 @@ import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
 import { LawyerMetricsGrid } from "@/components/lawyer-dashboard/LawyerMetricsGrid"
 import { LawyerQuickActions } from "@/components/lawyer-dashboard/LawyerQuickActions"
 import { LawyerCalendar } from "@/components/lawyer-dashboard/LawyerCalendar"
+import { ActiveCasesSummary } from "@/components/lawyer-dashboard/ActiveCasesSummary"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function LawyerDashboard() {
@@ -13,6 +14,8 @@ export default function LawyerDashboard() {
         </div>
         
         <LawyerMetricsGrid />
+
+        <ActiveCasesSummary />
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
           <LawyerCalendar />
