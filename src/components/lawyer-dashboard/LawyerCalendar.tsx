@@ -58,12 +58,12 @@ export function LawyerCalendar() {
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
-      <CardContent className="p-4">
-        <div className="flex justify-between items-center mb-4">
+      <CardContent className="p-3">
+        <div className="flex justify-between items-center mb-3">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="flex items-center gap-2" size="sm">
-                <Plus className="h-4 w-4" />
+              <Button className="flex items-center gap-1" size="sm">
+                <Plus className="h-3 w-3" />
                 New Schedule
               </Button>
             </DialogTrigger>
@@ -93,11 +93,11 @@ export function LawyerCalendar() {
             </DialogContent>
           </Dialog>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Button 
               variant="outline" 
               size="icon"
-              className="h-8 w-8"
+              className="h-7 w-7"
               onClick={() => {
                 const prevMonth = new Date(selectedDate)
                 prevMonth.setMonth(prevMonth.getMonth() - 1)
@@ -109,6 +109,7 @@ export function LawyerCalendar() {
             <Button 
               variant="outline"
               size="sm"
+              className="text-xs px-2 py-1"
               onClick={() => {
                 setSelectedDate(new Date())
                 toast({
@@ -124,7 +125,7 @@ export function LawyerCalendar() {
             <Button 
               variant="outline" 
               size="icon"
-              className="h-8 w-8"
+              className="h-7 w-7"
               onClick={() => {
                 const nextMonth = new Date(selectedDate)
                 nextMonth.setMonth(nextMonth.getMonth() + 1)
@@ -136,7 +137,7 @@ export function LawyerCalendar() {
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-[1fr_250px]">
+        <div className="grid gap-3 md:grid-cols-[1fr_220px]">
           <Calendar
             mode="single"
             selected={selectedDate}
@@ -145,26 +146,28 @@ export function LawyerCalendar() {
             toDate={sixMonthsFromNow}
             className="rounded-md border"
           />
-          <div className="space-y-3">
-            <h4 className="text-sm font-semibold">Upcoming Events</h4>
-            <div className="space-y-2 max-h-[250px] overflow-y-auto pr-2">
+          <div className="space-y-2">
+            <h4 className="text-xs font-semibold">Upcoming Events</h4>
+            <div className="space-y-1.5 max-h-[220px] overflow-y-auto pr-1.5">
               {events.map((event, index) => (
                 <div
                   key={index}
-                  className={`flex items-start gap-2 p-2 rounded-lg border ${
+                  className={`flex items-start gap-1.5 p-1.5 rounded-lg border ${
                     event.date.toDateString() === selectedDate.toDateString()
-                    ? "ring-2 ring-primary"
+                    ? "ring-1 ring-primary"
                     : ""
                   }`}
                 >
-                  <div className={`w-1 h-full rounded-full ${event.color}`} />
+                  <div className={`w-0.5 h-full rounded-full ${event.color}`} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{event.title}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs font-medium truncate">{event.title}</p>
+                    <p className="text-[10px] text-muted-foreground">
                       {event.date.toLocaleDateString()}
                     </p>
                   </div>
-                  <Badge variant="outline" className="text-xs">{event.type}</Badge>
+                  <Badge variant="outline" className="text-[10px] px-1 py-0">
+                    {event.type}
+                  </Badge>
                 </div>
               ))}
             </div>
