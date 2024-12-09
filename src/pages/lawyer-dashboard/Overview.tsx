@@ -4,6 +4,13 @@ import { LawyerCalendar } from "@/components/lawyer-dashboard/LawyerCalendar"
 import { ActiveCasesSummary } from "@/components/lawyer-dashboard/ActiveCasesSummary"
 import { TaskStatus } from "@/components/lawyer-dashboard/TaskStatus"
 import { UnreadMessages } from "@/components/lawyer-dashboard/UnreadMessages"
+import { RevenueChart } from "@/components/lawyer-dashboard/RevenueChart"
+import { PerformanceMetrics } from "@/components/lawyer-dashboard/PerformanceMetrics"
+import { NewsSection } from "@/components/lawyer-dashboard/NewsSection"
+import { ClientsLeadsChart } from "@/components/lawyer-dashboard/ClientsLeadsChart"
+import { PendingConsultations } from "@/components/lawyer-dashboard/PendingConsultations"
+import { LimitationStatus } from "@/components/lawyer-dashboard/LimitationStatus"
+import { BillingInfo } from "@/components/lawyer-dashboard/BillingInfo"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function LawyerDashboard() {
@@ -19,6 +26,22 @@ export default function LawyerDashboard() {
         <ActiveCasesSummary />
         <UnreadMessages />
       </div>
+
+      <RevenueChart />
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <PerformanceMetrics />
+        <NewsSection />
+      </div>
+
+      <ClientsLeadsChart />
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <PendingConsultations />
+        <BillingInfo />
+      </div>
+
+      <LimitationStatus />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <LawyerCalendar />
