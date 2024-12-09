@@ -57,17 +57,17 @@ export function LawyerCalendar() {
   )
 
   return (
-    <Card className="w-full max-w-4xl mx-auto overflow-hidden">
-      <CardContent className="p-6">
-        <div className="flex justify-between items-center mb-6">
+    <Card className="w-full max-w-4xl mx-auto">
+      <CardContent className="p-4">
+        <div className="flex justify-between items-center mb-4">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="flex items-center gap-2" size="lg">
+              <Button className="flex items-center gap-2" size="sm">
                 <Plus className="h-4 w-4" />
                 New Schedule
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle>Schedule a Meeting</DialogTitle>
               </DialogHeader>
@@ -97,6 +97,7 @@ export function LawyerCalendar() {
             <Button 
               variant="outline" 
               size="icon"
+              className="h-8 w-8"
               onClick={() => {
                 const prevMonth = new Date(selectedDate)
                 prevMonth.setMonth(prevMonth.getMonth() - 1)
@@ -107,6 +108,7 @@ export function LawyerCalendar() {
             </Button>
             <Button 
               variant="outline"
+              size="sm"
               onClick={() => {
                 setSelectedDate(new Date())
                 toast({
@@ -122,6 +124,7 @@ export function LawyerCalendar() {
             <Button 
               variant="outline" 
               size="icon"
+              className="h-8 w-8"
               onClick={() => {
                 const nextMonth = new Date(selectedDate)
                 nextMonth.setMonth(nextMonth.getMonth() + 1)
@@ -133,7 +136,7 @@ export function LawyerCalendar() {
           </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-[1fr_300px]">
+        <div className="grid gap-4 md:grid-cols-[1fr_250px]">
           <Calendar
             mode="single"
             selected={selectedDate}
@@ -142,13 +145,13 @@ export function LawyerCalendar() {
             toDate={sixMonthsFromNow}
             className="rounded-md border"
           />
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Upcoming Events</h4>
-            <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2">
+          <div className="space-y-3">
+            <h4 className="text-sm font-semibold">Upcoming Events</h4>
+            <div className="space-y-2 max-h-[250px] overflow-y-auto pr-2">
               {events.map((event, index) => (
                 <div
                   key={index}
-                  className={`flex items-start gap-2 p-3 rounded-lg border ${
+                  className={`flex items-start gap-2 p-2 rounded-lg border ${
                     event.date.toDateString() === selectedDate.toDateString()
                     ? "ring-2 ring-primary"
                     : ""
@@ -156,12 +159,12 @@ export function LawyerCalendar() {
                 >
                   <div className={`w-1 h-full rounded-full ${event.color}`} />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium truncate">{event.title}</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm font-medium truncate">{event.title}</p>
+                    <p className="text-xs text-muted-foreground">
                       {event.date.toLocaleDateString()}
                     </p>
                   </div>
-                  <Badge variant="outline">{event.type}</Badge>
+                  <Badge variant="outline" className="text-xs">{event.type}</Badge>
                 </div>
               ))}
             </div>
