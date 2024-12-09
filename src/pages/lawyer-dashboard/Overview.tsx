@@ -17,45 +17,65 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 export default function LawyerDashboard() {
   return (
     <LawyerDashboardLayout>
-      <div className="container mx-auto space-y-6 p-6">
+      <div className="max-w-[1400px] mx-auto p-6 space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold tracking-tight">Lawyer Dashboard</h1>
         </div>
         
-        <LawyerMetricsGrid />
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+          <LawyerMetricsGrid />
+        </div>
 
-        <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
-          <ActiveCasesSummary />
-          <UnreadMessages />
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+          <div className="glass-effect rounded-lg p-4">
+            <ActiveCasesSummary />
+          </div>
+          <div className="glass-effect rounded-lg p-4">
+            <UnreadMessages />
+          </div>
         </div>
 
         <div className="grid gap-6 grid-cols-1">
-          <RevenueChart />
+          <div className="glass-effect rounded-lg p-4 max-w-full">
+            <RevenueChart />
+          </div>
         </div>
 
-        <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
-          <PerformanceMetrics />
-          <NewsSection />
-        </div>
-
-        <div className="grid gap-6 grid-cols-1">
-          <ClientsLeadsChart />
-        </div>
-
-        <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
-          <PendingConsultations />
-          <BillingInfo />
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+          <div className="glass-effect rounded-lg p-4">
+            <PerformanceMetrics />
+          </div>
+          <div className="glass-effect rounded-lg p-4">
+            <NewsSection />
+          </div>
         </div>
 
         <div className="grid gap-6 grid-cols-1">
-          <LimitationStatus />
+          <div className="glass-effect rounded-lg p-4 max-w-full">
+            <ClientsLeadsChart />
+          </div>
         </div>
 
-        <div className="grid gap-6 grid-cols-1 lg:grid-cols-7">
-          <div className="lg:col-span-4">
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+          <div className="glass-effect rounded-lg p-4">
+            <PendingConsultations />
+          </div>
+          <div className="glass-effect rounded-lg p-4">
+            <BillingInfo />
+          </div>
+        </div>
+
+        <div className="grid gap-6 grid-cols-1">
+          <div className="glass-effect rounded-lg p-4">
+            <LimitationStatus />
+          </div>
+        </div>
+
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+          <div className="glass-effect rounded-lg p-4">
             <LawyerCalendar />
           </div>
-          <Card className="lg:col-span-3">
+          <Card className="glass-effect">
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
@@ -66,7 +86,9 @@ export default function LawyerDashboard() {
         </div>
 
         <div className="grid gap-6 grid-cols-1">
-          <TaskStatus />
+          <div className="glass-effect rounded-lg p-4">
+            <TaskStatus />
+          </div>
         </div>
       </div>
     </LawyerDashboardLayout>
