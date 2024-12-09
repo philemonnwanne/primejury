@@ -33,28 +33,28 @@ export default function LawyerDashboard() {
         </div>
 
         <div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
-          <div className="glass-effect rounded-lg p-4">
+          <div className="glass-effect rounded-lg p-3">
             <BillingInfo />
           </div>
-          <div className="glass-effect rounded-lg p-4">
+          <div className="glass-effect rounded-lg p-5">
             <LawyerCalendar />
           </div>
         </div>
 
-        <div className="grid gap-6 grid-cols-1 xl:grid-cols-3">
-          <div className="glass-effect rounded-lg p-4 xl:col-span-1">
+        <div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
+          <div className="glass-effect rounded-lg p-4">
             <PendingConsultations />
           </div>
-          <div className="glass-effect rounded-lg p-4 xl:col-span-2">
+          <div className="glass-effect rounded-lg p-4">
             <NewsSection />
           </div>
         </div>
         
         <div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
-          <div className="glass-effect rounded-lg p-4">
+          <div className="glass-effect rounded-lg p-6">
             <LimitationStatus />
           </div>
-           <div className="glass-effect rounded-lg p-4">
+           <div className="glass-effect rounded-lg p-2">
             <PerformanceMetrics />
           </div>
         </div>
