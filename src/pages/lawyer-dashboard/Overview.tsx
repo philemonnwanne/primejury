@@ -14,61 +14,44 @@ import { BillingInfo } from "@/components/lawyer-dashboard/BillingInfo"
 export default function LawyerDashboard() {
   return (
     <LawyerDashboardLayout>
-      <div className="space-y-6 animate-fade-in">
+      <div className="space-y-6 animate-fade-in max-w-[1920px] mx-auto px-4">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold tracking-tight">Dashboard Overview</h1>
         </div>
         
-        {/* Metrics Grid - Top row */}
-        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           <LawyerMetricsGrid />
         </div>
 
-        {/* Main Content Area */}
-        <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
-          {/* Revenue Chart - Spans full width on mobile, half on desktop */}
-          <div className="lg:col-span-2">
-            <div className="glass-effect rounded-lg p-4">
-              <RevenueChart />
-            </div>
-          </div>
-
-          {/* Two Column Layout for Charts */}
+        <div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
           <div className="glass-effect rounded-lg p-4">
-            <PerformanceMetrics />
+            <RevenueChart />
           </div>
           <div className="glass-effect rounded-lg p-4">
             <ClientsLeadsChart />
           </div>
+        </div>
 
-          {/* Calendar and Messages Section */}
+        <div className="grid gap-6 grid-cols-1 xl:grid-cols-2">
           <div className="glass-effect rounded-lg p-4">
-            <LawyerCalendar />
+            <PerformanceMetrics />
           </div>
-          <div className="glass-effect rounded-lg p-4">
-            <UnreadMessages />
-          </div>
-
-          {/* Cases and Consultations */}
-          <div className="glass-effect rounded-lg p-4">
-            <ActiveCasesSummary />
-          </div>
-          <div className="glass-effect rounded-lg p-4">
-            <PendingConsultations />
-          </div>
-
-          {/* Billing and News */}
           <div className="glass-effect rounded-lg p-4">
             <BillingInfo />
           </div>
-          <div className="glass-effect rounded-lg p-4">
+        </div>
+
+        <div className="grid gap-6 grid-cols-1 xl:grid-cols-3">
+          <div className="glass-effect rounded-lg p-4 xl:col-span-1">
+            <PendingConsultations />
+          </div>
+          <div className="glass-effect rounded-lg p-4 xl:col-span-2">
             <NewsSection />
           </div>
+        </div>
 
-          {/* Full Width Components */}
-          <div className="lg:col-span-2 glass-effect rounded-lg p-4">
-            <LimitationStatus />
-          </div>
+        <div className="glass-effect rounded-lg p-4">
+          <LimitationStatus />
         </div>
       </div>
     </LawyerDashboardLayout>
