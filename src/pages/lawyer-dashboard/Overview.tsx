@@ -3,6 +3,7 @@ import { LawyerQuickActions } from "@/components/lawyer-dashboard/LawyerQuickAct
 import { LawyerCalendar } from "@/components/lawyer-dashboard/LawyerCalendar"
 import { ActiveCasesSummary } from "@/components/lawyer-dashboard/ActiveCasesSummary"
 import { TaskStatus } from "@/components/lawyer-dashboard/TaskStatus"
+import { UnreadMessages } from "@/components/lawyer-dashboard/UnreadMessages"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function LawyerDashboard() {
@@ -14,7 +15,10 @@ export default function LawyerDashboard() {
       
       <LawyerMetricsGrid />
 
-      <ActiveCasesSummary />
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-12">
+        <ActiveCasesSummary />
+        <UnreadMessages />
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <LawyerCalendar />
