@@ -38,7 +38,7 @@ export function LimitationStatus() {
   return (
     <Card className="col-span-full">
       <CardHeader>
-        <CardTitle className="text-xl font-bold">Upcoming Status of Limitation</CardTitle>
+        <CardTitle className="text-xl font-bold">Status of Limitation</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>

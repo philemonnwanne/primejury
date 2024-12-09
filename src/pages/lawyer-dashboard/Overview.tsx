@@ -37,7 +37,7 @@ export default function LawyerDashboard() {
             <PerformanceMetrics />
           </div>
           <div className="glass-effect rounded-lg p-4">
-            <BillingInfo />
+            <LawyerCalendar />
           </div>
         </div>
 
