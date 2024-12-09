@@ -1,9 +1,7 @@
 import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
 import { LawyerMetricsGrid } from "@/components/lawyer-dashboard/LawyerMetricsGrid"
-import { LawyerQuickActions } from "@/components/lawyer-dashboard/LawyerQuickActions"
 import { LawyerCalendar } from "@/components/lawyer-dashboard/LawyerCalendar"
 import { ActiveCasesSummary } from "@/components/lawyer-dashboard/ActiveCasesSummary"
-import { TaskStatus } from "@/components/lawyer-dashboard/TaskStatus"
 import { UnreadMessages } from "@/components/lawyer-dashboard/UnreadMessages"
 import { RevenueChart } from "@/components/lawyer-dashboard/RevenueChart"
 import { PerformanceMetrics } from "@/components/lawyer-dashboard/PerformanceMetrics"
@@ -12,82 +10,64 @@ import { ClientsLeadsChart } from "@/components/lawyer-dashboard/ClientsLeadsCha
 import { PendingConsultations } from "@/components/lawyer-dashboard/PendingConsultations"
 import { LimitationStatus } from "@/components/lawyer-dashboard/LimitationStatus"
 import { BillingInfo } from "@/components/lawyer-dashboard/BillingInfo"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function LawyerDashboard() {
   return (
     <LawyerDashboardLayout>
-      <div className="max-w-[1400px] mx-auto p-6 space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold tracking-tight">Lawyer Dashboard</h1>
+      <div className="space-y-6 animate-fade-in">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard Overview</h1>
         </div>
         
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+        {/* Metrics Grid - Top row */}
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           <LawyerMetricsGrid />
         </div>
 
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-          <div className="glass-effect rounded-lg p-4">
-            <ActiveCasesSummary />
+        {/* Main Content Area */}
+        <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
+          {/* Revenue Chart - Spans full width on mobile, half on desktop */}
+          <div className="lg:col-span-2">
+            <div className="glass-effect rounded-lg p-4">
+              <RevenueChart />
+            </div>
           </div>
-          <div className="glass-effect rounded-lg p-4">
-            <UnreadMessages />
-          </div>
-        </div>
 
-        <div className="grid gap-6 grid-cols-1">
-          <div className="glass-effect rounded-lg p-4 max-w-full">
-            <RevenueChart />
-          </div>
-        </div>
-
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+          {/* Two Column Layout for Charts */}
           <div className="glass-effect rounded-lg p-4">
             <PerformanceMetrics />
           </div>
           <div className="glass-effect rounded-lg p-4">
-            <NewsSection />
-          </div>
-        </div>
-
-        <div className="grid gap-6 grid-cols-1">
-          <div className="glass-effect rounded-lg p-4 max-w-full">
             <ClientsLeadsChart />
           </div>
-        </div>
 
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-          <div className="glass-effect rounded-lg p-4">
-            <PendingConsultations />
-          </div>
-          <div className="glass-effect rounded-lg p-4">
-            <BillingInfo />
-          </div>
-        </div>
-
-        <div className="grid gap-6 grid-cols-1">
-          <div className="glass-effect rounded-lg p-4">
-            <LimitationStatus />
-          </div>
-        </div>
-
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+          {/* Calendar and Messages Section */}
           <div className="glass-effect rounded-lg p-4">
             <LawyerCalendar />
           </div>
-          <Card className="glass-effect">
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <LawyerQuickActions />
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid gap-6 grid-cols-1">
           <div className="glass-effect rounded-lg p-4">
-            <TaskStatus />
+            <UnreadMessages />
+          </div>
+
+          {/* Cases and Consultations */}
+          <div className="glass-effect rounded-lg p-4">
+            <ActiveCasesSummary />
+          </div>
+          <div className="glass-effect rounded-lg p-4">
+            <PendingConsultations />
+          </div>
+
+          {/* Billing and News */}
+          <div className="glass-effect rounded-lg p-4">
+            <BillingInfo />
+          </div>
+          <div className="glass-effect rounded-lg p-4">
+            <NewsSection />
+          </div>
+
+          {/* Full Width Components */}
+          <div className="lg:col-span-2 glass-effect rounded-lg p-4">
+            <LimitationStatus />
           </div>
         </div>
       </div>
