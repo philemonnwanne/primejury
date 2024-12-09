@@ -40,7 +40,7 @@ export function LawyerDashboardSidebar() {
     <Sidebar className="border-r-0">
       <SidebarContent>
         <div className="px-6 py-5">
-          <h1 className="text-2xl font-bold mb-8">Finance</h1>
+          <h1 className="text-2xl font-bold mb-8">⚖️ Lawfirm</h1>
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
