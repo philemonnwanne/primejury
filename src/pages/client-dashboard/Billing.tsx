@@ -15,15 +15,15 @@ const mockInvoices = [
     amount: 5000,
     paid: 2000,
     dueDate: "2024-04-30",
-    status: "partial" as const,
+    status: "partial",
     paymentMethod: {
-      type: "credit_card" as const,
+      type: "credit_card",
       last4: "4242",
     },
     isIncremental: true,
     nextPaymentDate: "2024-04-15",
     feeStructure: {
-      type: "hourly" as const,
+      type: "hourly",
       rate: 350,
       details: "Billed at $350/hour with detailed time tracking"
     }
@@ -35,14 +35,14 @@ const mockInvoices = [
     amount: 3000,
     paid: 3000,
     dueDate: "2024-03-15",
-    status: "paid" as const,
+    status: "paid",
     paymentMethod: {
-      type: "bank_account" as const,
+      type: "bank_transfer",
       last4: "9876",
     },
     isIncremental: false,
     feeStructure: {
-      type: "flat_fee" as const,
+      type: "flat_fee",
       amount: 3000,
       details: "One-time flat fee for entire case representation"
     }
@@ -54,14 +54,14 @@ const mockInvoices = [
     amount: "TBD",
     paid: 0,
     dueDate: "Upon settlement",
-    status: "pending" as const,
+    status: "pending",
     paymentMethod: {
-      type: "contingency" as const,
+      type: "contingency",
       percentage: 33
     },
     isIncremental: false,
     feeStructure: {
-      type: "contingency" as const,
+      type: "contingency",
       percentage: 33,
       details: "33% of settlement amount upon successful resolution"
     }
@@ -71,14 +71,14 @@ const mockInvoices = [
 const mockPaymentMethods = [
   {
     id: "PM001",
-    type: "credit_card" as const,
+    type: "credit_card",
     last4: "4242",
     expiryDate: "12/25",
     isDefault: true,
   },
   {
     id: "PM002",
-    type: "bank_account" as const,
+    type: "bank_account",
     last4: "9876",
     bankName: "Chase",
     isDefault: false,

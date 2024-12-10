@@ -60,7 +60,7 @@
 }
 
 .glass-effect {
-  @apply bg-white bg-opacity-70 backdrop-blur-lg shadow-lg border border-white border-opacity-20 hover:shadow-xl transition-all duration-300;
+  @apply bg-white bg-opacity-70 backdrop-blur-lg;
 }
 
 .fade-in {
@@ -86,22 +86,4 @@
 
 .scroll-area-horizontal::-webkit-scrollbar {
   display: none;
-}
-
-/* Enhanced chart styles */
-.recharts-default-tooltip {
-  @apply bg-white bg-opacity-90 backdrop-blur-sm border border-gray-200 shadow-lg rounded-lg !important;
-}
-
-.recharts-cartesian-grid-horizontal line,
-.recharts-cartesian-grid-vertical line {
-  @apply stroke-gray-200 stroke-[0.5] !important;
-}
-
-.recharts-line {
-  @apply !stroke-2;
-}
-
-.recharts-pie {
-  @apply drop-shadow-lg;
 }
