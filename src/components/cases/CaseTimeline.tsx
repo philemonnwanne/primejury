@@ -1,9 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, ArrowRight, Check, Info } from "lucide-react"
+import { Calendar, Clock, ArrowRight, Check, Info, Plus } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { TimelineEventDetails } from "./TimelineEventDetails"
+import { useToast } from "@/hooks/use-toast"
 
 interface TimelineEvent {
   date: string
@@ -29,15 +30,56 @@ interface TimelineEvent {
 
 interface CaseTimelineProps {
   events: TimelineEvent[]
+  onUpdateEvent?: (updatedEvent: TimelineEvent, index: number) => void
+  onAddEvent?: (newEvent: TimelineEvent) => void
 }
 
-export function CaseTimeline({ events }: CaseTimelineProps) {
+export function CaseTimeline({ events, onUpdateEvent, onAddEvent }: CaseTimelineProps) {
   const [selectedEvent, setSelectedEvent] = useState<TimelineEvent | null>(null)
+  const [selectedEventIndex, setSelectedEventIndex] = useState<number>(-1)
+  const { toast } = useToast()
+
+  const handleEventUpdate = (updatedEvent: TimelineEvent) => {
+    if (onUpdateEvent && selectedEventIndex !== -1) {
+      onUpdateEvent(updatedEvent, selectedEventIndex)
+      toast({
+        title: "Timeline Updated",
+        description: "The timeline event has been successfully updated.",
+      })
+    }
+  }
+
+  const handleAddEvent = () => {
+    if (onAddEvent) {
+      const newEvent: TimelineEvent = {
+        date: new Date().toISOString().split('T')[0],
+        title: "New Event",
+        description: "Add description here",
+        status: "upcoming",
+      }
+      onAddEvent(newEvent)
+      toast({
+        title: "Event Added",
+        description: "A new timeline event has been added.",
+      })
+    }
+  }
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl">Case Timeline</CardTitle>
+        {onAddEvent && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleAddEvent}
+            className="h-8"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Event
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <div className="relative space-y-0 pl-8 before:absolute before:left-8 before:top-0 before:h-full before:w-[2px] before:-translate-x-1/2 before:bg-primary/20">
@@ -74,7 +116,10 @@ export function CaseTimeline({ events }: CaseTimelineProps) {
                     variant="ghost"
                     size="icon"
                     className="h-6 w-6"
-                    onClick={() => setSelectedEvent(event)}
+                    onClick={() => {
+                      setSelectedEvent(event)
+                      setSelectedEventIndex(index)
+                    }}
                   >
                     <Info className="h-4 w-4" />
                   </Button>
@@ -130,6 +175,7 @@ export function CaseTimeline({ events }: CaseTimelineProps) {
           isOpen={!!selectedEvent}
           onOpenChange={(open) => !open && setSelectedEvent(null)}
           event={selectedEvent}
+          onUpdate={handleEventUpdate}
         />
       )}
     </Card>
