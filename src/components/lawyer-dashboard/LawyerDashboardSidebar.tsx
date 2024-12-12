@@ -1,10 +1,14 @@
 import {
   LayoutDashboard,
-  Briefcase,
-  CheckSquare,
   FileText,
-  MessageSquare,
+  CreditCard,
+  Newspaper,
+  ListCheck,
+  FolderOpen,
+  Calendar,
   BarChart2,
+  Network,
+  MessageSquare,
 } from "lucide-react"
 import {
   Sidebar,
@@ -19,11 +23,15 @@ import {
 
 const menuItems = [
   { title: "Overview", icon: LayoutDashboard, url: "/lawyer-dashboard" },
-  { title: "Cases", icon: Briefcase, url: "/lawyer-dashboard/cases" },
-  { title: "Tasks", icon: CheckSquare, url: "/lawyer-dashboard/tasks" },
-  { title: "Documents", icon: FileText, url: "/lawyer-dashboard/documents" },
-  { title: "Messages", icon: MessageSquare, url: "/lawyer-dashboard/messages" },
-  { title: "Performance", icon: BarChart2, url: "/lawyer-dashboard/performance" },
+  { title: "Case Insights", icon: FileText, url: "/lawyer-dashboard/case-insights" },
+  { title: "Billing", icon: CreditCard, url: "/lawyer-dashboard/billing" },
+  { title: "News Feed", icon: Newspaper, url: "/lawyer-dashboard/news" },
+  { title: "Tasks", icon: ListCheck, url: "/lawyer-dashboard/tasks" },
+  { title: "Document Center", icon: FolderOpen, url: "/lawyer-dashboard/documents" },
+  { title: "Calendar", icon: Calendar, url: "/lawyer-dashboard/calendar" },
+  { title: "Analytics", icon: BarChart2, url: "/lawyer-dashboard/analytics" },
+  { title: "Marketplace", icon: Network, url: "/lawyer-dashboard/marketplace" },
+  { title: "Communications", icon: MessageSquare, url: "/lawyer-dashboard/communications" },
 ]
 
 export function LawyerDashboardSidebar() {

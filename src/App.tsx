@@ -14,11 +14,15 @@ import Finance from "./pages/dashboard/Finance"
 import Analytics from "./pages/dashboard/Analytics"
 import Settings from "./pages/dashboard/Settings"
 import LawyerDashboard from "./pages/lawyer-dashboard/Overview"
-import LawyerCases from "./pages/lawyer-dashboard/Cases"
+import LawyerCaseInsights from "./pages/lawyer-dashboard/CaseInsights"
+import LawyerBilling from "./pages/lawyer-dashboard/Billing"
+import LawyerNewsFeed from "./pages/lawyer-dashboard/NewsFeed"
 import LawyerTasks from "./pages/lawyer-dashboard/Tasks"
 import LawyerDocuments from "./pages/lawyer-dashboard/Documents"
-import LawyerMessages from "./pages/lawyer-dashboard/Messages"
-import LawyerPerformance from "./pages/lawyer-dashboard/Performance"
+import LawyerCalendar from "./pages/lawyer-dashboard/Calendar"
+import LawyerAnalytics from "./pages/lawyer-dashboard/Analytics"
+import LawyerMarketplace from "./pages/lawyer-dashboard/Marketplace"
+import LawyerCommunications from "./pages/lawyer-dashboard/Communications"
 import ClientDashboard from "./pages/client-dashboard/Overview"
 import ClientCases from "./pages/client-dashboard/Cases"
 import ClientForms from "./pages/client-dashboard/Forms"
@@ -52,11 +56,15 @@ function App() {
             <Route path="/dashboard/analytics" element={<Analytics />} />
             <Route path="/dashboard/settings" element={<Settings />} />
             <Route path="/lawyer-dashboard" element={<LawyerDashboard />} />
-            <Route path="/lawyer-dashboard/cases" element={<LawyerCases />} />
+            <Route path="/lawyer-dashboard/case-insights" element={<LawyerCaseInsights />} />
+            <Route path="/lawyer-dashboard/billing" element={<LawyerBilling />} />
+            <Route path="/lawyer-dashboard/news" element={<LawyerNewsFeed />} />
             <Route path="/lawyer-dashboard/tasks" element={<LawyerTasks />} />
             <Route path="/lawyer-dashboard/documents" element={<LawyerDocuments />} />
-            <Route path="/lawyer-dashboard/messages" element={<LawyerMessages />} />
-            <Route path="/lawyer-dashboard/performance" element={<LawyerPerformance />} />
+            <Route path="/lawyer-dashboard/calendar" element={<LawyerCalendar />} />
+            <Route path="/lawyer-dashboard/analytics" element={<LawyerAnalytics />} />
+            <Route path="/lawyer-dashboard/marketplace" element={<LawyerMarketplace />} />
+            <Route path="/lawyer-dashboard/communications" element={<LawyerCommunications />} />
             <Route path="/client-dashboard" element={<ClientDashboard />} />
             <Route path="/client-dashboard/cases" element={<ClientCases />} />
             <Route path="/client-dashboard/forms" element={<ClientForms />} />
