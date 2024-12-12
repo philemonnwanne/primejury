@@ -59,7 +59,7 @@ export function PaymentRequests() {
       pending: "secondary",
       sent: "default",
       viewed: "outline",
-      paid: "success"
+      paid: "secondary"
     } as const
 
     return <Badge variant={variants[status]}>{status}</Badge>
