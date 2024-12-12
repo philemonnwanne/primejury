@@ -42,9 +42,11 @@ export function BillingReports() {
                   fileName="monthly-revenue-report.pdf"
                 >
                   {({ loading }) => (
-                    <Button disabled={loading}>
-                      <Download className="mr-2 h-4 w-4" />
-                      {loading ? "Loading..." : "Download Report"}
+                    <Button disabled={loading} asChild>
+                      <div className="flex items-center">
+                        <Download className="mr-2 h-4 w-4" />
+                        {loading ? "Loading..." : "Download Report"}
+                      </div>
                     </Button>
                   )}
                 </PDFDownloadLink>
