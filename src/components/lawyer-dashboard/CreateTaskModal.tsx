@@ -25,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useForm } from "react-hook-form"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import { Plus } from "lucide-react"
 
 interface TaskFormData {
@@ -35,6 +35,12 @@ interface TaskFormData {
   linkedCase: string
   dueDate: string
 }
+
+const mockCases = [
+  { id: "case1", title: "Johnson vs. Smith Corp" },
+  { id: "case2", title: "Tech Corp Merger" },
+  { id: "case3", title: "Estate Planning - Brown" },
+]
 
 export function CreateTaskModal() {
   const [open, setOpen] = useState(false)
@@ -134,9 +140,11 @@ export function CreateTaskModal() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="case1">Smith vs. Corp</SelectItem>
-                      <SelectItem value="case2">Johnson Estate</SelectItem>
-                      <SelectItem value="case3">Davis Trust</SelectItem>
+                      {mockCases.map(case_ => (
+                        <SelectItem key={case_.id} value={case_.id}>
+                          {case_.title}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
