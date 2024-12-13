@@ -1,12 +1,9 @@
 import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { FileText, Calendar, DollarSign, MapPin } from "lucide-react"
 import { toast } from "sonner"
+import { MarketplaceStats } from "./MarketplaceStats"
+import { MarketplaceCaseCard } from "./MarketplaceCaseCard"
+import { MarketplaceBidDialog } from "./MarketplaceBidDialog"
 
 const mockCases = [
   {
@@ -60,7 +57,6 @@ export function MarketplaceCaseList() {
       return
     }
 
-    // Here you would typically make an API call to submit the bid
     toast.success("Bid submitted successfully")
     setShowBidDialog(false)
     setBidAmount("")
@@ -70,47 +66,14 @@ export function MarketplaceCaseList() {
 
   return (
     <div className="space-y-4">
+      <MarketplaceStats totalCases={mockCases.length} />
+      
       {mockCases.map((case_) => (
-        <Card 
+        <MarketplaceCaseCard
           key={case_.id}
-          className="cursor-pointer hover:shadow-md transition-shadow"
+          case_={case_}
           onClick={() => setSelectedCase(case_)}
-        >
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-xl">{case_.title}</CardTitle>
-              <div className="flex gap-2">
-                {case_.isProBono && (
-                  <Badge variant="secondary">Pro Bono</Badge>
-                )}
-                <Badge>{case_.status}</Badge>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-muted-foreground" />
-                  <span>{case_.type}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <DollarSign className="h-4 w-4 text-muted-foreground" />
-                  <span>{case_.budget}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-muted-foreground" />
-                  <span>{case_.location}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span>Due by {new Date(case_.deadline).toLocaleDateString()}</span>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground">{case_.description}</p>
-            </div>
-          </CardContent>
-        </Card>
+        />
       ))}
 
       <Dialog open={!!selectedCase} onOpenChange={() => setSelectedCase(null)}>
@@ -146,59 +109,30 @@ export function MarketplaceCaseList() {
               <p className="font-medium">Description</p>
               <p className="text-sm text-muted-foreground">{selectedCase?.description}</p>
             </div>
-            <Button 
-              className="w-full" 
+            <button 
+              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md"
               onClick={() => {
                 setSelectedCase(null)
                 setShowBidDialog(true)
               }}
             >
               Place Bid
-            </Button>
+            </button>
           </div>
         </DialogContent>
       </Dialog>
 
-      <Dialog open={showBidDialog} onOpenChange={setShowBidDialog}>
-        <DialogContent className="sm:max-w-[600px]">
-          <DialogHeader>
-            <DialogTitle>Place Your Bid</DialogTitle>
-            <DialogDescription>
-              Please provide detailed information about your bid
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Bid Amount</label>
-              <Input
-                placeholder="Enter your bid amount"
-                value={bidAmount}
-                onChange={(e) => setBidAmount(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Proposed Timeline</label>
-              <Input
-                placeholder="e.g., 3 months"
-                value={proposedTimeline}
-                onChange={(e) => setProposedTimeline(e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Bid Details</label>
-              <Textarea
-                placeholder="Provide details about your approach, experience with similar cases, and why you're the best fit"
-                value={bidDetails}
-                onChange={(e) => setBidDetails(e.target.value)}
-                className="h-32"
-              />
-            </div>
-            <Button className="w-full" onClick={handleBidSubmit}>
-              Submit Bid
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <MarketplaceBidDialog
+        open={showBidDialog}
+        onOpenChange={setShowBidDialog}
+        bidAmount={bidAmount}
+        setBidAmount={setBidAmount}
+        proposedTimeline={proposedTimeline}
+        setProposedTimeline={setProposedTimeline}
+        bidDetails={bidDetails}
+        setBidDetails={setBidDetails}
+        onSubmit={handleBidSubmit}
+      />
     </div>
   )
 }
