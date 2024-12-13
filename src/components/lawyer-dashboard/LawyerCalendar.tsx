@@ -41,6 +41,11 @@ export function LawyerCalendar() {
 
   const selectedDayEvents = selectedDate ? getDayEvents(selectedDate) : []
 
+  const handleDateSelect = (date: Date | undefined) => {
+    console.log("Selected date:", date) // Add logging to debug
+    setSelectedDate(date)
+  }
+
   return (
     <Card className="col-span-4">
       <CardHeader>
@@ -51,7 +56,7 @@ export function LawyerCalendar() {
           <Calendar
             mode="single"
             selected={selectedDate}
-            onSelect={setSelectedDate}
+            onSelect={handleDateSelect}
             fromDate={today}
             toDate={sixMonthsFromNow}
             className="rounded-md border"
