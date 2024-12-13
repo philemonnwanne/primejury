@@ -15,11 +15,27 @@ interface DocumentUploadProps {
   onSuccess: () => void
 }
 
+const documentTypes = [
+  { value: "court_filing", label: "Court Filing" },
+  { value: "evidence", label: "Evidence" },
+  { value: "correspondence", label: "Correspondence" },
+  { value: "contract", label: "Contract" },
+  { value: "identification", label: "Identification" },
+  { value: "financial", label: "Financial Document" },
+]
+
+const mockCases = [
+  { id: "1", title: "Smith vs. Johnson" },
+  { id: "2", title: "Tech Corp Merger" },
+  { id: "3", title: "Estate Planning - Brown" },
+]
+
 export function DocumentUpload({ onSuccess }: DocumentUploadProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [selectedCase, setSelectedCase] = useState("")
-  const [accessLevel, setAccessLevel] = useState<string>("")
+  const [documentType, setDocumentType] = useState("")
+  const [description, setDescription] = useState("")
   const { toast } = useToast()
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -49,7 +65,7 @@ export function DocumentUpload({ onSuccess }: DocumentUploadProps) {
   }
 
   const handleUpload = async () => {
-    if (!selectedFile || !selectedCase || !accessLevel) {
+    if (!selectedFile || !selectedCase || !documentType) {
       toast({
         title: "Error",
         description: "Please fill in all required fields",
@@ -110,24 +126,38 @@ export function DocumentUpload({ onSuccess }: DocumentUploadProps) {
               <SelectValue placeholder="Select a case" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="case1">Smith vs. Johnson</SelectItem>
-              <SelectItem value="case2">Tech Corp Merger</SelectItem>
+              {mockCases.map((case_) => (
+                <SelectItem key={case_.id} value={case_.id}>
+                  {case_.title}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Access Level</label>
-          <Select value={accessLevel} onValueChange={setAccessLevel}>
+          <label className="text-sm font-medium">Document Type</label>
+          <Select value={documentType} onValueChange={setDocumentType}>
             <SelectTrigger>
-              <SelectValue placeholder="Set access level" />
+              <SelectValue placeholder="Select document type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="firm-wide">Firm-Wide</SelectItem>
-              <SelectItem value="lawyer-only">Lawyer-Only</SelectItem>
-              <SelectItem value="client-accessible">Client-Accessible</SelectItem>
+              {documentTypes.map((type) => (
+                <SelectItem key={type.value} value={type.value}>
+                  {type.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Description</label>
+          <Input
+            placeholder="Enter document description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </div>
       </div>
 
