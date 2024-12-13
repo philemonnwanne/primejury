@@ -8,9 +8,13 @@ interface UpcomingEventsProps {
 }
 
 export function UpcomingEvents({ events }: UpcomingEventsProps) {
-  const sortedEvents = [...events].sort((a, b) => a.start.getTime() - b.start.getTime());
+  // Filter out events with invalid dates and sort the valid ones
+  const sortedEvents = [...events]
+    .filter(event => event.start instanceof Date && !isNaN(event.start.getTime()))
+    .sort((a, b) => a.start.getTime() - b.start.getTime());
+
   const weeklyEvents = sortedEvents.filter(event => {
-    const eventDate = new Date(event.start);
+    const eventDate = event.start;
     const today = new Date();
     const nextWeek = new Date();
     nextWeek.setDate(today.getDate() + 7);
