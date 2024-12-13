@@ -1,5 +1,6 @@
 import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
-import { LawyerCalendar } from "@/components/lawyer-dashboard/LawyerCalendar"
+import { Calendar } from "@/components/ui/calendar"
+import { Card, CardContent } from "@/components/ui/card"
 import { UpcomingEvents } from "@/components/lawyer-dashboard/calendar/UpcomingEvents"
 import { ScheduleEventDialog } from "@/components/lawyer-dashboard/calendar/ScheduleEventDialog"
 import { ShareCalendarDialog } from "@/components/lawyer-dashboard/calendar/ShareCalendarDialog"
@@ -8,107 +9,45 @@ import { CalendarSettings } from "@/components/lawyer-dashboard/calendar/Calenda
 import { CalendarSync } from "@/components/lawyer-dashboard/calendar/CalendarSync"
 import { useState } from "react"
 import { CalendarEvent } from "@/types/calendar"
-import { addMonths } from "date-fns"
+import { addDays } from "date-fns"
 import { useToast } from "@/hooks/use-toast"
 
 // Mock data for demonstration
-const events: CalendarEvent[] = [
+const mockEvents: CalendarEvent[] = [
   {
     id: "1",
-    title: "Client Meeting - Brown Case",
+    title: "Client Meeting - Smith Case",
+    start: addDays(new Date(), 1),
+    end: addDays(new Date(), 1),
     type: "meeting",
-    start: new Date(2024, 11, 4, 9, 0),
-    end: new Date(2024, 11, 4, 10, 0),
-    description: "Initial consultation regarding employment dispute",
+    caseName: "Smith vs. Johnson",
   },
   {
     id: "2",
-    title: "Document Review - Smith Estate",
-    type: "deadline",
-    start: new Date(2024, 11, 4, 14, 0),
-    end: new Date(2024, 11, 4, 17, 0),
-    description: "Review and finalize estate planning documents",
+    title: "Court Hearing",
+    start: addDays(new Date(), 3),
+    end: addDays(new Date(), 3),
+    type: "court-date",
+    caseName: "State vs. Brown",
   },
   {
     id: "3",
-    title: "Court Hearing - Johnson vs. MegaCorp",
-    type: "hearing",
-    start: new Date(2024, 11, 7, 10, 30),
-    end: new Date(2024, 11, 7, 12, 30),
-    description: "Summary judgment hearing",
-  },
-  {
-    id: "4",
-    title: "Settlement Conference",
-    type: "meeting",
-    start: new Date(2024, 11, 11, 13, 0),
-    end: new Date(2024, 11, 11, 17, 0),
-    description: "Mediation session for Davis personal injury case",
-  },
-  {
-    id: "5",
-    title: "Expert Witness Deposition",
-    type: "meeting",
-    start: new Date(2024, 11, 13, 9, 30),
-    end: new Date(2024, 11, 13, 12, 30),
-    description: "Deposition of Dr. Smith for medical malpractice case",
-  },
-  {
-    id: "6",
-    title: "Filing Deadline - Wilson Appeal",
+    title: "Document Filing Deadline",
+    start: addDays(new Date(), 5),
+    end: addDays(new Date(), 5),
     type: "deadline",
-    start: new Date(2024, 11, 15, 17, 0),
-    end: new Date(2024, 11, 15, 17, 0),
-    description: "Final deadline for appellate brief submission",
+    caseName: "Williams Estate",
   },
-  {
-    id: "7",
-    title: "Client Strategy Meeting",
-    type: "meeting",
-    start: new Date(2024, 11, 18, 11, 0),
-    end: new Date(2024, 11, 18, 12, 30),
-    description: "Quarterly strategy review with corporate client",
-  },
-  {
-    id: "8",
-    title: "Arbitration Hearing",
-    type: "hearing",
-    start: new Date(2024, 11, 20, 9, 0),
-    end: new Date(2024, 11, 20, 15, 0),
-    description: "Commercial contract dispute resolution",
-  },
-  {
-    id: "9",
-    title: "Expert Report Due",
-    type: "deadline",
-    start: new Date(2024, 11, 22, 16, 0),
-    end: new Date(2024, 11, 22, 16, 0),
-    description: "Technical expert report for patent case",
-  },
-  {
-    id: "10",
-    title: "Settlement Negotiation",
-    type: "meeting",
-    start: new Date(2024, 11, 27, 14, 0),
-    end: new Date(2024, 11, 27, 16, 0),
-    description: "Final settlement discussion for class action",
-  },
-  {
-    id: "11",
-    title: "Year-End Case Review",
-    type: "meeting",
-    start: new Date(2024, 11, 29, 10, 0),
-    end: new Date(2024, 11, 29, 14, 0),
-    description: "Annual review of active cases and planning",
-  }
 ]
 
-export default function LawyerCalendarPage() {
+export default function LawyerCalendar() {
+  const [events, setEvents] = useState<CalendarEvent[]>(mockEvents)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
   const [selectedView, setSelectedView] = useState<"month" | "week" | "day">("month")
   const { toast } = useToast()
 
   const handleEventScheduled = (newEvent: CalendarEvent) => {
+    setEvents([...events, newEvent])
     toast({
       title: "Event Scheduled",
       description: "Your event has been successfully added to the calendar.",
@@ -132,7 +71,24 @@ export default function LawyerCalendarPage() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-[1fr_300px]">
-          <LawyerCalendar />
+          <div className="space-y-6">
+            <Card className="p-4">
+              <CalendarFilters
+                selectedView={selectedView}
+                onViewChange={setSelectedView}
+              />
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={setSelectedDate}
+                className="rounded-md border mt-4"
+                disabled={(date) =>
+                  date < new Date(new Date().setHours(0, 0, 0, 0))
+                }
+              />
+            </Card>
+          </div>
+
           <div className="space-y-6">
             <UpcomingEvents events={events} />
           </div>
