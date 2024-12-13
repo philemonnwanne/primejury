@@ -3,8 +3,23 @@ import { MarketplaceCaseList } from "@/components/marketplace/MarketplaceCaseLis
 import { MarketplaceFilters } from "@/components/marketplace/MarketplaceFilters"
 import { LawyerMarketplaceProfile } from "@/components/marketplace/LawyerMarketplaceProfile"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useEffect, useState } from "react"
 
 export default function LawyerMarketplace() {
+  const [activeTab, setActiveTab] = useState("cases")
+
+  useEffect(() => {
+    const handleShowPendingBids = () => {
+      document.dispatchEvent(new CustomEvent('marketplace-show-pending-bids'));
+    };
+
+    document.addEventListener('show-pending-bids', handleShowPendingBids);
+
+    return () => {
+      document.removeEventListener('show-pending-bids', handleShowPendingBids);
+    };
+  }, []);
+
   return (
     <LawyerDashboardLayout>
       <div className="space-y-6">
@@ -12,7 +27,7 @@ export default function LawyerMarketplace() {
           <h1 className="text-3xl font-bold tracking-tight">Case Marketplace</h1>
         </div>
 
-        <Tabs defaultValue="cases">
+        <Tabs defaultValue="cases" value={activeTab} onValueChange={setActiveTab}>
           <TabsList>
             <TabsTrigger value="cases">Available Cases</TabsTrigger>
             <TabsTrigger value="profile">My Profile</TabsTrigger>

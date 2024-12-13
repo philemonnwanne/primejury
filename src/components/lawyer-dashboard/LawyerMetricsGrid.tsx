@@ -38,8 +38,11 @@ export function LawyerMetricsGrid() {
 
   const handleMetricClick = (metric: typeof metrics[0]) => {
     if ('action' in metric && metric.action === 'pending-bids') {
-      // This will trigger the same behavior as clicking on Pending Bids in Marketplace
-      document.dispatchEvent(new CustomEvent('show-pending-bids'));
+      navigate('/lawyer-dashboard/marketplace');
+      // Use setTimeout to ensure navigation completes before dispatching the event
+      setTimeout(() => {
+        document.dispatchEvent(new CustomEvent('show-pending-bids'));
+      }, 100);
     } else if ('link' in metric) {
       navigate(metric.link);
     }
