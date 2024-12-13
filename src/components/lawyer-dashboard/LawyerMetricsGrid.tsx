@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Briefcase, Clock, AlertTriangle, CheckCircle } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const metrics = [
   {
@@ -15,7 +15,7 @@ const metrics = [
     value: "8",
     description: "2 awaiting response",
     icon: Clock,
-    link: "/lawyer-dashboard/marketplace",
+    action: "pending-bids",
   },
   {
     title: "Urgent Tasks",
@@ -34,10 +34,25 @@ const metrics = [
 ]
 
 export function LawyerMetricsGrid() {
+  const navigate = useNavigate();
+
+  const handleMetricClick = (metric: typeof metrics[0]) => {
+    if ('action' in metric && metric.action === 'pending-bids') {
+      // This will trigger the same behavior as clicking on Pending Bids in Marketplace
+      document.dispatchEvent(new CustomEvent('show-pending-bids'));
+    } else if ('link' in metric) {
+      navigate(metric.link);
+    }
+  };
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {metrics.map((metric) => (
-        <Link key={metric.title} to={metric.link} className="block">
+        <div
+          key={metric.title}
+          className="cursor-pointer"
+          onClick={() => handleMetricClick(metric)}
+        >
           <Card className="transition-shadow hover:shadow-md">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
@@ -52,7 +67,7 @@ export function LawyerMetricsGrid() {
               </p>
             </CardContent>
           </Card>
-        </Link>
+        </div>
       ))}
     </div>
   )

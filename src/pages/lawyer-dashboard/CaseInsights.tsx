@@ -2,13 +2,23 @@ import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
 import { CaseList } from "@/components/cases/CaseList"
 import { CaseTimeline } from "@/components/cases/CaseTimeline"
 import { PreviousCaseCard } from "@/components/cases/PreviousCaseCard"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { LawyerCaseDetails } from "@/components/lawyer-dashboard/case-insights/LawyerCaseDetails"
+import { useSearchParams } from "react-router-dom"
 
 export default function LawyerCaseInsights() {
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState("current")
+  const [searchParams] = useSearchParams()
+  const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "current")
+
+  // Update active tab when URL changes
+  useEffect(() => {
+    const tab = searchParams.get("tab")
+    if (tab) {
+      setActiveTab(tab)
+    }
+  }, [searchParams])
 
   return (
     <LawyerDashboardLayout>
