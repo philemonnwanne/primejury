@@ -6,44 +6,90 @@ import { addMonths, format, isSameDay } from "date-fns"
 
 const events = [
   {
-    id: "1",
+    date: new Date(2024, 11, 4),
     title: "Client Meeting - Brown Case",
-    start: new Date(2024, 2, 4, 9, 0),
-    end: new Date(2024, 2, 4, 10, 0),
     type: "meeting",
+    time: "09:00 AM",
+    duration: "1 hour",
     description: "Initial consultation regarding employment dispute",
   },
   {
-    id: "2",
+    date: new Date(2024, 11, 4),
     title: "Document Review - Smith Estate",
-    start: new Date(2024, 2, 4, 14, 0),
-    end: new Date(2024, 2, 4, 17, 0),
     type: "deadline",
+    time: "02:00 PM",
+    duration: "3 hours",
     description: "Review and finalize estate planning documents",
   },
   {
-    id: "3",
+    date: new Date(2024, 11, 7),
     title: "Court Hearing - Johnson vs. MegaCorp",
-    start: new Date(2024, 2, 7, 10, 30),
-    end: new Date(2024, 2, 7, 12, 30),
     type: "hearing",
+    time: "10:30 AM",
+    duration: "2 hours",
     description: "Summary judgment hearing",
   },
   {
-    id: "4",
+    date: new Date(2024, 11, 11),
     title: "Settlement Conference",
-    start: new Date(2024, 2, 11, 13, 0),
-    end: new Date(2024, 2, 11, 17, 0),
     type: "meeting",
+    time: "01:00 PM",
+    duration: "4 hours",
     description: "Mediation session for Davis personal injury case",
   },
   {
-    id: "5",
+    date: new Date(2024, 11, 13),
     title: "Expert Witness Deposition",
-    start: new Date(2024, 2, 13, 9, 30),
-    end: new Date(2024, 2, 13, 12, 30),
     type: "meeting",
+    time: "09:30 AM",
+    duration: "3 hours",
     description: "Deposition of Dr. Smith for medical malpractice case",
+  },
+  {
+    date: new Date(2024, 11, 15),
+    title: "Filing Deadline - Wilson Appeal",
+    type: "deadline",
+    time: "05:00 PM",
+    description: "Final deadline for appellate brief submission",
+  },
+  {
+    date: new Date(2024, 11, 18),
+    title: "Client Strategy Meeting",
+    type: "meeting",
+    time: "11:00 AM",
+    duration: "1.5 hours",
+    description: "Quarterly strategy review with corporate client",
+  },
+  {
+    date: new Date(2024, 11, 20),
+    title: "Arbitration Hearing",
+    type: "hearing",
+    time: "09:00 AM",
+    duration: "6 hours",
+    description: "Commercial contract dispute resolution",
+  },
+  {
+    date: new Date(2024, 11, 22),
+    title: "Expert Report Due",
+    type: "deadline",
+    time: "04:00 PM",
+    description: "Technical expert report for patent case",
+  },
+  {
+    date: new Date(2024, 11, 27),
+    title: "Settlement Negotiation",
+    type: "meeting",
+    time: "02:00 PM",
+    duration: "2 hours",
+    description: "Final settlement discussion for class action",
+  },
+  {
+    date: new Date(2024, 11, 29),
+    title: "Year-End Case Review",
+    type: "meeting",
+    time: "10:00 AM",
+    duration: "4 hours",
+    description: "Annual review of active cases and planning",
   }
 ]
 
@@ -53,22 +99,27 @@ export function LawyerCalendar() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(today)
 
   const getDayEvents = (date: Date) => {
-    return events.filter((event) => isSameDay(event.start, date))
+    return events.filter((event) => isSameDay(event.date, date))
   }
 
   const selectedDayEvents = selectedDate ? getDayEvents(selectedDate) : []
 
+  const handleDateSelect = (date: Date | undefined) => {
+    console.log("Selected date:", date) // Add logging to debug
+    setSelectedDate(date)
+  }
+
   return (
     <Card className="col-span-4">
       <CardHeader>
-        <CardTitle>Schedule</CardTitle>
+        <CardTitle>Schedule a Consultation</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4 md:grid-cols-[1fr_300px]">
           <Calendar
             mode="single"
             selected={selectedDate}
-            onSelect={setSelectedDate}
+            onSelect={handleDateSelect}
             fromDate={today}
             toDate={sixMonthsFromNow}
             className="rounded-md border"
@@ -81,9 +132,9 @@ export function LawyerCalendar() {
                 </h4>
                 <div className="space-y-2">
                   {selectedDayEvents.length > 0 ? (
-                    selectedDayEvents.map((event) => (
+                    selectedDayEvents.map((event, index) => (
                       <div
-                        key={event.id}
+                        key={index}
                         className="flex flex-col space-y-2 rounded-md border p-3 hover:bg-accent/50 transition-colors"
                       >
                         <div className="flex items-center justify-between">
@@ -91,7 +142,8 @@ export function LawyerCalendar() {
                           <Badge variant="outline">{event.type}</Badge>
                         </div>
                         <div className="text-xs text-muted-foreground space-y-1">
-                          <p>Time: {format(event.start, "h:mm a")} - {format(event.end, "h:mm a")}</p>
+                          {event.time && <p>Time: {event.time}</p>}
+                          {event.duration && <p>Duration: {event.duration}</p>}
                           {event.description && (
                             <p className="text-xs">{event.description}</p>
                           )}
