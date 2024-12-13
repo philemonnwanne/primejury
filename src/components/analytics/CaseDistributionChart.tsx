@@ -2,11 +2,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts"
 
 const data = [
-  { name: "Won", value: 45, color: "#10b981" },
+  { name: "Won", value: 85, color: "#10b981" },
   { name: "Lost", value: 15, color: "#ef4444" },
-  { name: "Settled", value: 30, color: "#3b82f6" },
-  { name: "Pending", value: 25, color: "#f59e0b" },
-  { name: "Dismissed", value: 5, color: "#6b7280" },
+  { name: "Settled", value: 45, color: "#3b82f6" },
+  { name: "Pending", value: 35, color: "#f59e0b" },
+  { name: "Dismissed", value: 10, color: "#6b7280" },
 ]
 
 export function CaseDistributionChart() {

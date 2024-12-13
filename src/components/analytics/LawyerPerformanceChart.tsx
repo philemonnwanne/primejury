@@ -2,10 +2,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 
 const data = [
-  { name: "Sarah P.", cases: 25, success: 22 },
-  { name: "John D.", cases: 20, success: 16 },
-  { name: "Emma R.", cases: 18, success: 15 },
-  { name: "Michael B.", cases: 15, success: 12 },
+  { name: "Sarah P.", cases: 45, success: 38 },
+  { name: "John D.", cases: 35, success: 28 },
+  { name: "Emma R.", cases: 42, success: 35 },
+  { name: "Michael B.", cases: 38, success: 30 },
+  { name: "Lisa K.", cases: 32, success: 25 },
 ]
 
 export function LawyerPerformanceChart() {

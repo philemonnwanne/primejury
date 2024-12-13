@@ -2,13 +2,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 
 const data = [
-  { month: "Jan", revenue: 45000 },
-  { month: "Feb", revenue: 52000 },
-  { month: "Mar", revenue: 48000 },
-  { month: "Apr", revenue: 61000 },
-  { month: "May", revenue: 55000 },
-  { month: "Jun", revenue: 67000 },
-  { month: "Jul", revenue: 72000 },
+  { month: "Jan", revenue: 145000 },
+  { month: "Feb", revenue: 162000 },
+  { month: "Mar", revenue: 158000 },
+  { month: "Apr", revenue: 171000 },
+  { month: "May", revenue: 165000 },
+  { month: "Jun", revenue: 177000 },
+  { month: "Jul", revenue: 182000 },
+  { month: "Aug", revenue: 191000 },
+  { month: "Sep", revenue: 188000 },
+  { month: "Oct", revenue: 197000 },
+  { month: "Nov", revenue: 192000 },
+  { month: "Dec", revenue: 205000 },
 ]
 
 export function RevenueAnalyticsChart() {
@@ -24,16 +29,17 @@ export function RevenueAnalyticsChart() {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" />
               <YAxis 
-                tickFormatter={(value) => `$${value.toLocaleString()}`}
+                tickFormatter={(value) => `$${(value/1000).toFixed(0)}k`}
               />
               <Tooltip 
-                formatter={(value) => [`$${value.toLocaleString()}`, "Revenue"]}
+                formatter={(value: number) => [`$${value.toLocaleString()}`, "Revenue"]}
               />
               <Line 
                 type="monotone" 
                 dataKey="revenue" 
                 stroke="hsl(var(--primary))" 
                 strokeWidth={2}
+                dot={{ fill: "hsl(var(--primary))" }}
               />
             </LineChart>
           </ResponsiveContainer>
