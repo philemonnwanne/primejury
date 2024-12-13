@@ -7,6 +7,8 @@ export type CalendarEventType =
   | "blocked"
   | "statute-limitation";
 
+export type CalendarView = "month" | "week" | "day";
+
 export interface CalendarEvent {
   id: string;
   title: string;
@@ -20,4 +22,15 @@ export interface CalendarEvent {
   clientId?: string;
   location?: string;
   meetingLink?: string;
+  color?: string;
+  recurring?: boolean;
+  recurrencePattern?: string;
+}
+
+export interface SharedCalendarLink {
+  id: string;
+  url: string;
+  expiresAt?: Date;
+  createdAt: Date;
+  accessType: "view" | "schedule";
 }

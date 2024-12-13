@@ -1,11 +1,15 @@
 import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
 import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { UpcomingEvents } from "@/components/lawyer-dashboard/calendar/UpcomingEvents"
 import { ScheduleEventDialog } from "@/components/lawyer-dashboard/calendar/ScheduleEventDialog"
-import { CalendarEvent } from "@/types/calendar"
+import { ShareCalendarDialog } from "@/components/lawyer-dashboard/calendar/ShareCalendarDialog"
+import { CalendarFilters } from "@/components/lawyer-dashboard/calendar/CalendarFilters"
 import { useState } from "react"
+import { CalendarEvent } from "@/types/calendar"
 import { addDays } from "date-fns"
+import { useToast } from "@/hooks/use-toast"
 
 // Mock data for demonstration
 const mockEvents: CalendarEvent[] = [
@@ -33,38 +37,54 @@ const mockEvents: CalendarEvent[] = [
     type: "deadline",
     caseName: "Williams Estate",
   },
-];
+]
 
 export default function LawyerCalendar() {
-  const [events, setEvents] = useState<CalendarEvent[]>(mockEvents);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [events, setEvents] = useState<CalendarEvent[]>(mockEvents)
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
+  const [selectedView, setSelectedView] = useState<"month" | "week" | "day">("month")
+  const { toast } = useToast()
 
   const handleEventScheduled = (newEvent: CalendarEvent) => {
-    setEvents([...events, newEvent]);
-  };
+    setEvents([...events, newEvent])
+    toast({
+      title: "Event Scheduled",
+      description: "Your event has been successfully added to the calendar.",
+    })
+  }
 
   return (
     <LawyerDashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 animate-fade-in">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold tracking-tight">Calendar</h1>
-          <ScheduleEventDialog 
-            onEventScheduled={handleEventScheduled}
-            selectedDate={selectedDate}
-          />
+          <div className="flex gap-4">
+            <ScheduleEventDialog
+              onEventScheduled={handleEventScheduled}
+              selectedDate={selectedDate}
+            />
+            <ShareCalendarDialog />
+          </div>
         </div>
 
         <div className="grid gap-6 md:grid-cols-[1fr_300px]">
-          <Card>
-            <CardContent className="p-4">
+          <div className="space-y-6">
+            <Card className="p-4">
+              <CalendarFilters
+                selectedView={selectedView}
+                onViewChange={setSelectedView}
+              />
               <Calendar
                 mode="single"
                 selected={selectedDate}
                 onSelect={setSelectedDate}
-                className="rounded-md border"
+                className="rounded-md border mt-4"
+                disabled={(date) =>
+                  date < new Date(new Date().setHours(0, 0, 0, 0))
+                }
               />
-            </CardContent>
-          </Card>
+            </Card>
+          </div>
 
           <div className="space-y-6">
             <UpcomingEvents events={events} />
