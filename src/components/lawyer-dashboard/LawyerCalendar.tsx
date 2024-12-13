@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -32,12 +33,12 @@ const events = [
 export function LawyerCalendar() {
   const today = new Date()
   const sixMonthsFromNow = addMonths(today, 6)
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(today)
 
   const getDayEvents = (date: Date) => {
     return events.filter((event) => isSameDay(event.date, date))
   }
 
-  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(today)
   const selectedDayEvents = selectedDate ? getDayEvents(selectedDate) : []
 
   return (
