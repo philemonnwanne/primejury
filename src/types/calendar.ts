@@ -5,7 +5,8 @@ export type CalendarEventType =
   | "deadline"
   | "holiday"
   | "blocked"
-  | "statute-limitation";
+  | "statute-limitation"
+  | "hearing";
 
 export type CalendarView = "month" | "week" | "day";
 
@@ -33,7 +34,7 @@ export interface CalendarEvent {
   color?: string;
   recurring?: boolean;
   recurrencePattern?: string;
-  calendarId?: string; // Reference to the calendar source
+  calendarId?: string;
 }
 
 export interface SharedCalendarLink {
