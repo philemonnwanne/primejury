@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Download, Eye, Share2, Search } from "lucide-react"
+import { Download, Eye, Share2, Search, Folder, ChevronRight, ChevronDown, File } from "lucide-react"
 import { DocumentViewer } from "./DocumentViewer"
 import {
   Select,
@@ -19,6 +19,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 
 interface Document {
   id: string
@@ -31,27 +36,90 @@ interface Document {
   url: string
 }
 
-const mockDocuments: Document[] = [
+// Mock data structure for cases and their documents
+const mockCaseDocuments = [
   {
-    id: "1",
-    name: "Contract_v1.pdf",
-    type: "PDF",
-    size: "2.5 MB",
-    uploadDate: "2024-02-20",
-    case: "Smith vs. Johnson",
-    accessLevel: "lawyer-only",
-    url: "/documents/contract.pdf",
+    caseId: "1",
+    caseName: "Smith vs. Johnson",
+    documents: {
+      "Legal Filings": [
+        {
+          id: "1",
+          name: "Initial Complaint.pdf",
+          type: "PDF",
+          size: "2.5 MB",
+          uploadDate: "2024-02-20",
+          case: "Smith vs. Johnson",
+          accessLevel: "lawyer-only",
+          url: "/documents/complaint.pdf",
+        },
+        {
+          id: "2",
+          name: "Response to Motion.pdf",
+          type: "PDF",
+          size: "1.8 MB",
+          uploadDate: "2024-02-22",
+          case: "Smith vs. Johnson",
+          accessLevel: "lawyer-only",
+          url: "/documents/response.pdf",
+        }
+      ],
+      "Evidence": [
+        {
+          id: "3",
+          name: "Evidence_photo.jpg",
+          type: "Image",
+          size: "1.2 MB",
+          uploadDate: "2024-02-19",
+          case: "Smith vs. Johnson",
+          accessLevel: "firm-wide",
+          url: "/documents/evidence.jpg",
+        }
+      ],
+      "Client Forms": [
+        {
+          id: "4",
+          name: "Client Authorization.pdf",
+          type: "PDF",
+          size: "0.5 MB",
+          uploadDate: "2024-02-18",
+          case: "Smith vs. Johnson",
+          accessLevel: "client-accessible",
+          url: "/documents/auth.pdf",
+        }
+      ]
+    }
   },
   {
-    id: "2",
-    name: "Evidence_photo.jpg",
-    type: "Image",
-    size: "1.2 MB",
-    uploadDate: "2024-02-19",
-    case: "Tech Corp Merger",
-    accessLevel: "firm-wide",
-    url: "/documents/evidence.jpg",
-  },
+    caseId: "2",
+    caseName: "Tech Corp Merger",
+    documents: {
+      "Contracts": [
+        {
+          id: "5",
+          name: "Merger Agreement.pdf",
+          type: "PDF",
+          size: "3.5 MB",
+          uploadDate: "2024-02-15",
+          case: "Tech Corp Merger",
+          accessLevel: "lawyer-only",
+          url: "/documents/merger.pdf",
+        }
+      ],
+      "Due Diligence": [
+        {
+          id: "6",
+          name: "Financial Report.pdf",
+          type: "PDF",
+          size: "2.8 MB",
+          uploadDate: "2024-02-16",
+          case: "Tech Corp Merger",
+          accessLevel: "lawyer-only",
+          url: "/documents/finance.pdf",
+        }
+      ]
+    }
+  }
 ]
 
 const accessLevelColors = {
@@ -60,20 +128,36 @@ const accessLevelColors = {
   "client-accessible": "outline",
 } as const
 
-export function DocumentLibrary() {
+export function DocumentLibrary({ type = "case" }: { type?: string }) {
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
-  const [filterType, setFilterType] = useState<string>("all")
-  const [filterAccess, setFilterAccess] = useState<string>("all")
+  const [expandedCases, setExpandedCases] = useState<string[]>([])
+  const [expandedCategories, setExpandedCategories] = useState<{[key: string]: string[]}>({})
 
-  const filteredDocuments = mockDocuments.filter((doc) => {
-    const matchesSearch = doc.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
-    const matchesType = filterType === "all" || doc.type === filterType
-    const matchesAccess = filterAccess === "all" || doc.accessLevel === filterAccess
-    return matchesSearch && matchesType && matchesAccess
-  })
+  const toggleCase = (caseId: string) => {
+    setExpandedCases(prev => 
+      prev.includes(caseId) 
+        ? prev.filter(id => id !== caseId)
+        : [...prev, caseId]
+    )
+  }
+
+  const toggleCategory = (caseId: string, category: string) => {
+    setExpandedCategories(prev => {
+      const caseCategories = prev[caseId] || []
+      const newCaseCategories = caseCategories.includes(category)
+        ? caseCategories.filter(cat => cat !== category)
+        : [...caseCategories, category]
+      return {
+        ...prev,
+        [caseId]: newCaseCategories
+      }
+    })
+  }
+
+  const isCategoryExpanded = (caseId: string, category: string) => {
+    return expandedCategories[caseId]?.includes(category) || false
+  }
 
   return (
     <div className="space-y-4">
@@ -87,77 +171,90 @@ export function DocumentLibrary() {
             className="pl-8"
           />
         </div>
-        <Select value={filterType} onValueChange={setFilterType}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            <SelectItem value="PDF">PDF</SelectItem>
-            <SelectItem value="Image">Image</SelectItem>
-            <SelectItem value="Word">Word</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select value={filterAccess} onValueChange={setFilterAccess}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Access Level" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Access Levels</SelectItem>
-            <SelectItem value="firm-wide">Firm-Wide</SelectItem>
-            <SelectItem value="lawyer-only">Lawyer-Only</SelectItem>
-            <SelectItem value="client-accessible">Client-Accessible</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
 
       <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Size</TableHead>
-              <TableHead>Upload Date</TableHead>
-              <TableHead>Case</TableHead>
-              <TableHead>Access Level</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredDocuments.map((doc) => (
-              <TableRow key={doc.id}>
-                <TableCell className="font-medium">{doc.name}</TableCell>
-                <TableCell>{doc.type}</TableCell>
-                <TableCell>{doc.size}</TableCell>
-                <TableCell>{doc.uploadDate}</TableCell>
-                <TableCell>{doc.case}</TableCell>
-                <TableCell>
-                  <Badge variant={accessLevelColors[doc.accessLevel]}>
-                    {doc.accessLevel}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setSelectedDocument(doc)}
+        {mockCaseDocuments.map((caseData) => (
+          <Collapsible
+            key={caseData.caseId}
+            open={expandedCases.includes(caseData.caseId)}
+            className="border-b last:border-b-0"
+          >
+            <CollapsibleTrigger
+              className="flex w-full items-center justify-between p-4 hover:bg-muted/50"
+              onClick={() => toggleCase(caseData.caseId)}
+            >
+              <div className="flex items-center gap-2">
+                <Folder className="h-5 w-5 text-muted-foreground" />
+                <span className="font-medium">{caseData.caseName}</span>
+              </div>
+              {expandedCases.includes(caseData.caseId) ? (
+                <ChevronDown className="h-4 w-4" />
+              ) : (
+                <ChevronRight className="h-4 w-4" />
+              )}
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <div className="px-4 pb-4">
+                {Object.entries(caseData.documents).map(([category, documents]) => (
+                  <Collapsible
+                    key={category}
+                    open={isCategoryExpanded(caseData.caseId, category)}
+                    className="mt-2"
+                  >
+                    <CollapsibleTrigger
+                      className="flex w-full items-center justify-between p-2 hover:bg-muted/50 rounded-md"
+                      onClick={() => toggleCategory(caseData.caseId, category)}
                     >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon">
-                      <Download className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon">
-                      <Share2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                      <div className="flex items-center gap-2">
+                        <Folder className="h-4 w-4 text-muted-foreground" />
+                        <span className="font-medium">{category}</span>
+                      </div>
+                      {isCategoryExpanded(caseData.caseId, category) ? (
+                        <ChevronDown className="h-4 w-4" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4" />
+                      )}
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <div className="ml-6 mt-2 space-y-2">
+                        {documents.map((doc) => (
+                          <div
+                            key={doc.id}
+                            className="flex items-center justify-between rounded-md p-2 hover:bg-muted/50"
+                          >
+                            <div className="flex items-center gap-2">
+                              <File className="h-4 w-4 text-muted-foreground" />
+                              <span>{doc.name}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Badge variant={accessLevelColors[doc.accessLevel]}>
+                                {doc.accessLevel}
+                              </Badge>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => setSelectedDocument(doc)}
+                              >
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                              <Button variant="ghost" size="icon">
+                                <Download className="h-4 w-4" />
+                              </Button>
+                              <Button variant="ghost" size="icon">
+                                <Share2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+                ))}
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+        ))}
       </div>
 
       <DocumentViewer
