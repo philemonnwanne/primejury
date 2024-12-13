@@ -33,6 +33,49 @@ const scheduledMeetings = [
   },
 ]
 
+// Updated mock client data with full profiles
+const mockClients = [
+  {
+    id: "client-1",
+    name: "John Smith",
+    email: "john.smith@email.com",
+    phone: "(555) 123-4567",
+    address: "123 Main St, Sacramento, CA 95814",
+    occupation: "Business Owner",
+    cases: [
+      { id: "case-1", title: "Contract Dispute" },
+      { id: "case-2", title: "Property Settlement" }
+    ],
+    status: "active"
+  },
+  {
+    id: "client-2",
+    name: "Sarah Johnson",
+    email: "sarah.j@email.com",
+    phone: "(555) 234-5678",
+    address: "456 Oak Ave, Sacramento, CA 95815",
+    occupation: "Software Engineer",
+    cases: [
+      { id: "case-3", title: "Employment Law" }
+    ],
+    status: "active"
+  },
+  {
+    id: "client-3",
+    name: "Michael Brown",
+    email: "michael.b@email.com",
+    phone: "(555) 345-6789",
+    address: "789 Pine St, Sacramento, CA 95816",
+    occupation: "Restaurant Owner",
+    cases: [
+      { id: "case-4", title: "Business Litigation" },
+      { id: "case-5", title: "Intellectual Property" },
+      { id: "case-6", title: "Contract Review" }
+    ],
+    status: "active"
+  }
+]
+
 export default function LawyerCommunications() {
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState("")
@@ -142,34 +185,3 @@ export default function LawyerCommunications() {
     </LawyerDashboardLayout>
   )
 }
-
-// Mock client data with associated cases
-const mockClients = [
-  {
-    id: "client-1",
-    name: "John Smith",
-    cases: [
-      { id: "case-1", title: "Contract Dispute" },
-      { id: "case-2", title: "Property Settlement" }
-    ],
-    status: "active"
-  },
-  {
-    id: "client-2",
-    name: "Sarah Johnson",
-    cases: [
-      { id: "case-3", title: "Employment Law" }
-    ],
-    status: "active"
-  },
-  {
-    id: "client-3",
-    name: "Michael Brown",
-    cases: [
-      { id: "case-4", title: "Business Litigation" },
-      { id: "case-5", title: "Intellectual Property" },
-      { id: "case-6", title: "Contract Review" }
-    ],
-    status: "active"
-  }
-]
