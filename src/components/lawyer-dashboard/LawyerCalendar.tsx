@@ -1,23 +1,31 @@
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { addMonths } from "date-fns"
+import { addMonths, format, isSameDay } from "date-fns"
 
 const events = [
   {
     date: new Date(2024, 1, 15),
     title: "Client Meeting - Smith Case",
     type: "meeting",
+    time: "10:00 AM",
+    duration: "1 hour",
+    description: "Initial consultation regarding property dispute",
   },
   {
     date: new Date(2024, 1, 18),
     title: "Court Hearing - Johnson vs. Tech Corp",
     type: "hearing",
+    time: "2:00 PM",
+    duration: "2 hours",
+    description: "Preliminary hearing for patent infringement case",
   },
   {
     date: new Date(2024, 1, 20),
     title: "Document Filing Deadline",
     type: "deadline",
+    time: "5:00 PM",
+    description: "Final deadline for submitting amended complaint",
   },
 ]
 
@@ -25,38 +33,66 @@ export function LawyerCalendar() {
   const today = new Date()
   const sixMonthsFromNow = addMonths(today, 6)
 
+  const getDayEvents = (date: Date) => {
+    return events.filter((event) => isSameDay(event.date, date))
+  }
+
+  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(today)
+  const selectedDayEvents = selectedDate ? getDayEvents(selectedDate) : []
+
   return (
     <Card className="col-span-4">
       <CardHeader>
         <CardTitle>Schedule a Consultation</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-4 md:grid-cols-[1fr_250px]">
+        <div className="grid gap-4 md:grid-cols-[1fr_300px]">
           <Calendar
             mode="single"
-            selected={today}
+            selected={selectedDate}
+            onSelect={setSelectedDate}
             fromDate={today}
             toDate={sixMonthsFromNow}
             className="rounded-md border"
           />
           <div className="space-y-4">
-            <h4 className="text-sm font-medium">Upcoming Events</h4>
-            <div className="space-y-2">
-              {events.map((event, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col space-y-1 rounded-md border p-2"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">{event.title}</span>
-                    <Badge variant="outline">{event.type}</Badge>
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {event.date.toLocaleDateString()}
-                  </span>
+            {selectedDate ? (
+              <>
+                <h4 className="text-sm font-medium">
+                  Activities for {format(selectedDate, "MMMM d, yyyy")}
+                </h4>
+                <div className="space-y-2">
+                  {selectedDayEvents.length > 0 ? (
+                    selectedDayEvents.map((event, index) => (
+                      <div
+                        key={index}
+                        className="flex flex-col space-y-2 rounded-md border p-3 hover:bg-accent/50 transition-colors"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">{event.title}</span>
+                          <Badge variant="outline">{event.type}</Badge>
+                        </div>
+                        <div className="text-xs text-muted-foreground space-y-1">
+                          {event.time && <p>Time: {event.time}</p>}
+                          {event.duration && <p>Duration: {event.duration}</p>}
+                          {event.description && (
+                            <p className="text-xs">{event.description}</p>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      No activities scheduled for this day
+                    </p>
+                  )}
                 </div>
-              ))}
-            </div>
+              </>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Select a date to view activities
+              </p>
+            )}
           </div>
         </div>
       </CardContent>
