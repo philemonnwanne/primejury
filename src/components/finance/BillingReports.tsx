@@ -4,6 +4,7 @@ import { FileText, Download } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { AnalyticsReport } from "@/components/analytics/AnalyticsReport"
 import { PDFDownloadLink } from "@react-pdf/renderer"
+import { ReactElement } from "react"
 
 export function BillingReports() {
   const { toast } = useToast()
@@ -41,7 +42,7 @@ export function BillingReports() {
                   document={<AnalyticsReport sections={reportSections} />}
                   fileName="monthly-revenue-report.pdf"
                 >
-                  {({ loading }) => (
+                  {({ loading }): ReactElement => (
                     <Button disabled={loading} asChild>
                       <div className="flex items-center">
                         <Download className="mr-2 h-4 w-4" />
