@@ -4,7 +4,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Scale, Timer, TrendingUp, Users } from "lucide-react"
+import { Scale, Timer, TrendingUp, Users, Award, Star } from "lucide-react"
 
 const metrics = [
   {
@@ -17,7 +17,7 @@ const metrics = [
     title: "Success Rate",
     value: "89%",
     description: "+2% from last month",
-    icon: TrendingUp,
+    icon: Award,
   },
   {
     title: "Avg. Resolution Time",
@@ -26,16 +26,28 @@ const metrics = [
     icon: Timer,
   },
   {
+    title: "Client Satisfaction",
+    value: "4.8/5",
+    description: "Based on 98 reviews",
+    icon: Star,
+  },
+  {
     title: "Active Lawyers",
     value: "12",
     description: "8 cases per lawyer",
     icon: Users,
   },
+  {
+    title: "Revenue Growth",
+    value: "+15%",
+    description: "Compared to last quarter",
+    icon: TrendingUp,
+  },
 ]
 
 export function AnalyticsMetrics() {
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {metrics.map((metric) => (
         <Card key={metric.title}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
