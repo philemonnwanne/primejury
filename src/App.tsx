@@ -34,6 +34,7 @@ import ClientBilling from "./pages/client-dashboard/Billing"
 import LawyerPublicProfiles from "./pages/lawyers/LawyerPublicProfiles"
 import LawyerProfile from "./pages/lawyers/LawyerProfile"
 import CaseBids from "./pages/client-dashboard/CaseBids"
+import LawyerClients from "./pages/lawyer-dashboard/Clients"
 
 const queryClient = new QueryClient()
 
@@ -76,6 +77,7 @@ function App() {
             <Route path="/client-dashboard/case-bids" element={<CaseBids />} />
             <Route path="/lawyers" element={<LawyerPublicProfiles />} />
             <Route path="/lawyers/:id" element={<LawyerProfile />} />
+            <Route path="/lawyer-dashboard/clients" element={<LawyerClients />} />
             <Route path="/lawyer-marketplace" element={<Navigate to="/lawyers" replace />} />
           </Routes>
         </TooltipProvider>
