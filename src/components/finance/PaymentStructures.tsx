@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { PaymentStructureForm } from "./payment-structures/PaymentStructureForm"
-import { PaymentStructureSelector } from "./payment-structures/PaymentStructureSelector"
+import { CaseSelector } from "./payment-structures/CaseSelector"
 import { Case, PaymentStructure } from "./payment-structures/types"
 
 // Mock data - in a real app, this would come from an API
@@ -71,7 +71,7 @@ export function PaymentStructures() {
           <CardTitle>Payment Structure Management</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <PaymentStructureSelector
+          <CaseSelector
             cases={mockCases}
             selectedCase={selectedCase}
             onCaseSelect={handleCaseSelect}
