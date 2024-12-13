@@ -9,6 +9,14 @@ export type CalendarEventType =
 
 export type CalendarView = "month" | "week" | "day";
 
+export type CalendarSource = {
+  id: string;
+  name: string;
+  type: "primary" | "google" | "outlook" | "apple";
+  color: string;
+  enabled: boolean;
+};
+
 export interface CalendarEvent {
   id: string;
   title: string;
@@ -25,6 +33,7 @@ export interface CalendarEvent {
   color?: string;
   recurring?: boolean;
   recurrencePattern?: string;
+  calendarId?: string; // Reference to the calendar source
 }
 
 export interface SharedCalendarLink {

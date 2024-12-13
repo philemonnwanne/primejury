@@ -1,11 +1,12 @@
 import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
 import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import { UpcomingEvents } from "@/components/lawyer-dashboard/calendar/UpcomingEvents"
 import { ScheduleEventDialog } from "@/components/lawyer-dashboard/calendar/ScheduleEventDialog"
 import { ShareCalendarDialog } from "@/components/lawyer-dashboard/calendar/ShareCalendarDialog"
 import { CalendarFilters } from "@/components/lawyer-dashboard/calendar/CalendarFilters"
+import { CalendarSettings } from "@/components/lawyer-dashboard/calendar/CalendarSettings"
+import { CalendarSync } from "@/components/lawyer-dashboard/calendar/CalendarSync"
 import { useState } from "react"
 import { CalendarEvent } from "@/types/calendar"
 import { addDays } from "date-fns"
@@ -58,7 +59,9 @@ export default function LawyerCalendar() {
       <div className="space-y-6 animate-fade-in">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold tracking-tight">Calendar</h1>
-          <div className="flex gap-4">
+          <div className="flex gap-2">
+            <CalendarSync />
+            <CalendarSettings />
             <ScheduleEventDialog
               onEventScheduled={handleEventScheduled}
               selectedDate={selectedDate}
