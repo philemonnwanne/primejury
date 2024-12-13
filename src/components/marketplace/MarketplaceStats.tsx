@@ -2,31 +2,13 @@ import { Clock, ArrowLeftRight, CheckCircle2 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Badge } from "@/components/ui/badge"
 import { useState } from "react"
+import { PendingBidCard } from "./bid-details/PendingBidCard"
+import { CounterBidCard } from "./bid-details/CounterBidCard"
+import { AcceptedBidCard } from "./bid-details/AcceptedBidCard"
 
-interface Bid {
-  id: string
-  caseTitle: string
-  amount: string
-  proposedTimeline: string
-  bidDate: string
-  status: "pending" | "countered" | "accepted" | "rejected"
-  caseDetails: {
-    description: string
-    location: string
-    practiceArea: string
-    deadline: string
-    budget: string
-  }
-  bidDetails: {
-    strategy: string
-    availability: string
-    proposedPaymentStructure: string
-  }
-}
-
-const mockBids: Bid[] = [
+// Mock data with extended client details and counter offers
+const mockBids = [
   {
     id: "1",
     caseTitle: "Contract Dispute Resolution",
@@ -45,6 +27,13 @@ const mockBids: Bid[] = [
       strategy: "Mediation-first approach with litigation preparation",
       availability: "Immediate start",
       proposedPaymentStructure: "50% upfront, 50% upon resolution"
+    },
+    clientDetails: {
+      name: "John Smith",
+      email: "john.smith@email.com",
+      phone: "(555) 123-4567",
+      address: "123 Main St, Sacramento, CA 95814",
+      occupation: "Business Owner"
     }
   },
   {
@@ -65,6 +54,18 @@ const mockBids: Bid[] = [
       strategy: "Aggressive IP protection strategy",
       availability: "Available within 1 week",
       proposedPaymentStructure: "Monthly retainer"
+    },
+    clientDetails: {
+      name: "Sarah Johnson",
+      email: "sarah.j@email.com",
+      phone: "(555) 234-5678",
+      address: "456 Oak Ave, San Francisco, CA 94105",
+      occupation: "Tech Startup CEO"
+    },
+    counterOffer: {
+      amount: "$10,500",
+      timeline: "5 months",
+      additionalNotes: "Would like to expedite the timeline and adjust the fee structure"
     }
   },
   {
@@ -85,6 +86,13 @@ const mockBids: Bid[] = [
       strategy: "Documentation review and negotiation",
       availability: "Start next week",
       proposedPaymentStructure: "Milestone-based payments"
+    },
+    clientDetails: {
+      name: "Michael Brown",
+      email: "michael.b@email.com",
+      phone: "(555) 345-6789",
+      address: "789 Pine St, Los Angeles, CA 90012",
+      occupation: "Restaurant Owner"
     }
   }
 ]
@@ -119,10 +127,6 @@ export function MarketplaceStats() {
       description: "Successfully won cases"
     }
   ]
-
-  const getBidsByCategory = (category: "pending" | "countered" | "accepted") => {
-    return mockBids.filter(bid => bid.status === category)
-  }
 
   const getDialogTitle = (category: "pending" | "countered" | "accepted") => {
     switch (category) {
@@ -169,46 +173,21 @@ export function MarketplaceStats() {
           </DialogHeader>
           <ScrollArea className="max-h-[600px]">
             <div className="space-y-4">
-              {selectedCategory && getBidsByCategory(selectedCategory).map((bid) => (
-                <Card key={bid.id} className="p-4">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold">{bid.caseTitle}</h3>
-                      <Badge variant={
-                        bid.status === "accepted" ? "default" :
-                        bid.status === "countered" ? "secondary" : "outline"
-                      }>
-                        {bid.status.charAt(0).toUpperCase() + bid.status.slice(1)}
-                      </Badge>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <h4 className="font-medium mb-2">Bid Details</h4>
-                        <div className="space-y-1 text-sm">
-                          <p><span className="text-muted-foreground">Amount:</span> {bid.amount}</p>
-                          <p><span className="text-muted-foreground">Timeline:</span> {bid.proposedTimeline}</p>
-                          <p><span className="text-muted-foreground">Date:</span> {bid.bidDate}</p>
-                          <p><span className="text-muted-foreground">Strategy:</span> {bid.bidDetails.strategy}</p>
-                          <p><span className="text-muted-foreground">Availability:</span> {bid.bidDetails.availability}</p>
-                          <p><span className="text-muted-foreground">Payment:</span> {bid.bidDetails.proposedPaymentStructure}</p>
-                        </div>
-                      </div>
-
-                      <div>
-                        <h4 className="font-medium mb-2">Case Details</h4>
-                        <div className="space-y-1 text-sm">
-                          <p><span className="text-muted-foreground">Description:</span> {bid.caseDetails.description}</p>
-                          <p><span className="text-muted-foreground">Location:</span> {bid.caseDetails.location}</p>
-                          <p><span className="text-muted-foreground">Practice Area:</span> {bid.caseDetails.practiceArea}</p>
-                          <p><span className="text-muted-foreground">Deadline:</span> {bid.caseDetails.deadline}</p>
-                          <p><span className="text-muted-foreground">Budget Range:</span> {bid.caseDetails.budget}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              ))}
+              {selectedCategory === "pending" && 
+                pendingBids.map(bid => (
+                  <PendingBidCard key={bid.id} bid={bid} />
+                ))
+              }
+              {selectedCategory === "countered" && 
+                counterBids.map(bid => (
+                  <CounterBidCard key={bid.id} bid={bid as any} />
+                ))
+              }
+              {selectedCategory === "accepted" && 
+                acceptedBids.map(bid => (
+                  <AcceptedBidCard key={bid.id} bid={bid} />
+                ))
+              }
             </div>
           </ScrollArea>
         </DialogContent>
