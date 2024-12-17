@@ -2,6 +2,8 @@ import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
 import { CaseList } from "@/components/cases/CaseList"
 import { CaseTimeline } from "@/components/cases/CaseTimeline"
 import { PreviousCaseCard } from "@/components/cases/PreviousCaseCard"
+import { CreateCaseDialog } from "@/components/cases/CreateCaseDialog"
+import { IntakeFormDialog } from "@/components/cases/IntakeFormDialog"
 import { useState, useEffect } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { LawyerCaseDetails } from "@/components/lawyer-dashboard/case-insights/LawyerCaseDetails"
@@ -12,7 +14,6 @@ export default function LawyerCaseInsights() {
   const [searchParams] = useSearchParams()
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "current")
 
-  // Update active tab when URL changes
   useEffect(() => {
     const tab = searchParams.get("tab")
     if (tab) {
@@ -30,6 +31,10 @@ export default function LawyerCaseInsights() {
               Manage and track all your cases in detail
             </p>
           </div>
+          <div className="flex gap-2">
+            <CreateCaseDialog />
+            <IntakeFormDialog />
+          </div>
         </div>
 
         {selectedCaseId ? (
@@ -45,8 +50,8 @@ export default function LawyerCaseInsights() {
         ) : (
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList>
-              <TabsTrigger value="current">Current Cases</TabsTrigger>
-              <TabsTrigger value="past">Past Cases</TabsTrigger>
+              <TabsTrigger value="current">Active Cases</TabsTrigger>
+              <TabsTrigger value="past">Inactive Cases</TabsTrigger>
             </TabsList>
             <TabsContent value="current" className="space-y-6">
               <CaseList onCaseSelect={setSelectedCaseId} />
