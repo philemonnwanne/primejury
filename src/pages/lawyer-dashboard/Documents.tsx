@@ -2,8 +2,8 @@ import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DocumentLibrary } from "@/components/documents/DocumentLibrary"
 import { DocumentUpload } from "@/components/documents/DocumentUpload"
-import { LegalFormDirectory } from "@/components/documents/LegalFormDirectory"
 import { LegalDocumentGenerator } from "@/components/documents/LegalDocumentGenerator"
+import { LegalFormGenerator } from "@/components/documents/legal-forms/LegalFormGenerator"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import { useState } from "react"
@@ -26,7 +26,7 @@ export default function LawyerDocuments() {
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Document Center</h1>
             <p className="text-muted-foreground">
-              Manage case documents, legal forms, and generate court documents
+              Manage case documents, generate legal documents and forms
             </p>
           </div>
           <Sheet open={isUploadOpen} onOpenChange={setIsUploadOpen}>
@@ -51,20 +51,20 @@ export default function LawyerDocuments() {
         <Tabs defaultValue="case-documents" className="space-y-4">
           <TabsList>
             <TabsTrigger value="case-documents">Case Documents</TabsTrigger>
-            <TabsTrigger value="legal-forms">Legal Forms</TabsTrigger>
             <TabsTrigger value="document-generator">Document Generator</TabsTrigger>
+            <TabsTrigger value="form-generator">Form Generator</TabsTrigger>
           </TabsList>
 
           <TabsContent value="case-documents">
             <DocumentLibrary />
           </TabsContent>
 
-          <TabsContent value="legal-forms">
-            <LegalFormDirectory />
-          </TabsContent>
-
           <TabsContent value="document-generator">
             <LegalDocumentGenerator />
+          </TabsContent>
+
+          <TabsContent value="form-generator">
+            <LegalFormGenerator />
           </TabsContent>
         </Tabs>
       </div>

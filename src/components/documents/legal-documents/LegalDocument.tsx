@@ -48,10 +48,12 @@ export function LegalDocument({ type, caseNumber, content, court }: LegalDocumen
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <View style={styles.court}>
-          <Text>{court?.name}</Text>
-          <Text>{court?.address}</Text>
-        </View>
+        {court && (
+          <View style={styles.court}>
+            <Text>{court.name}</Text>
+            <Text>{court.address}</Text>
+          </View>
+        )}
 
         <View style={styles.content}>
           <Text>{content}</Text>
