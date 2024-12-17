@@ -4,6 +4,7 @@ const styles = StyleSheet.create({
   page: {
     padding: 50,
     fontSize: 12,
+    fontFamily: "Helvetica",
   },
   header: {
     marginBottom: 20,
@@ -13,64 +14,47 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
     textAlign: "center",
+    fontWeight: "bold",
   },
-  caseInfo: {
+  court: {
     marginBottom: 20,
+    textAlign: "center",
   },
   content: {
     lineHeight: 1.5,
-    textAlign: "justify",
+    whiteSpace: "pre-wrap",
   },
   footer: {
     marginTop: 30,
-    textAlign: "right",
+    textAlign: "left",
   },
 })
+
+interface Court {
+  name: string
+  address: string
+  state: string
+  county: string
+}
 
 interface LegalDocumentProps {
   type: string
   caseNumber: string
-  partyName: string
   content: string
+  court?: Court
 }
 
-export function LegalDocument({ type, caseNumber, partyName, content }: LegalDocumentProps) {
-  const documentTitle = {
-    complaint: "CIVIL COMPLAINT",
-    motion: "MOTION FOR SUMMARY JUDGMENT",
-    petition: "PETITION FOR DISSOLUTION",
-  }[type] || "LEGAL DOCUMENT"
-
-  const court = {
-    complaint: "SUPERIOR COURT OF CALIFORNIA",
-    motion: "SUPERIOR COURT OF CALIFORNIA",
-    petition: "SUPERIOR COURT OF CALIFORNIA, FAMILY DIVISION",
-  }[type] || "SUPERIOR COURT OF CALIFORNIA"
-
+export function LegalDocument({ type, caseNumber, content, court }: LegalDocumentProps) {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <View style={styles.header}>
-          <Text>{court}</Text>
-          <Text>COUNTY OF LOS ANGELES</Text>
-        </View>
-
-        <View style={styles.title}>
-          <Text>{documentTitle}</Text>
-        </View>
-
-        <View style={styles.caseInfo}>
-          <Text>Case Number: {caseNumber}</Text>
-          <Text>Party Name: {partyName}</Text>
+        <View style={styles.court}>
+          <Text>{court?.name}</Text>
+          <Text>{court?.address}</Text>
         </View>
 
         <View style={styles.content}>
           <Text>{content}</Text>
-        </View>
-
-        <View style={styles.footer}>
-          <Text>Date: {new Date().toLocaleDateString()}</Text>
-          <Text>Signature: _____________________</Text>
         </View>
       </Page>
     </Document>

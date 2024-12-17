@@ -14,49 +14,74 @@ import {
 import { useToast } from "@/components/ui/use-toast"
 import { PDFDownloadLink } from "@react-pdf/renderer"
 import { LegalDocument } from "./legal-documents/LegalDocument"
+import { documentTypes } from "./legal-documents/documentTypes"
 
-const documentTypes = [
+// Mock cases data - in a real app, this would come from an API
+const mockCases = [
   {
-    value: "complaint",
-    label: "Civil Complaint",
-    jurisdiction: "California Superior Court",
+    id: "1",
+    title: "Smith vs. Johnson",
+    type: "Civil Litigation",
+    court: {
+      name: "Sacramento County Superior Court",
+      state: "California",
+      county: "Sacramento",
+      address: "720 9th Street, Sacramento, CA 95814"
+    }
   },
   {
-    value: "motion",
-    label: "Motion for Summary Judgment",
-    jurisdiction: "California Superior Court",
-  },
-  {
-    value: "petition",
-    label: "Petition for Dissolution",
-    jurisdiction: "California Family Court",
-  },
+    id: "2",
+    title: "State vs. Thompson",
+    type: "Criminal Law",
+    court: {
+      name: "Los Angeles County Superior Court",
+      state: "California",
+      county: "Los Angeles",
+      address: "111 N Hill St, Los Angeles, CA 90012"
+    }
+  }
 ]
 
 export function LegalDocumentGenerator() {
+  const [selectedCase, setSelectedCase] = useState("")
   const [documentType, setDocumentType] = useState("")
-  const [caseNumber, setCaseNumber] = useState("")
-  const [partyName, setPartyName] = useState("")
-  const [content, setContent] = useState("")
+  const [generatedContent, setGeneratedContent] = useState("")
+  const [editedContent, setEditedContent] = useState("")
+  const [isEditing, setIsEditing] = useState(false)
   const { toast } = useToast()
 
-  const handleGenerate = () => {
-    if (!documentType || !caseNumber || !partyName || !content) {
+  const selectedCaseData = mockCases.find(c => c.id === selectedCase)
+  const selectedDocType = documentTypes.find(d => d.value === documentType)
+
+  const generateDocument = () => {
+    if (!selectedCase || !documentType) {
       toast({
         title: "Missing Information",
-        description: "Please fill in all required fields",
+        description: "Please select both a case and document type",
         variant: "destructive",
       })
       return
     }
 
+    if (!selectedCaseData || !selectedDocType) return
+
+    let content = selectedDocType.template
+    content = content.replace("{state}", selectedCaseData.court.state)
+    content = content.replace("{county}", selectedCaseData.court.county)
+    content = content.replace("{caseNumber}", selectedCase)
+    content = content.replace("{date}", new Date().toLocaleDateString())
+
+    setGeneratedContent(content)
+    setEditedContent(content)
+    setIsEditing(true)
+  }
+
+  const handleDownload = () => {
     toast({
       title: "Document Generated",
       description: "Your legal document has been generated successfully",
     })
   }
-
-  const selectedDocument = documentTypes.find(doc => doc.value === documentType)
 
   return (
     <div className="space-y-6">
@@ -66,88 +91,89 @@ export function LegalDocumentGenerator() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="document-type">Document Type</Label>
-            <Select value={documentType} onValueChange={setDocumentType}>
+            <Label htmlFor="case">Select Case</Label>
+            <Select value={selectedCase} onValueChange={setSelectedCase}>
               <SelectTrigger>
-                <SelectValue placeholder="Select document type" />
+                <SelectValue placeholder="Select a case" />
               </SelectTrigger>
               <SelectContent>
-                {documentTypes.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
-                    {type.label}
+                {mockCases.map((case_) => (
+                  <SelectItem key={case_.id} value={case_.id}>
+                    {case_.title}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            {selectedDocument && (
-              <p className="text-sm text-muted-foreground">
-                Jurisdiction: {selectedDocument.jurisdiction}
-              </p>
-            )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="case-number">Case Number</Label>
-            <Input
-              id="case-number"
-              value={caseNumber}
-              onChange={(e) => setCaseNumber(e.target.value)}
-              placeholder="Enter case number"
-            />
-          </div>
+          {selectedCase && (
+            <div className="space-y-2">
+              <Label htmlFor="document-type">Document Type</Label>
+              <Select value={documentType} onValueChange={setDocumentType}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select document type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {documentTypes
+                    .filter(type => type.category === selectedCaseData?.type)
+                    .map((type) => (
+                      <SelectItem key={type.value} value={type.value}>
+                        {type.label}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+              {selectedDocType && (
+                <p className="text-sm text-muted-foreground">
+                  {selectedDocType.description}
+                </p>
+              )}
+            </div>
+          )}
 
-          <div className="space-y-2">
-            <Label htmlFor="party-name">Party Name</Label>
-            <Input
-              id="party-name"
-              value={partyName}
-              onChange={(e) => setPartyName(e.target.value)}
-              placeholder="Enter party name"
-            />
-          </div>
+          {!isEditing ? (
+            <div className="flex justify-end">
+              <Button onClick={generateDocument}>Generate Document</Button>
+            </div>
+          ) : (
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="content">Edit Document Content</Label>
+                <Textarea
+                  id="content"
+                  value={editedContent}
+                  onChange={(e) => setEditedContent(e.target.value)}
+                  rows={15}
+                  className="font-mono"
+                />
+              </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="content">Document Content</Label>
-            <Textarea
-              id="content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Enter document content"
-              rows={6}
-            />
-          </div>
-
-          <div className="flex justify-end space-x-2">
-            <Button variant="outline" onClick={() => {
-              setCaseNumber("")
-              setPartyName("")
-              setContent("")
-              setDocumentType("")
-            }}>
-              Reset
-            </Button>
-            {documentType && caseNumber && partyName && content ? (
-              <PDFDownloadLink
-                document={
-                  <LegalDocument
-                    type={documentType}
-                    caseNumber={caseNumber}
-                    partyName={partyName}
-                    content={content}
-                  />
-                }
-                fileName={`${documentType}-${caseNumber}.pdf`}
-              >
-                {({ loading }) => (
-                  <Button disabled={loading}>
-                    {loading ? "Generating..." : "Download Document"}
-                  </Button>
-                )}
-              </PDFDownloadLink>
-            ) : (
-              <Button onClick={handleGenerate}>Generate Document</Button>
-            )}
-          </div>
+              <div className="flex justify-end space-x-2">
+                <Button variant="outline" onClick={() => {
+                  setEditedContent(generatedContent)
+                }}>
+                  Reset to Original
+                </Button>
+                <PDFDownloadLink
+                  document={
+                    <LegalDocument
+                      type={documentType}
+                      caseNumber={selectedCase}
+                      content={editedContent}
+                      court={selectedCaseData?.court}
+                    />
+                  }
+                  fileName={`${documentType}-${selectedCase}.pdf`}
+                >
+                  {({ loading }) => (
+                    <Button disabled={loading} onClick={handleDownload}>
+                      {loading ? "Preparing..." : "Download Document"}
+                    </Button>
+                  )}
+                </PDFDownloadLink>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
     </div>
