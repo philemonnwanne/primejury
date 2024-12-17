@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DocumentLibrary } from "@/components/documents/DocumentLibrary"
 import { DocumentUpload } from "@/components/documents/DocumentUpload"
 import { LegalFormDirectory } from "@/components/documents/LegalFormDirectory"
+import { LegalDocumentGenerator } from "@/components/documents/LegalDocumentGenerator"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import { useState } from "react"
@@ -25,7 +26,7 @@ export default function LawyerDocuments() {
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Document Center</h1>
             <p className="text-muted-foreground">
-              Manage case documents, legal forms, and client communications
+              Manage case documents, legal forms, and generate court documents
             </p>
           </div>
           <Sheet open={isUploadOpen} onOpenChange={setIsUploadOpen}>
@@ -51,7 +52,7 @@ export default function LawyerDocuments() {
           <TabsList>
             <TabsTrigger value="case-documents">Case Documents</TabsTrigger>
             <TabsTrigger value="legal-forms">Legal Forms</TabsTrigger>
-            <TabsTrigger value="client-documents">Client Documents</TabsTrigger>
+            <TabsTrigger value="document-generator">Document Generator</TabsTrigger>
           </TabsList>
 
           <TabsContent value="case-documents">
@@ -62,8 +63,8 @@ export default function LawyerDocuments() {
             <LegalFormDirectory />
           </TabsContent>
 
-          <TabsContent value="client-documents">
-            <DocumentLibrary type="client" />
+          <TabsContent value="document-generator">
+            <LegalDocumentGenerator />
           </TabsContent>
         </Tabs>
       </div>
