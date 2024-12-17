@@ -5,8 +5,7 @@ import { TeamsLikeChat } from "@/components/lawyer-dashboard/communications/Team
 import { ContactDirectory } from "@/components/lawyer-dashboard/communications/ContactDirectory"
 import { GroupChat, ChatMessage, ChatParticipant } from "@/types/chat"
 import { useToast } from "@/hooks/use-toast"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { MessageSquare, Users, Building } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const mockChats: GroupChat[] = [
   {
@@ -162,28 +161,26 @@ export default function LawyerCommunications() {
   return (
     <LawyerDashboardLayout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div>
           <h1 className="text-3xl font-bold tracking-tight">Communications</h1>
         </div>
 
-        <div className="flex justify-center mb-6">
-          <ToggleGroup type="single" value={activeView} onValueChange={(value) => value && setActiveView(value)}>
-            <ToggleGroupItem value="chat" aria-label="Toggle chat view">
-              <MessageSquare className="h-4 w-4 mr-2" />
-              Case Chats
-            </ToggleGroupItem>
-            <ToggleGroupItem value="contacts" aria-label="Toggle contacts view">
-              <Users className="h-4 w-4 mr-2" />
-              Contacts
-            </ToggleGroupItem>
-            <ToggleGroupItem value="internal" aria-label="Toggle internal chat view">
-              <Building className="h-4 w-4 mr-2" />
-              Internal Chat
-            </ToggleGroupItem>
-          </ToggleGroup>
-        </div>
-
-        {renderContent()}
+        <Tabs value={activeView} onValueChange={setActiveView} className="w-full">
+          <TabsList>
+            <TabsTrigger value="chat">Case Chats</TabsTrigger>
+            <TabsTrigger value="contacts">Contacts</TabsTrigger>
+            <TabsTrigger value="internal">Internal Chat</TabsTrigger>
+          </TabsList>
+          <TabsContent value="chat">
+            {renderContent()}
+          </TabsContent>
+          <TabsContent value="contacts">
+            {renderContent()}
+          </TabsContent>
+          <TabsContent value="internal">
+            {renderContent()}
+          </TabsContent>
+        </Tabs>
       </div>
     </LawyerDashboardLayout>
   )
