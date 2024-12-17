@@ -1,107 +1,108 @@
 import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Send, User } from "lucide-react"
 import { useState } from "react"
-import { VideoCall } from "@/components/client-dashboard/communications/VideoCall"
-import { MessageList } from "@/components/client-dashboard/communications/MessageList"
-import { ClientList } from "@/components/lawyer-dashboard/communications/ClientList"
-import { Badge } from "@/components/ui/badge"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { ChatSidebar } from "@/components/lawyer-dashboard/communications/ChatSidebar"
+import { TeamsLikeChat } from "@/components/lawyer-dashboard/communications/TeamsLikeChat"
+import { GroupChat, ChatMessage } from "@/types/chat"
+import { useToast } from "@/hooks/use-toast"
 
-interface Message {
-  id: string
-  senderId: string
-  senderName: string
-  content: string
-  timestamp: Date
-  isLawyer: boolean
-}
-
-// Mock scheduled meetings data
-const scheduledMeetings = [
+// Mock data for demonstration
+const mockChats: GroupChat[] = [
   {
-    clientId: "client-1",
-    startTime: new Date(2024, 3, 15, 14, 0), // April 15, 2024, 2:00 PM
-    endTime: new Date(2024, 3, 15, 15, 0),   // April 15, 2024, 3:00 PM
+    id: "1",
+    name: "Smith vs. Johnson Case",
+    caseId: "case-1",
+    participants: [
+      {
+        id: "lawyer-1",
+        name: "Sarah Parker",
+        role: "lawyer",
+        email: "sarah.parker@lawfirm.com"
+      },
+      {
+        id: "client-1",
+        name: "John Smith",
+        role: "client",
+        email: "john.smith@email.com"
+      }
+    ],
+    createdAt: new Date(),
+    lastMessage: {
+      content: "Latest update on the case documents",
+      sender: "Sarah Parker",
+      timestamp: new Date()
+    }
   },
   {
-    clientId: "client-2",
-    startTime: new Date(2024, 3, 16, 10, 0), // April 16, 2024, 10:00 AM
-    endTime: new Date(2024, 3, 16, 11, 0),   // April 16, 2024, 11:00 AM
-  },
+    id: "2",
+    name: "Estate Planning Team",
+    caseId: "case-2",
+    participants: [
+      {
+        id: "lawyer-1",
+        name: "Sarah Parker",
+        role: "lawyer",
+        email: "sarah.parker@lawfirm.com"
+      },
+      {
+        id: "client-2",
+        name: "Robert Brown",
+        role: "client",
+        email: "robert.brown@email.com"
+      }
+    ],
+    createdAt: new Date(),
+    lastMessage: {
+      content: "Meeting scheduled for tomorrow",
+      sender: "Robert Brown",
+      timestamp: new Date()
+    }
+  }
 ]
 
-// Updated mock client data with full profiles
-const mockClients = [
+const mockMessages: ChatMessage[] = [
   {
-    id: "client-1",
-    name: "John Smith",
-    email: "john.smith@email.com",
-    phone: "(555) 123-4567",
-    address: "123 Main St, Sacramento, CA 95814",
-    occupation: "Business Owner",
-    cases: [
-      { id: "case-1", title: "Contract Dispute" },
-      { id: "case-2", title: "Property Settlement" }
-    ],
-    status: "active"
+    id: "1",
+    content: "Hello, I've reviewed the latest documents",
+    senderId: "lawyer-1",
+    senderName: "Sarah Parker",
+    timestamp: new Date(Date.now() - 3600000)
   },
   {
-    id: "client-2",
-    name: "Sarah Johnson",
-    email: "sarah.j@email.com",
-    phone: "(555) 234-5678",
-    address: "456 Oak Ave, Sacramento, CA 95815",
-    occupation: "Software Engineer",
-    cases: [
-      { id: "case-3", title: "Employment Law" }
-    ],
-    status: "active"
-  },
-  {
-    id: "client-3",
-    name: "Michael Brown",
-    email: "michael.b@email.com",
-    phone: "(555) 345-6789",
-    address: "789 Pine St, Sacramento, CA 95816",
-    occupation: "Restaurant Owner",
-    cases: [
-      { id: "case-4", title: "Business Litigation" },
-      { id: "case-5", title: "Intellectual Property" },
-      { id: "case-6", title: "Contract Review" }
-    ],
-    status: "active"
+    id: "2",
+    content: "Thank you for the update. When can we schedule a meeting?",
+    senderId: "client-1",
+    senderName: "John Smith",
+    timestamp: new Date(Date.now() - 1800000)
   }
 ]
 
 export default function LawyerCommunications() {
-  const [messages, setMessages] = useState<Message[]>([])
-  const [newMessage, setNewMessage] = useState("")
-  const [selectedClient, setSelectedClient] = useState<string | undefined>()
+  const [selectedChat, setSelectedChat] = useState<GroupChat>()
+  const { toast } = useToast()
 
-  const handleSendMessage = () => {
-    if (!newMessage.trim()) return
-
-    const message: Message = {
-      id: Date.now().toString(),
-      senderId: "lawyer1",
-      senderName: "You",
-      content: newMessage,
-      timestamp: new Date(),
-      isLawyer: true
-    }
-
-    setMessages(prev => [...prev, message])
-    setNewMessage("")
+  const handleSendMessage = (content: string) => {
+    // In a real app, this would send the message to the backend
+    toast({
+      title: "Message sent",
+      description: "Your message has been sent successfully.",
+    })
   }
 
-  const currentMeeting = scheduledMeetings.find(
-    meeting => meeting.clientId === selectedClient
-  )
+  const handleCreateGroup = (name: string, participants: ChatParticipant[]) => {
+    // In a real app, this would create a new group chat
+    toast({
+      title: "Group created",
+      description: "New group chat has been created successfully.",
+    })
+  }
 
-  const currentClient = mockClients.find(c => c.id === selectedClient)
+  const handleInviteParticipants = (chatId: string, participants: ChatParticipant[]) => {
+    // In a real app, this would invite new participants to the group
+    toast({
+      title: "Invitations sent",
+      description: "Invitations have been sent to the selected participants.",
+    })
+  }
 
   return (
     <LawyerDashboardLayout>
@@ -110,76 +111,23 @@ export default function LawyerCommunications() {
           <h1 className="text-3xl font-bold tracking-tight">Communications</h1>
         </div>
 
-        <div className="grid grid-cols-12 gap-4 h-[600px]">
-          {/* Contacts List */}
-          <Card className="col-span-3 flex flex-col">
-            <CardHeader>
-              <CardTitle className="text-sm">Your Clients</CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1 p-0">
-              <ClientList 
-                clients={mockClients}
-                selectedClient={selectedClient}
-                onSelectClient={setSelectedClient}
-              />
-            </CardContent>
-          </Card>
-
-          {/* Communication Area */}
-          <Card className="col-span-9 flex flex-col">
-            <CardHeader className="border-b">
-              {currentClient ? (
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <User className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <CardTitle>{currentClient.name}</CardTitle>
-                      <div className="flex gap-2 mt-1">
-                        {currentClient.cases.map((c, index) => (
-                          <Badge key={index} variant="secondary">
-                            {c.title}
-                          </Badge>
-                        ))}
-                      </div>
-                      {currentMeeting && (
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Next meeting: {currentMeeting.startTime.toLocaleString()}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <VideoCall 
-                    selectedLawyer={selectedClient}
-                    currentMeeting={currentMeeting}
-                  />
-                </div>
-              ) : (
-                <CardTitle>Select a client to start messaging</CardTitle>
-              )}
-            </CardHeader>
-            <CardContent className="flex-1 flex flex-col p-4">
-              <MessageList messages={messages} />
-              <div className="flex gap-2 mt-4">
-                <Input
-                  placeholder="Type your message..."
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault()
-                      handleSendMessage()
-                    }
-                  }}
-                  disabled={!selectedClient}
-                />
-                <Button onClick={handleSendMessage} disabled={!selectedClient}>
-                  <Send className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-3">
+            <ChatSidebar
+              chats={mockChats}
+              selectedChat={selectedChat}
+              onSelectChat={setSelectedChat}
+            />
+          </div>
+          <div className="col-span-9">
+            <TeamsLikeChat
+              selectedChat={selectedChat}
+              messages={mockMessages}
+              onSendMessage={handleSendMessage}
+              onCreateGroup={handleCreateGroup}
+              onInviteParticipants={handleInviteParticipants}
+            />
+          </div>
         </div>
       </div>
     </LawyerDashboardLayout>
