@@ -5,8 +5,9 @@ import { TeamsLikeChat } from "@/components/lawyer-dashboard/communications/Team
 import { ContactDirectory } from "@/components/lawyer-dashboard/communications/ContactDirectory"
 import { GroupChat, ChatMessage, ChatParticipant } from "@/types/chat"
 import { useToast } from "@/hooks/use-toast"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { MessageSquare, Users, Building } from "lucide-react"
 
-// Mock data for demonstration
 const mockChats: GroupChat[] = [
   {
     id: "1",
@@ -79,6 +80,7 @@ const mockMessages: ChatMessage[] = [
 
 export default function LawyerCommunications() {
   const [selectedChat, setSelectedChat] = useState<GroupChat>()
+  const [activeView, setActiveView] = useState("chat")
   const { toast } = useToast()
 
   const handleSendMessage = (content: string) => {
@@ -102,6 +104,61 @@ export default function LawyerCommunications() {
     })
   }
 
+  const renderContent = () => {
+    switch (activeView) {
+      case "chat":
+        return (
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-3">
+              <ChatSidebar
+                chats={mockChats}
+                selectedChat={selectedChat}
+                onSelectChat={setSelectedChat}
+              />
+            </div>
+            <div className="col-span-9">
+              <TeamsLikeChat
+                selectedChat={selectedChat}
+                messages={mockMessages}
+                onSendMessage={handleSendMessage}
+                onCreateGroup={handleCreateGroup}
+                onInviteParticipants={handleInviteParticipants}
+              />
+            </div>
+          </div>
+        )
+      case "contacts":
+        return <ContactDirectory />
+      case "internal":
+        return (
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-3">
+              <ChatSidebar
+                chats={mockChats.filter(chat => 
+                  chat.participants.every(p => 
+                    ["lawyer", "paralegal"].includes(p.role)
+                  )
+                )}
+                selectedChat={selectedChat}
+                onSelectChat={setSelectedChat}
+              />
+            </div>
+            <div className="col-span-9">
+              <TeamsLikeChat
+                selectedChat={selectedChat}
+                messages={mockMessages}
+                onSendMessage={handleSendMessage}
+                onCreateGroup={handleCreateGroup}
+                onInviteParticipants={handleInviteParticipants}
+              />
+            </div>
+          </div>
+        )
+      default:
+        return null
+    }
+  }
+
   return (
     <LawyerDashboardLayout>
       <div className="space-y-6">
@@ -109,27 +166,24 @@ export default function LawyerCommunications() {
           <h1 className="text-3xl font-bold tracking-tight">Communications</h1>
         </div>
 
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-3">
-            <ChatSidebar
-              chats={mockChats}
-              selectedChat={selectedChat}
-              onSelectChat={setSelectedChat}
-            />
-            <div className="mt-4">
-              <ContactDirectory />
-            </div>
-          </div>
-          <div className="col-span-9">
-            <TeamsLikeChat
-              selectedChat={selectedChat}
-              messages={mockMessages}
-              onSendMessage={handleSendMessage}
-              onCreateGroup={handleCreateGroup}
-              onInviteParticipants={handleInviteParticipants}
-            />
-          </div>
+        <div className="flex justify-center mb-6">
+          <ToggleGroup type="single" value={activeView} onValueChange={(value) => value && setActiveView(value)}>
+            <ToggleGroupItem value="chat" aria-label="Toggle chat view">
+              <MessageSquare className="h-4 w-4 mr-2" />
+              Case Chats
+            </ToggleGroupItem>
+            <ToggleGroupItem value="contacts" aria-label="Toggle contacts view">
+              <Users className="h-4 w-4 mr-2" />
+              Contacts
+            </ToggleGroupItem>
+            <ToggleGroupItem value="internal" aria-label="Toggle internal chat view">
+              <Building className="h-4 w-4 mr-2" />
+              Internal Chat
+            </ToggleGroupItem>
+          </ToggleGroup>
         </div>
+
+        {renderContent()}
       </div>
     </LawyerDashboardLayout>
   )
