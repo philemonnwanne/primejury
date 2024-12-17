@@ -15,6 +15,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { PDFDownloadLink } from "@react-pdf/renderer"
 import { LegalDocument } from "../legal-documents/LegalDocument"
 import { formTypes } from "./FormTypes"
+import { generateLegalContent } from "@/utils/documentGeneration"
 
 // Mock cases data - in a real app, this would come from an API
 const mockCases = [
@@ -48,12 +49,14 @@ export function LegalFormGenerator() {
   const [generatedContent, setGeneratedContent] = useState("")
   const [editedContent, setEditedContent] = useState("")
   const [isEditing, setIsEditing] = useState(false)
+  const [description, setDescription] = useState("")
+  const [isGenerating, setIsGenerating] = useState(false)
   const { toast } = useToast()
 
   const selectedCaseData = mockCases.find(c => c.id === selectedCase)
   const selectedFormType = formTypes.find(d => d.value === formType)
 
-  const generateForm = () => {
+  const generateForm = async () => {
     if (!selectedCase || !formType) {
       toast({
         title: "Missing Information",
@@ -65,22 +68,39 @@ export function LegalFormGenerator() {
 
     if (!selectedCaseData || !selectedFormType) return
 
-    let content = selectedFormType.template
-    content = content.replace(/{state}/g, selectedCaseData.court.state)
-    content = content.replace(/{county}/g, selectedCaseData.court.county)
-    content = content.replace(/{caseNumber}/g, selectedCase)
-    content = content.replace(/{date}/g, new Date().toLocaleDateString())
+    setIsGenerating(true)
+    try {
+      let content = selectedFormType.template
+      
+      if (description) {
+        const generatedContent = await generateLegalContent(
+          description,
+          selectedFormType.label,
+          {
+            state: selectedCaseData.court.state,
+            county: selectedCaseData.court.county,
+          }
+        )
+        content = content.replace("{content}", generatedContent)
+      }
+      
+      content = content.replace(/{state}/g, selectedCaseData.court.state)
+      content = content.replace(/{county}/g, selectedCaseData.court.county)
+      content = content.replace(/{caseNumber}/g, selectedCase)
+      content = content.replace(/{date}/g, new Date().toLocaleDateString())
 
-    setGeneratedContent(content)
-    setEditedContent(content)
-    setIsEditing(true)
-  }
-
-  const handleDownload = () => {
-    toast({
-      title: "Form Generated",
-      description: "Your legal form has been generated successfully",
-    })
+      setGeneratedContent(content)
+      setEditedContent(content)
+      setIsEditing(true)
+    } catch (error) {
+      toast({
+        title: "Generation Failed",
+        description: "Failed to generate form content. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   return (
@@ -131,9 +151,27 @@ export function LegalFormGenerator() {
             </div>
           )}
 
+          {selectedCase && formType && (
+            <div className="space-y-2">
+              <Label htmlFor="description">Form Description</Label>
+              <Textarea
+                id="description"
+                placeholder="Describe what you want the form to contain..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={4}
+              />
+            </div>
+          )}
+
           {!isEditing ? (
             <div className="flex justify-end">
-              <Button onClick={generateForm}>Generate Form</Button>
+              <Button 
+                onClick={generateForm}
+                disabled={isGenerating}
+              >
+                {isGenerating ? "Generating..." : "Generate Form"}
+              </Button>
             </div>
           ) : (
             <>
@@ -166,7 +204,7 @@ export function LegalFormGenerator() {
                   fileName={`${formType}-${selectedCase}.pdf`}
                 >
                   {({ loading }) => (
-                    <Button disabled={loading} onClick={handleDownload}>
+                    <Button disabled={loading}>
                       {loading ? "Preparing..." : "Download Form"}
                     </Button>
                   )}

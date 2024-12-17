@@ -15,6 +15,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { PDFDownloadLink } from "@react-pdf/renderer"
 import { LegalDocument } from "./legal-documents/LegalDocument"
 import { documentTypes } from "./legal-documents/documentTypes"
+import { generateLegalContent } from "@/utils/documentGeneration"
 
 // Mock cases data - in a real app, this would come from an API
 const mockCases = [
@@ -48,12 +49,14 @@ export function LegalDocumentGenerator() {
   const [generatedContent, setGeneratedContent] = useState("")
   const [editedContent, setEditedContent] = useState("")
   const [isEditing, setIsEditing] = useState(false)
+  const [description, setDescription] = useState("")
+  const [isGenerating, setIsGenerating] = useState(false)
   const { toast } = useToast()
 
   const selectedCaseData = mockCases.find(c => c.id === selectedCase)
   const selectedDocType = documentTypes.find(d => d.value === documentType)
 
-  const generateDocument = () => {
+  const generateDocument = async () => {
     if (!selectedCase || !documentType) {
       toast({
         title: "Missing Information",
@@ -65,22 +68,39 @@ export function LegalDocumentGenerator() {
 
     if (!selectedCaseData || !selectedDocType) return
 
-    let content = selectedDocType.template
-    content = content.replace("{state}", selectedCaseData.court.state)
-    content = content.replace("{county}", selectedCaseData.court.county)
-    content = content.replace("{caseNumber}", selectedCase)
-    content = content.replace("{date}", new Date().toLocaleDateString())
+    setIsGenerating(true)
+    try {
+      let content = selectedDocType.template
+      
+      if (description) {
+        const generatedContent = await generateLegalContent(
+          description,
+          selectedDocType.label,
+          {
+            state: selectedCaseData.court.state,
+            county: selectedCaseData.court.county,
+          }
+        )
+        content = content.replace("{content}", generatedContent)
+      }
+      
+      content = content.replace(/{state}/g, selectedCaseData.court.state)
+      content = content.replace(/{county}/g, selectedCaseData.court.county)
+      content = content.replace(/{caseNumber}/g, selectedCase)
+      content = content.replace(/{date}/g, new Date().toLocaleDateString())
 
-    setGeneratedContent(content)
-    setEditedContent(content)
-    setIsEditing(true)
-  }
-
-  const handleDownload = () => {
-    toast({
-      title: "Document Generated",
-      description: "Your legal document has been generated successfully",
-    })
+      setGeneratedContent(content)
+      setEditedContent(content)
+      setIsEditing(true)
+    } catch (error) {
+      toast({
+        title: "Generation Failed",
+        description: "Failed to generate document content. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   return (
@@ -131,9 +151,27 @@ export function LegalDocumentGenerator() {
             </div>
           )}
 
+          {selectedCase && documentType && (
+            <div className="space-y-2">
+              <Label htmlFor="description">Document Description</Label>
+              <Textarea
+                id="description"
+                placeholder="Describe what you want the document to contain..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={4}
+              />
+            </div>
+          )}
+
           {!isEditing ? (
             <div className="flex justify-end">
-              <Button onClick={generateDocument}>Generate Document</Button>
+              <Button 
+                onClick={generateDocument}
+                disabled={isGenerating}
+              >
+                {isGenerating ? "Generating..." : "Generate Document"}
+              </Button>
             </div>
           ) : (
             <>
@@ -166,7 +204,7 @@ export function LegalDocumentGenerator() {
                   fileName={`${documentType}-${selectedCase}.pdf`}
                 >
                   {({ loading }) => (
-                    <Button disabled={loading} onClick={handleDownload}>
+                    <Button disabled={loading}>
                       {loading ? "Preparing..." : "Download Document"}
                     </Button>
                   )}
