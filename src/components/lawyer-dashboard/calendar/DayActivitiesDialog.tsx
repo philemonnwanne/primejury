@@ -4,6 +4,9 @@ import { Badge } from "@/components/ui/badge"
 import { format } from "date-fns"
 import { CalendarEvent } from "@/types/calendar"
 import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { useState } from "react"
+import { QuickScheduleForm } from "./QuickScheduleForm"
 
 interface DayActivitiesDialogProps {
   isOpen: boolean
@@ -11,6 +14,7 @@ interface DayActivitiesDialogProps {
   date: Date
   events: CalendarEvent[]
   workingHours: { start: string; end: string }
+  onEventScheduled: (event: CalendarEvent) => void
 }
 
 export function DayActivitiesDialog({
@@ -19,10 +23,11 @@ export function DayActivitiesDialog({
   date,
   events,
   workingHours,
+  onEventScheduled,
 }: DayActivitiesDialogProps) {
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<{ start: Date; end: Date } | null>(null)
   const sortedEvents = [...events].sort((a, b) => a.start.getTime() - b.start.getTime())
 
-  // Calculate available time slots
   const workStart = new Date(date)
   workStart.setHours(parseInt(workingHours.start.split(":")[0]), parseInt(workingHours.start.split(":")[1]), 0)
   
@@ -89,9 +94,24 @@ export function DayActivitiesDialog({
                 {availableSlots.map((slot, index) => (
                   <div
                     key={index}
-                    className="text-sm text-muted-foreground p-2 border rounded-md"
+                    className={`time-slot ${
+                      selectedTimeSlot === slot ? "border-primary bg-accent/50" : ""
+                    }`}
+                    onClick={() => setSelectedTimeSlot(slot)}
                   >
-                    {format(slot.start, "h:mm a")} - {format(slot.end, "h:mm a")}
+                    <span className="text-sm text-muted-foreground">
+                      {format(slot.start, "h:mm a")} - {format(slot.end, "h:mm a")}
+                    </span>
+                    {selectedTimeSlot === slot && (
+                      <QuickScheduleForm
+                        timeSlot={slot}
+                        onSchedule={(event) => {
+                          onEventScheduled(event)
+                          setSelectedTimeSlot(null)
+                        }}
+                        onCancel={() => setSelectedTimeSlot(null)}
+                      />
+                    )}
                   </div>
                 ))}
               </div>

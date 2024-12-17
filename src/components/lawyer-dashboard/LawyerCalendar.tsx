@@ -3,6 +3,8 @@ import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { addMonths, format, isSameDay } from "date-fns"
+import { DayActivitiesDialog } from "./calendar/DayActivitiesDialog"
+import { useToast } from "@/hooks/use-toast"
 
 const events = [
   {
@@ -97,6 +99,8 @@ export function LawyerCalendar() {
   const today = new Date()
   const sixMonthsFromNow = addMonths(today, 6)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(today)
+  const [showDayActivities, setShowDayActivities] = useState(false)
+  const { toast } = useToast()
 
   const getDayEvents = (date: Date) => {
     return events.filter((event) => isSameDay(event.date, date))
@@ -105,8 +109,31 @@ export function LawyerCalendar() {
   const selectedDayEvents = selectedDate ? getDayEvents(selectedDate) : []
 
   const handleDateSelect = (date: Date | undefined) => {
-    console.log("Selected date:", date) // Add logging to debug
     setSelectedDate(date)
+    if (date) {
+      setShowDayActivities(true)
+    }
+  }
+
+  const handleEventScheduled = (newEvent: CalendarEvent) => {
+    events.push(newEvent)
+    toast({
+      title: "Event Scheduled",
+      description: "Your event has been successfully scheduled",
+    })
+    setShowDayActivities(false)
+  }
+
+  const modifiers = {
+    hasEvents: (date: Date) => getDayEvents(date).length > 0,
+  }
+
+  const modifiersStyles = {
+    hasEvents: {
+      backgroundColor: "var(--primary)",
+      color: "var(--primary-foreground)",
+      fontWeight: "bold",
+    },
   }
 
   return (
@@ -123,6 +150,8 @@ export function LawyerCalendar() {
             fromDate={today}
             toDate={sixMonthsFromNow}
             className="rounded-md border"
+            modifiers={modifiers}
+            modifiersStyles={modifiersStyles}
           />
           <div className="space-y-4">
             {selectedDate ? (
@@ -164,6 +193,17 @@ export function LawyerCalendar() {
             )}
           </div>
         </div>
+
+        {selectedDate && (
+          <DayActivitiesDialog
+            isOpen={showDayActivities}
+            onOpenChange={setShowDayActivities}
+            date={selectedDate}
+            events={selectedDayEvents}
+            workingHours={{ start: "09:00", end: "17:00" }}
+            onEventScheduled={handleEventScheduled}
+          />
+        )}
       </CardContent>
     </Card>
   )
