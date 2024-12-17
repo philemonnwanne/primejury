@@ -22,13 +22,15 @@ import { Switch } from "@/components/ui/switch"
 import { CalendarEvent, CalendarEventType } from "@/types/calendar"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 interface ScheduleEventDialogProps {
   onEventScheduled: (event: CalendarEvent) => void;
   selectedDate?: Date;
+  cases: Array<{ id: string; title: string }>;
 }
 
-export function ScheduleEventDialog({ onEventScheduled, selectedDate }: ScheduleEventDialogProps) {
+export function ScheduleEventDialog({ onEventScheduled, selectedDate, cases }: ScheduleEventDialogProps) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [type, setType] = useState<CalendarEventType>("meeting");
@@ -36,6 +38,8 @@ export function ScheduleEventDialog({ onEventScheduled, selectedDate }: Schedule
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [isSharedWithClient, setIsSharedWithClient] = useState(false);
+  const [eventType, setEventType] = useState<"case-related" | "non-case-related">("case-related");
+  const [selectedCaseId, setSelectedCaseId] = useState<string>("");
   const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -50,6 +54,15 @@ export function ScheduleEventDialog({ onEventScheduled, selectedDate }: Schedule
       return;
     }
 
+    if (eventType === "case-related" && !selectedCaseId) {
+      toast({
+        title: "Case Selection Required",
+        description: "Please select a case for this event",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const newEvent: CalendarEvent = {
       id: crypto.randomUUID(),
       title,
@@ -58,6 +71,7 @@ export function ScheduleEventDialog({ onEventScheduled, selectedDate }: Schedule
       start: new Date(startTime),
       end: new Date(endTime),
       isSharedWithClient,
+      ...(eventType === "case-related" && { caseId: selectedCaseId }),
     };
 
     onEventScheduled(newEvent);
@@ -82,6 +96,42 @@ export function ScheduleEventDialog({ onEventScheduled, selectedDate }: Schedule
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label>Event Type</Label>
+              <RadioGroup
+                value={eventType}
+                onValueChange={(value) => setEventType(value as "case-related" | "non-case-related")}
+                className="flex flex-col space-y-1"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="case-related" id="case-related" />
+                  <Label htmlFor="case-related">Case Related</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="non-case-related" id="non-case-related" />
+                  <Label htmlFor="non-case-related">Non-Case Related</Label>
+                </div>
+              </RadioGroup>
+            </div>
+
+            {eventType === "case-related" && (
+              <div className="grid gap-2">
+                <Label htmlFor="case">Select Case</Label>
+                <Select value={selectedCaseId} onValueChange={setSelectedCaseId}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a case" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {cases.map((case_) => (
+                      <SelectItem key={case_.id} value={case_.id}>
+                        {case_.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
             <div className="grid gap-2">
               <Label htmlFor="title">Title</Label>
               <Input

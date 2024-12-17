@@ -7,10 +7,12 @@ import { ShareCalendarDialog } from "@/components/lawyer-dashboard/calendar/Shar
 import { CalendarFilters } from "@/components/lawyer-dashboard/calendar/CalendarFilters"
 import { CalendarSettings } from "@/components/lawyer-dashboard/calendar/CalendarSettings"
 import { CalendarSync } from "@/components/lawyer-dashboard/calendar/CalendarSync"
+import { DayActivitiesDialog } from "@/components/lawyer-dashboard/calendar/DayActivitiesDialog"
 import { useState } from "react"
 import { CalendarEvent } from "@/types/calendar"
-import { addDays } from "date-fns"
+import { addDays, isSameDay } from "date-fns"
 import { useToast } from "@/hooks/use-toast"
+import { Badge } from "@/components/ui/badge"
 
 // Mock data for demonstration
 const mockEvents: CalendarEvent[] = [
@@ -21,6 +23,7 @@ const mockEvents: CalendarEvent[] = [
     end: addDays(new Date(), 1),
     type: "meeting",
     caseName: "Smith vs. Johnson",
+    caseId: "case1"
   },
   {
     id: "2",
@@ -29,6 +32,7 @@ const mockEvents: CalendarEvent[] = [
     end: addDays(new Date(), 3),
     type: "court-date",
     caseName: "State vs. Brown",
+    caseId: "case2"
   },
   {
     id: "3",
@@ -37,13 +41,26 @@ const mockEvents: CalendarEvent[] = [
     end: addDays(new Date(), 5),
     type: "deadline",
     caseName: "Williams Estate",
+    caseId: "case3"
   },
 ]
+
+const mockCases = [
+  { id: "case1", title: "Smith vs. Johnson" },
+  { id: "case2", title: "State vs. Brown" },
+  { id: "case3", title: "Williams Estate" },
+]
+
+const workingHours = {
+  start: "09:00",
+  end: "17:00",
+}
 
 export default function LawyerCalendar() {
   const [events, setEvents] = useState<CalendarEvent[]>(mockEvents)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
   const [selectedView, setSelectedView] = useState<"month" | "week" | "day">("month")
+  const [showDayActivities, setShowDayActivities] = useState(false)
   const { toast } = useToast()
 
   const handleEventScheduled = (newEvent: CalendarEvent) => {
@@ -52,6 +69,29 @@ export default function LawyerCalendar() {
       title: "Event Scheduled",
       description: "Your event has been successfully added to the calendar.",
     })
+  }
+
+  const getDayEvents = (date: Date) => {
+    return events.filter(event => isSameDay(event.start, date))
+  }
+
+  const modifiers = {
+    hasEvents: (date: Date) => getDayEvents(date).length > 0,
+  }
+
+  const modifiersStyles = {
+    hasEvents: {
+      backgroundColor: "var(--accent)",
+      color: "var(--accent-foreground)",
+      fontWeight: "bold",
+    },
+  }
+
+  const handleDateSelect = (date: Date | undefined) => {
+    if (date) {
+      setSelectedDate(date)
+      setShowDayActivities(true)
+    }
   }
 
   return (
@@ -65,6 +105,7 @@ export default function LawyerCalendar() {
             <ScheduleEventDialog
               onEventScheduled={handleEventScheduled}
               selectedDate={selectedDate}
+              cases={mockCases}
             />
             <ShareCalendarDialog />
           </div>
@@ -80,8 +121,10 @@ export default function LawyerCalendar() {
               <Calendar
                 mode="single"
                 selected={selectedDate}
-                onSelect={setSelectedDate}
+                onSelect={handleDateSelect}
                 className="rounded-md border mt-4"
+                modifiers={modifiers}
+                modifiersStyles={modifiersStyles}
                 disabled={(date) =>
                   date < new Date(new Date().setHours(0, 0, 0, 0))
                 }
@@ -93,6 +136,16 @@ export default function LawyerCalendar() {
             <UpcomingEvents events={events} />
           </div>
         </div>
+
+        {selectedDate && (
+          <DayActivitiesDialog
+            isOpen={showDayActivities}
+            onOpenChange={setShowDayActivities}
+            date={selectedDate}
+            events={getDayEvents(selectedDate)}
+            workingHours={workingHours}
+          />
+        )}
       </div>
     </LawyerDashboardLayout>
   )
