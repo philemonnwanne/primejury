@@ -6,20 +6,19 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { 
-  Users, 
-  Send, 
-  Plus, 
-  Paperclip,
-  UserPlus 
-} from "lucide-react"
-import { 
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
-import { ChatMessage, ChatParticipant, GroupChat } from "@/types/chat"
+import { 
+  Send, 
+  Plus, 
+  Paperclip,
+  UserPlus,
+  Users 
+} from "lucide-react"
+import { GroupChat, ChatMessage, ChatParticipant } from "@/types/chat"
 
 interface TeamsLikeChatProps {
   selectedChat?: GroupChat
@@ -37,7 +36,7 @@ export function TeamsLikeChat({
   onInviteParticipants,
 }: TeamsLikeChatProps) {
   const [newMessage, setNewMessage] = useState("")
-  const [showInviteDialog, setShowInviteDialog] = useState(false)
+  const [showParticipants, setShowParticipants] = useState(false)
 
   const handleSendMessage = () => {
     if (!newMessage.trim()) return
@@ -56,20 +55,20 @@ export function TeamsLikeChat({
               </div>
               <div>
                 <CardTitle>{selectedChat.name}</CardTitle>
-                <div className="flex items-center gap-2 mt-1">
-                  <Badge variant="secondary">
-                    {selectedChat.participants.length} participants
-                  </Badge>
-                  {selectedChat.caseId && (
-                    <Badge variant="outline">Case Related</Badge>
-                  )}
-                </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-sm text-muted-foreground"
+                  onClick={() => setShowParticipants(true)}
+                >
+                  {selectedChat.participants.length} participants
+                </Button>
               </div>
             </div>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setShowInviteDialog(true)}
+              onClick={() => setShowParticipants(true)}
             >
               <UserPlus className="h-4 w-4 mr-2" />
               Invite
@@ -100,23 +99,6 @@ export function TeamsLikeChat({
                     <div className="bg-accent/50 rounded-lg p-3 max-w-[80%]">
                       {message.content}
                     </div>
-                    {message.attachments && message.attachments.length > 0 && (
-                      <div className="flex gap-2 mt-2">
-                        {message.attachments.map((attachment) => (
-                          <Button
-                            key={attachment.id}
-                            variant="outline"
-                            size="sm"
-                            className="h-8"
-                            asChild
-                          >
-                            <a href={attachment.url} target="_blank" rel="noopener noreferrer">
-                              {attachment.name}
-                            </a>
-                          </Button>
-                        ))}
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>
@@ -159,23 +141,37 @@ export function TeamsLikeChat({
                 Select an existing chat or create a new one
               </p>
               <Dialog>
-                <DialogTrigger asChild>
-                  <Button>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create New Chat
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Create New Chat</DialogTitle>
-                  </DialogHeader>
-                  {/* Add form for creating new chat */}
-                </DialogContent>
+                <Button>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create New Chat
+                </Button>
               </Dialog>
             </div>
           </div>
         )}
       </CardContent>
+
+      <Dialog open={showParticipants} onOpenChange={setShowParticipants}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Chat Participants</DialogTitle>
+          </DialogHeader>
+          <ScrollArea className="h-[300px]">
+            {selectedChat?.participants.map((participant) => (
+              <div
+                key={participant.id}
+                className="flex items-center justify-between p-3 hover:bg-accent rounded-lg"
+              >
+                <div>
+                  <p className="font-medium">{participant.name}</p>
+                  <p className="text-sm text-muted-foreground">{participant.email}</p>
+                </div>
+                <Badge>{participant.role}</Badge>
+              </div>
+            ))}
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
     </Card>
   )
 }

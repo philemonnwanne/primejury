@@ -2,7 +2,8 @@ import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
 import { useState } from "react"
 import { ChatSidebar } from "@/components/lawyer-dashboard/communications/ChatSidebar"
 import { TeamsLikeChat } from "@/components/lawyer-dashboard/communications/TeamsLikeChat"
-import { GroupChat, ChatMessage } from "@/types/chat"
+import { ContactDirectory } from "@/components/lawyer-dashboard/communications/ContactDirectory"
+import { GroupChat, ChatMessage, ChatParticipant } from "@/types/chat"
 import { useToast } from "@/hooks/use-toast"
 
 // Mock data for demonstration
@@ -81,7 +82,6 @@ export default function LawyerCommunications() {
   const { toast } = useToast()
 
   const handleSendMessage = (content: string) => {
-    // In a real app, this would send the message to the backend
     toast({
       title: "Message sent",
       description: "Your message has been sent successfully.",
@@ -89,7 +89,6 @@ export default function LawyerCommunications() {
   }
 
   const handleCreateGroup = (name: string, participants: ChatParticipant[]) => {
-    // In a real app, this would create a new group chat
     toast({
       title: "Group created",
       description: "New group chat has been created successfully.",
@@ -97,7 +96,6 @@ export default function LawyerCommunications() {
   }
 
   const handleInviteParticipants = (chatId: string, participants: ChatParticipant[]) => {
-    // In a real app, this would invite new participants to the group
     toast({
       title: "Invitations sent",
       description: "Invitations have been sent to the selected participants.",
@@ -118,6 +116,9 @@ export default function LawyerCommunications() {
               selectedChat={selectedChat}
               onSelectChat={setSelectedChat}
             />
+            <div className="mt-4">
+              <ContactDirectory />
+            </div>
           </div>
           <div className="col-span-9">
             <TeamsLikeChat
