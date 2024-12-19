@@ -7,6 +7,7 @@ import { CaseOverviewTab } from "./tabs/CaseOverviewTab"
 import { DocumentsTab } from "./tabs/DocumentsTab"
 import { BillingTab } from "./tabs/BillingTab"
 import { useToast } from "@/hooks/use-toast"
+import { mockCases } from "@/components/cases/mock-data/cases"
 
 interface LawyerCaseDetailsProps {
   caseId: string
@@ -15,57 +16,24 @@ interface LawyerCaseDetailsProps {
 export function LawyerCaseDetails({ caseId }: LawyerCaseDetailsProps) {
   const [isEditing, setIsEditing] = useState(false)
   const { toast } = useToast()
+  
+  // Find the specific case data based on the caseId
+  const selectedCase = mockCases.find(c => c.id === caseId)
 
-  const handleSave = () => {
-    toast({
-      title: "Changes saved",
-      description: "Your changes have been saved successfully.",
-    })
-    setIsEditing(false)
-  }
-
-  // Mock data - in a real app, this would be fetched based on the caseId
-  const mockTimelineEvents = [
-    {
-      date: "2024-03-15",
-      title: "Initial Consultation",
-      description: "First meeting with client to discuss case details",
-      status: "completed" as const,
-      details: {
-        lawyerNotes: "Client provided initial documentation. Need to follow up on medical records.",
-      }
-    },
-    {
-      date: "2024-03-20",
-      title: "Document Collection",
-      description: "Gathering necessary documentation from client",
-      status: "current" as const,
-      details: {
-        evidenceRequests: [
-          {
-            id: "1",
-            description: "Medical records from Primary Care Physician",
-            status: "pending" as const,
-            dueDate: "2024-03-25"
-          }
-        ]
-      }
-    }
-  ]
-
-  const mockCaseData = {
-    title: "Smith vs. Johnson",
-    type: "civil",
-    status: "active",
-    priority: "high",
-    description: "Contract dispute regarding construction project delays",
+  // Mock data specific to the selected case
+  const caseSpecificData = selectedCase ? {
+    title: selectedCase.title,
+    type: selectedCase.type,
+    status: selectedCase.status,
+    priority: selectedCase.priority,
+    description: `Case details for ${selectedCase.title}`,
     estimatedDuration: "6-8 months",
-    subject: "Contract dispute regarding construction project delays",
+    subject: `${selectedCase.type} case involving ${selectedCase.client}`,
     lawyer: {
-      name: "Sarah Parker",
-      email: "sarah.parker@lawfirm.com",
+      name: selectedCase.lawyer,
+      email: `${selectedCase.lawyer.toLowerCase().replace(' ', '.')}@lawfirm.com`,
       phone: "(555) 123-4567",
-      id: "lawyer_id_1"
+      id: `lawyer_id_${selectedCase.id}`
     },
     judge: "Hon. Michael Roberts",
     location: {
@@ -78,31 +46,18 @@ export function LawyerCaseDetails({ caseId }: LawyerCaseDetailsProps) {
         phone: "(916) 874-5522"
       }
     }
+  } : null
+
+  const handleSave = () => {
+    toast({
+      title: "Changes saved",
+      description: "Your changes have been saved successfully.",
+    })
+    setIsEditing(false)
   }
 
-  const mockBillingData = {
-    billingType: "hourly",
-    rate: "250",
-    schedule: "monthly",
-    totalPaid: 5000,
-    pendingAmount: 2500,
-    nextPaymentDate: "2024-04-15",
-    paymentMethod: {
-      type: "credit_card",
-      last4: "4242"
-    },
-    paymentHistory: [
-      {
-        date: "2024-03-01",
-        amount: 2500,
-        status: "paid"
-      },
-      {
-        date: "2024-02-01",
-        amount: 2500,
-        status: "paid"
-      }
-    ]
+  if (!caseSpecificData) {
+    return <div>Case not found</div>
   }
 
   return (
@@ -133,7 +88,7 @@ export function LawyerCaseDetails({ caseId }: LawyerCaseDetailsProps) {
         <TabsContent value="overview">
           <CaseOverviewTab 
             isEditing={isEditing} 
-            caseData={mockCaseData} 
+            caseData={caseSpecificData} 
             onSave={handleSave} 
           />
         </TabsContent>
@@ -145,23 +100,63 @@ export function LawyerCaseDetails({ caseId }: LawyerCaseDetailsProps) {
         <TabsContent value="billing">
           <BillingTab 
             isEditing={isEditing} 
-            initialData={mockBillingData}
+            initialData={{
+              billingType: "hourly",
+              rate: "250",
+              schedule: "monthly",
+              totalPaid: 5000,
+              pendingAmount: 2500,
+              nextPaymentDate: "2024-04-15",
+              paymentMethod: {
+                type: "credit_card",
+                last4: "4242"
+              },
+              paymentHistory: [
+                {
+                  date: "2024-03-01",
+                  amount: 2500,
+                  status: "paid"
+                },
+                {
+                  date: "2024-02-01",
+                  amount: 2500,
+                  status: "paid"
+                }
+              ]
+            }}
             onSave={handleSave}
           />
         </TabsContent>
 
         <TabsContent value="timeline">
           <CaseTimeline 
-            events={mockTimelineEvents}
+            events={[
+              {
+                date: `${selectedCase.createdAt}`,
+                title: "Case Created",
+                description: `Initial filing for ${selectedCase.title}`,
+                status: "completed" as const,
+                details: {
+                  lawyerNotes: `Case opened by ${selectedCase.lawyer}`,
+                }
+              },
+              {
+                date: new Date(new Date(selectedCase.createdAt).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                title: "Initial Review",
+                description: "Case documentation review",
+                status: "completed" as const,
+                details: {
+                  lawyerNotes: "Initial documentation reviewed",
+                }
+              }
+            ]}
             onUpdateEvent={isEditing ? (updatedEvent, index) => {
-              // Handle timeline event update
               toast({
                 title: "Timeline Updated",
                 description: "The timeline event has been updated successfully.",
               })
             } : undefined}
             onAddEvent={isEditing ? (newEvent) => {
-              // Handle new timeline event
               toast({
                 title: "Event Added",
                 description: "A new timeline event has been added.",
