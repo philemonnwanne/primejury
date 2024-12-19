@@ -2,10 +2,11 @@ import { useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { CaseTimeline } from "@/components/cases/CaseTimeline"
-import { Pencil, Eye } from "lucide-react"
+import { Eye, PencilLine } from "lucide-react"
 import { CaseOverviewTab } from "./tabs/CaseOverviewTab"
 import { DocumentsTab } from "./tabs/DocumentsTab"
 import { BillingTab } from "./tabs/BillingTab"
+import { useToast } from "@/hooks/use-toast"
 
 interface LawyerCaseDetailsProps {
   caseId: string
@@ -13,6 +14,15 @@ interface LawyerCaseDetailsProps {
 
 export function LawyerCaseDetails({ caseId }: LawyerCaseDetailsProps) {
   const [isEditing, setIsEditing] = useState(false)
+  const { toast } = useToast()
+
+  const handleSave = () => {
+    toast({
+      title: "Changes saved",
+      description: "Your changes have been saved successfully.",
+    })
+    setIsEditing(false)
+  }
 
   // Mock data - in a real app, this would be fetched based on the caseId
   const mockTimelineEvents = [
@@ -49,12 +59,50 @@ export function LawyerCaseDetails({ caseId }: LawyerCaseDetailsProps) {
     status: "active",
     priority: "high",
     description: "Contract dispute regarding construction project delays",
+    estimatedDuration: "6-8 months",
+    subject: "Contract dispute regarding construction project delays",
+    lawyer: {
+      name: "Sarah Parker",
+      email: "sarah.parker@lawfirm.com",
+      phone: "(555) 123-4567",
+      id: "lawyer_id_1"
+    },
+    judge: "Hon. Michael Roberts",
+    location: {
+      city: "Sacramento",
+      state: "California",
+      county: "Sacramento",
+      courthouse: {
+        name: "Sacramento County Superior Court",
+        address: "720 9th Street, Sacramento, CA 95814",
+        phone: "(916) 874-5522"
+      }
+    }
   }
 
   const mockBillingData = {
     billingType: "hourly",
     rate: "250",
     schedule: "monthly",
+    totalPaid: 5000,
+    pendingAmount: 2500,
+    nextPaymentDate: "2024-04-15",
+    paymentMethod: {
+      type: "credit_card",
+      last4: "4242"
+    },
+    paymentHistory: [
+      {
+        date: "2024-03-01",
+        amount: 2500,
+        status: "paid"
+      },
+      {
+        date: "2024-02-01",
+        amount: 2500,
+        status: "paid"
+      }
+    ]
   }
 
   return (
@@ -62,19 +110,14 @@ export function LawyerCaseDetails({ caseId }: LawyerCaseDetailsProps) {
       <div className="flex justify-end">
         <Button
           variant="outline"
+          size="icon"
           onClick={() => setIsEditing(!isEditing)}
-          className="gap-2"
+          className="h-10 w-10"
         >
           {isEditing ? (
-            <>
-              <Eye className="h-4 w-4" />
-              View Mode
-            </>
+            <Eye className="h-4 w-4" />
           ) : (
-            <>
-              <Pencil className="h-4 w-4" />
-              Edit Mode
-            </>
+            <PencilLine className="h-4 w-4" />
           )}
         </Button>
       </div>
@@ -88,7 +131,11 @@ export function LawyerCaseDetails({ caseId }: LawyerCaseDetailsProps) {
         </TabsList>
 
         <TabsContent value="overview">
-          <CaseOverviewTab isEditing={isEditing} caseData={mockCaseData} />
+          <CaseOverviewTab 
+            isEditing={isEditing} 
+            caseData={mockCaseData} 
+            onSave={handleSave} 
+          />
         </TabsContent>
 
         <TabsContent value="documents">
@@ -96,11 +143,31 @@ export function LawyerCaseDetails({ caseId }: LawyerCaseDetailsProps) {
         </TabsContent>
 
         <TabsContent value="billing">
-          <BillingTab isEditing={isEditing} initialData={mockBillingData} />
+          <BillingTab 
+            isEditing={isEditing} 
+            initialData={mockBillingData}
+            onSave={handleSave}
+          />
         </TabsContent>
 
         <TabsContent value="timeline">
-          <CaseTimeline events={mockTimelineEvents} />
+          <CaseTimeline 
+            events={mockTimelineEvents}
+            onUpdateEvent={isEditing ? (updatedEvent, index) => {
+              // Handle timeline event update
+              toast({
+                title: "Timeline Updated",
+                description: "The timeline event has been updated successfully.",
+              })
+            } : undefined}
+            onAddEvent={isEditing ? (newEvent) => {
+              // Handle new timeline event
+              toast({
+                title: "Event Added",
+                description: "A new timeline event has been added.",
+              })
+            } : undefined}
+          />
         </TabsContent>
       </Tabs>
     </div>
