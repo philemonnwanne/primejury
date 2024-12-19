@@ -20,13 +20,6 @@ export function CaseOverviewTab({ isEditing, caseData, onSave }: CaseOverviewTab
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">{formData.title}</h2>
-        <div className="flex items-center gap-2 mt-2">
-          <Badge variant="secondary">{formData.type}</Badge>
-          <Badge variant="outline">{formData.status}</Badge>
-        </div>
-      </div>
 
       <PendingItems />
 
