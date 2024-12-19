@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
@@ -19,13 +18,11 @@ export function CaseOverviewTab({ isEditing, caseData, onSave }: CaseOverviewTab
   const [formData, setFormData] = useState(caseData)
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">{formData.title}</h2>
-        <div className="flex items-center gap-2 mt-2">
-          <Badge variant="secondary">{formData.type}</Badge>
-          <Badge variant="outline">{formData.status}</Badge>
-        </div>
+    <>
+      <h2 className="text-2xl font-bold">{formData.title}</h2>
+      <div className="flex items-center gap-2 mt-2">
+        <Badge variant="secondary">{formData.type}</Badge>
+        <Badge variant="outline">{formData.status}</Badge>
       </div>
 
       <PendingItems />
@@ -52,6 +49,6 @@ export function CaseOverviewTab({ isEditing, caseData, onSave }: CaseOverviewTab
           Save Changes
         </Button>
       )}
-    </div>
+    </>
   )
 }
