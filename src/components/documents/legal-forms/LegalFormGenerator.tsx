@@ -6,8 +6,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
 import { PDFDownloadLink } from "@react-pdf/renderer"
-import { LegalDocument } from "./legal-documents/LegalDocument"
-import { documentTypes } from "./legal-documents/documentTypes"
+import { LegalDocument } from "../legal-documents/LegalDocument"
+import { documentTypes } from "../legal-documents/documentTypes"
 import { generateLegalContent } from "@/utils/documentGeneration"
 
 // Mock cases data - in a real app, this would come from an API
