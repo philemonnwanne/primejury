@@ -69,49 +69,10 @@ export default function LawyerCaseInsights() {
               <TabsTrigger value="past">Inactive Cases</TabsTrigger>
             </TabsList>
             <TabsContent value="current" className="space-y-6">
-              <CaseList onCaseSelect={setSelectedCaseId} />
+              <CaseList onCaseSelect={setSelectedCaseId} filter="active" />
             </TabsContent>
             <TabsContent value="past" className="space-y-6">
-              <div className="grid gap-6">
-                <PreviousCaseCard
-                  caseData={{
-                    id: "past1",
-                    title: "Smith vs. Johnson",
-                    type: "Civil Litigation",
-                    duration: {
-                      startDate: "2023-01-15",
-                      endDate: "2023-06-30",
-                      totalDays: 166
-                    },
-                    description: "Contract dispute regarding construction project delays",
-                    lawyer: {
-                      name: "Sarah Parker",
-                      id: "lawyer1"
-                    },
-                    documents: [
-                      {
-                        id: "doc1",
-                        title: "Final Settlement Agreement",
-                        type: "Legal Document",
-                        dateAdded: "2023-06-15"
-                      }
-                    ],
-                    disposition: "Settled",
-                    judge: "Hon. Michael Roberts",
-                    location: {
-                      city: "Sacramento",
-                      state: "California",
-                      county: "Sacramento",
-                      courthouse: {
-                        name: "Sacramento County Superior Court",
-                        address: "720 9th Street, Sacramento, CA 95814",
-                        phone: "(916) 874-5522"
-                      }
-                    },
-                    status: "settled"
-                  }}
-                />
-              </div>
+              <CaseList onCaseSelect={setSelectedCaseId} filter="inactive" />
             </TabsContent>
           </Tabs>
         )}

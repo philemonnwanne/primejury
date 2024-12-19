@@ -16,6 +16,7 @@ interface Case {
   lawyer: string
   status: "active" | "pending" | "pending_review" | "closed"
   priority: "high" | "medium" | "low"
+  createdAt: string // Added this field
 }
 
 const mockCases: Case[] = [
@@ -27,6 +28,7 @@ const mockCases: Case[] = [
     lawyer: "Sarah Parker",
     status: "active",
     priority: "high",
+    createdAt: "2024-01-15",
   },
   {
     id: "2",
@@ -36,6 +38,7 @@ const mockCases: Case[] = [
     lawyer: "Michael Chang",
     status: "pending",
     priority: "medium",
+    createdAt: "2024-02-20",
   },
   {
     id: "3",
@@ -45,6 +48,7 @@ const mockCases: Case[] = [
     lawyer: "Emily Wilson",
     status: "closed",
     priority: "low",
+    createdAt: "2023-11-30",
   },
   {
     id: "4",
@@ -54,6 +58,7 @@ const mockCases: Case[] = [
     lawyer: "Pending Assignment",
     status: "pending_review",
     priority: "medium",
+    createdAt: "2024-03-01",
   }
 ]
 
@@ -72,9 +77,17 @@ const statusColors = {
 
 interface CaseListProps {
   onCaseSelect: (caseId: string) => void
+  filter?: "active" | "inactive"
 }
 
-export function CaseList({ onCaseSelect }: CaseListProps) {
+export function CaseList({ onCaseSelect, filter = "active" }: CaseListProps) {
+  const filteredCases = mockCases.filter(case_ => {
+    if (filter === "active") {
+      return case_.status !== "closed";
+    }
+    return case_.status === "closed";
+  });
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -86,10 +99,11 @@ export function CaseList({ onCaseSelect }: CaseListProps) {
             <TableHead>Assigned Lawyer</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Priority</TableHead>
+            <TableHead>Created</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {mockCases.map((case_) => (
+          {filteredCases.map((case_) => (
             <TableRow
               key={case_.id}
               className="cursor-pointer hover:bg-muted/50"
@@ -110,6 +124,9 @@ export function CaseList({ onCaseSelect }: CaseListProps) {
                 <Badge variant={priorityColors[case_.priority]}>
                   {case_.priority}
                 </Badge>
+              </TableCell>
+              <TableCell>
+                {new Date(case_.createdAt).toLocaleDateString()}
               </TableCell>
             </TableRow>
           ))}
