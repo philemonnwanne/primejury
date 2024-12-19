@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/select"
 import { useToast } from "@/components/ui/use-toast"
 import { PDFDownloadLink } from "@react-pdf/renderer"
-import { LegalDocument } from "../legal-documents/LegalDocument"
-import { formTypes } from "./FormTypes"
+import { LegalDocument } from "./legal-documents/LegalDocument"
+import { documentTypes } from "./legal-documents/documentTypes"
 import { generateLegalContent } from "@/utils/documentGeneration"
 
 // Mock cases data - in a real app, this would come from an API
@@ -22,7 +22,7 @@ const mockCases = [
   {
     id: "1",
     title: "Smith vs. Johnson",
-    type: "Civil Law",
+    type: "Civil Litigation",
     court: {
       name: "Sacramento County Superior Court",
       state: "California",
@@ -43,9 +43,9 @@ const mockCases = [
   }
 ]
 
-export function LegalFormGenerator() {
+export function LegalDocumentGenerator() {
   const [selectedCase, setSelectedCase] = useState("")
-  const [formType, setFormType] = useState("")
+  const [documentType, setDocumentType] = useState("")
   const [generatedContent, setGeneratedContent] = useState("")
   const [editedContent, setEditedContent] = useState("")
   const [isEditing, setIsEditing] = useState(false)
@@ -54,28 +54,28 @@ export function LegalFormGenerator() {
   const { toast } = useToast()
 
   const selectedCaseData = mockCases.find(c => c.id === selectedCase)
-  const selectedFormType = formTypes.find(d => d.value === formType)
+  const selectedDocType = documentTypes.find(d => d.value === documentType)
 
-  const generateForm = async () => {
-    if (!selectedCase || !formType) {
+  const generateDocument = async () => {
+    if (!selectedCase || !documentType) {
       toast({
         title: "Missing Information",
-        description: "Please select both a case and form type",
+        description: "Please select both a case and document type",
         variant: "destructive",
       })
       return
     }
 
-    if (!selectedCaseData || !selectedFormType) return
+    if (!selectedCaseData || !selectedDocType) return
 
     setIsGenerating(true)
     try {
-      let content = selectedFormType.template
+      let content = selectedDocType.template
       
       if (description) {
         const generatedContent = await generateLegalContent(
           description,
-          selectedFormType.label,
+          selectedDocType.label,
           {
             state: selectedCaseData.court.state,
             county: selectedCaseData.court.county,
@@ -95,7 +95,7 @@ export function LegalFormGenerator() {
     } catch (error) {
       toast({
         title: "Generation Failed",
-        description: "Failed to generate form content. Please try again.",
+        description: "Failed to generate document content. Please try again.",
         variant: "destructive",
       })
     } finally {
@@ -107,7 +107,7 @@ export function LegalFormGenerator() {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Legal Form Generator</CardTitle>
+          <CardTitle>Legal Document Generator</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -128,13 +128,13 @@ export function LegalFormGenerator() {
 
           {selectedCase && (
             <div className="space-y-2">
-              <Label htmlFor="form-type">Form Type</Label>
-              <Select value={formType} onValueChange={setFormType}>
+              <Label htmlFor="document-type">Document Type</Label>
+              <Select value={documentType} onValueChange={setDocumentType}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select form type" />
+                  <SelectValue placeholder="Select document type" />
                 </SelectTrigger>
                 <SelectContent>
-                  {formTypes
+                  {documentTypes
                     .filter(type => type.category === selectedCaseData?.type)
                     .map((type) => (
                       <SelectItem key={type.value} value={type.value}>
@@ -143,20 +143,20 @@ export function LegalFormGenerator() {
                     ))}
                 </SelectContent>
               </Select>
-              {selectedFormType && (
+              {selectedDocType && (
                 <p className="text-sm text-muted-foreground">
-                  {selectedFormType.description}
+                  {selectedDocType.description}
                 </p>
               )}
             </div>
           )}
 
-          {selectedCase && formType && (
+          {selectedCase && documentType && (
             <div className="space-y-2">
-              <Label htmlFor="description">Form Description</Label>
+              <Label htmlFor="description">Document Description</Label>
               <Textarea
                 id="description"
-                placeholder="Describe what you want the form to contain..."
+                placeholder="Describe what you want the document to contain..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
@@ -167,16 +167,16 @@ export function LegalFormGenerator() {
           {!isEditing ? (
             <div className="flex justify-end">
               <Button 
-                onClick={generateForm}
+                onClick={generateDocument}
                 disabled={isGenerating}
               >
-                {isGenerating ? "Generating..." : "Generate Form"}
+                {isGenerating ? "Generating..." : "Generate Document"}
               </Button>
             </div>
           ) : (
             <>
               <div className="space-y-2">
-                <Label htmlFor="content">Edit Form Content</Label>
+                <Label htmlFor="content">Edit Document Content</Label>
                 <Textarea
                   id="content"
                   value={editedContent}
@@ -195,17 +195,17 @@ export function LegalFormGenerator() {
                 <PDFDownloadLink
                   document={
                     <LegalDocument
-                      type={formType}
+                      type={documentType}
                       caseNumber={selectedCase}
                       content={editedContent}
                       court={selectedCaseData?.court}
                     />
                   }
-                  fileName={`${formType}-${selectedCase}.pdf`}
+                  fileName={`${documentType}-${selectedCase}.pdf`}
                 >
                   {({ loading }) => (
                     <Button disabled={loading}>
-                      {loading ? "Preparing..." : "Download Form"}
+                      {loading ? "Preparing..." : "Download Document"}
                     </Button>
                   )}
                 </PDFDownloadLink>

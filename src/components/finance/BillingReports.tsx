@@ -1,106 +1,91 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { FileText, Download } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
-import { AnalyticsReport } from "@/components/analytics/AnalyticsReport"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PDFDownloadLink } from "@react-pdf/renderer"
-import { ReactNode } from "react"
+import { BillingReport } from "./BillingReport"
+import { useState } from "react"
 
 export function BillingReports() {
-  const { toast } = useToast()
+  const [reportType, setReportType] = useState("monthly")
+  const [reportDate, setReportDate] = useState("")
+  const [reportData, setReportData] = useState(null)
 
-  const handleGenerateReport = (type: string) => {
-    toast({
-      title: "Report Generated",
-      description: `The ${type} report has been generated successfully.`,
-    })
+  const generateReport = () => {
+    // Mock report data generation
+    const mockData = {
+      type: reportType,
+      date: reportDate,
+      totalBilled: 45000,
+      totalPaid: 35000,
+      outstandingAmount: 10000,
+      cases: [
+        {
+          id: "1",
+          title: "Smith vs. Johnson",
+          billedAmount: 15000,
+          paidAmount: 12000,
+          status: "partial"
+        },
+        {
+          id: "2",
+          title: "Tech Corp Merger",
+          billedAmount: 30000,
+          paidAmount: 23000,
+          status: "partial"
+        }
+      ]
+    }
+    setReportData(mockData)
   }
 
-  const reportSections = [
-    "caseMetrics",
-    "financialMetrics",
-    "trends"
-  ]
-
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Billing Reports</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Monthly Revenue Report</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Detailed breakdown of revenue by case type and payment structure
-                </p>
-                <PDFDownloadLink
-                  document={<AnalyticsReport sections={reportSections} />}
-                  fileName="monthly-revenue-report.pdf"
-                >
-                  {({ loading }): ReactNode => (
-                    <Button disabled={loading}>
-                      <div className="flex items-center">
-                        <Download className="mr-2 h-4 w-4" />
-                        {loading ? "Loading..." : "Download Report"}
-                      </div>
-                    </Button>
-                  )}
-                </PDFDownloadLink>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Payment Collection Report</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Overview of payment collection status and outstanding balances
-                </p>
-                <Button onClick={() => handleGenerateReport("payment-collection")}>
-                  <FileText className="mr-2 h-4 w-4" />
-                  Generate Report
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Client Payment History</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Detailed history of payments by client and case
-                </p>
-                <Button onClick={() => handleGenerateReport("payment-history")}>
-                  <FileText className="mr-2 h-4 w-4" />
-                  Generate Report
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Late Payment Analysis</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Analysis of late payments and collection efficiency
-                </p>
-                <Button onClick={() => handleGenerateReport("late-payment")}>
-                  <FileText className="mr-2 h-4 w-4" />
-                  Generate Report
-                </Button>
-              </CardContent>
-            </Card>
+    <Card>
+      <CardHeader>
+        <CardTitle>Generate Billing Reports</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <Label>Report Type</Label>
+            <Select value={reportType} onValueChange={setReportType}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="monthly">Monthly Report</SelectItem>
+                <SelectItem value="quarterly">Quarterly Report</SelectItem>
+                <SelectItem value="annual">Annual Report</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+          <div className="space-y-2">
+            <Label>Report Date</Label>
+            <Input
+              type="date"
+              value={reportDate}
+              onChange={(e) => setReportDate(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-between">
+          <Button onClick={generateReport}>Generate Report</Button>
+          {reportData && (
+            <PDFDownloadLink
+              document={<BillingReport data={reportData} />}
+              fileName={`billing-report-${reportDate}.pdf`}
+            >
+              {({ loading }) => (
+                <Button disabled={loading}>
+                  {loading ? "Generating..." : "Download Report"}
+                </Button>
+              )}
+            </PDFDownloadLink>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   )
 }

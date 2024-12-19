@@ -192,23 +192,25 @@ export function LegalDocumentGenerator() {
                 }}>
                   Reset to Original
                 </Button>
-                <PDFDownloadLink
-                  document={
-                    <LegalDocument
-                      type={documentType}
-                      caseNumber={selectedCase}
-                      content={editedContent}
-                      court={selectedCaseData?.court}
-                    />
-                  }
-                  fileName={`${documentType}-${selectedCase}.pdf`}
-                >
-                  {({ loading }) => (
-                    <Button disabled={loading}>
-                      {loading ? "Preparing..." : "Download Document"}
-                    </Button>
-                  )}
-                </PDFDownloadLink>
+
+<PDFDownloadLink
+  document={
+    <LegalDocument
+      type={documentType}
+      caseNumber={selectedCase}
+      content={editedContent}
+      court={selectedCaseData?.court}
+    />
+  }
+  fileName={`${documentType}-${selectedCase}.pdf`}
+>
+  {({ loading }) => (
+    <Button disabled={loading}>
+      {loading ? "Preparing..." : "Download Document"}
+    </Button>
+  )}
+</PDFDownloadLink>
+
               </div>
             </>
           )}
@@ -217,3 +219,4 @@ export function LegalDocumentGenerator() {
     </div>
   )
 }
+
