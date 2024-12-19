@@ -13,6 +13,7 @@ import { Upload } from "lucide-react"
 
 interface DocumentUploadProps {
   onSuccess: () => void
+  prefilledCaseId?: string
 }
 
 const documentTypes = [
@@ -30,10 +31,10 @@ const mockCases = [
   { id: "3", title: "Estate Planning - Brown" },
 ]
 
-export function DocumentUpload({ onSuccess }: DocumentUploadProps) {
+export function DocumentUpload({ onSuccess, prefilledCaseId }: DocumentUploadProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [isDragging, setIsDragging] = useState(false)
-  const [selectedCase, setSelectedCase] = useState("")
+  const [selectedCase, setSelectedCase] = useState(prefilledCaseId || "")
   const [documentType, setDocumentType] = useState("")
   const [description, setDescription] = useState("")
   const { toast } = useToast()
@@ -119,21 +120,23 @@ export function DocumentUpload({ onSuccess }: DocumentUploadProps) {
       </div>
 
       <div className="space-y-4">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Assign to Case</label>
-          <Select value={selectedCase} onValueChange={setSelectedCase}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a case" />
-            </SelectTrigger>
-            <SelectContent>
-              {mockCases.map((case_) => (
-                <SelectItem key={case_.id} value={case_.id}>
-                  {case_.title}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        {!prefilledCaseId && (
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Assign to Case</label>
+            <Select value={selectedCase} onValueChange={setSelectedCase}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a case" />
+              </SelectTrigger>
+              <SelectContent>
+                {mockCases.map((case_) => (
+                  <SelectItem key={case_.id} value={case_.id}>
+                    {case_.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
         <div className="space-y-2">
           <label className="text-sm font-medium">Document Type</label>

@@ -1,71 +1,66 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Send } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
+import { DocumentLibrary } from "@/components/documents/DocumentLibrary"
 import { DocumentUpload } from "@/components/documents/DocumentUpload"
-import { useToast } from "@/hooks/use-toast"
+import { DocumentRequest } from "@/components/documents/DocumentRequest"
+import { Button } from "@/components/ui/button"
+import { Plus } from "lucide-react"
 import { useState } from "react"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 
 interface DocumentsTabProps {
   isEditing: boolean
+  caseId?: string
 }
 
-export function DocumentsTab({ isEditing }: DocumentsTabProps) {
-  const [documentRequest, setDocumentRequest] = useState("")
-  const { toast } = useToast()
+export function DocumentsTab({ isEditing, caseId }: DocumentsTabProps) {
+  const [isUploadOpen, setIsUploadOpen] = useState(false)
 
-  const handleDocumentRequest = () => {
-    if (!documentRequest.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter a document request description",
-        variant: "destructive",
-      })
-      return
-    }
-
-    toast({
-      title: "Document Request Sent",
-      description: "The client has been notified of your request",
-    })
-    setDocumentRequest("")
-  }
+  // Mock cases data - in a real app, this would come from a context or prop
+  const mockCases = [
+    { id: "1", title: "Smith vs. Johnson" },
+    { id: "2", title: "Tech Corp Merger" },
+  ]
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Document Management</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {isEditing && (
-          <>
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">Upload New Document</h3>
-              <DocumentUpload
-                onSuccess={() => {
-                  toast({
-                    title: "Document Uploaded",
-                    description: "The document has been successfully uploaded",
-                  })
-                }}
+      <CardContent className="space-y-6 pt-6">
+        <div className="flex justify-end">
+          <Sheet open={isUploadOpen} onOpenChange={setIsUploadOpen}>
+            <SheetTrigger asChild>
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                Upload Document
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle>Upload Document</SheetTitle>
+                <SheetDescription>
+                  Upload and categorize documents for your case
+                </SheetDescription>
+              </SheetHeader>
+              <DocumentUpload 
+                onSuccess={() => setIsUploadOpen(false)}
+                prefilledCaseId={caseId}
               />
-            </div>
+            </SheetContent>
+          </Sheet>
+        </div>
 
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">Request Document from Client</h3>
-              <div className="flex gap-4">
-                <Input
-                  placeholder="Describe the document needed..."
-                  value={documentRequest}
-                  onChange={(e) => setDocumentRequest(e.target.value)}
-                />
-                <Button onClick={handleDocumentRequest}>
-                  <Send className="mr-2 h-4 w-4" />
-                  Send Request
-                </Button>
-              </div>
-            </div>
-          </>
+        <DocumentLibrary type="case" />
+        
+        {isEditing && (
+          <DocumentRequest 
+            prefilledCaseId={caseId} 
+            cases={mockCases}
+          />
         )}
       </CardContent>
     </Card>
