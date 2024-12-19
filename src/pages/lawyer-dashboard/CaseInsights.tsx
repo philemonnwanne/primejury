@@ -14,6 +14,19 @@ export default function LawyerCaseInsights() {
   const [searchParams] = useSearchParams()
   const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "current")
 
+  // Mock data - in a real app, this would come from an API or state management
+  const mockCases = [
+    {
+      id: "1",
+      title: "Smith vs. Johnson",
+      type: "Civil Litigation",
+      status: "active"
+    },
+    // ... other mock cases
+  ]
+
+  const selectedCase = mockCases.find(c => c.id === selectedCaseId)
+
   useEffect(() => {
     const tab = searchParams.get("tab")
     if (tab) {
@@ -26,9 +39,11 @@ export default function LawyerCaseInsights() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Case Insights</h1>
+            <h1 className="text-3xl font-bold tracking-tight">
+              {selectedCase ? selectedCase.title : "Case Insights"}
+            </h1>
             <p className="text-muted-foreground">
-              Manage and track all your cases in detail
+              {selectedCase ? "Case Details" : "Manage and track all your cases in detail"}
             </p>
           </div>
           <div className="flex gap-2">
