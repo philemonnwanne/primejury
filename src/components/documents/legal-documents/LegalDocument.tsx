@@ -32,9 +32,9 @@ const styles = StyleSheet.create({
 
 interface Court {
   name: string
-  address: string
   state: string
   county: string
+  address: string
 }
 
 interface LegalDocumentProps {
@@ -48,10 +48,16 @@ export function LegalDocument({ type, caseNumber, content, court }: LegalDocumen
   return (
     <Document>
       <Page size="A4" style={styles.page}>
+        <View style={styles.header}>
+          <Text style={styles.title}>{type}</Text>
+          <Text>Case Number: {caseNumber}</Text>
+        </View>
+
         {court && (
           <View style={styles.court}>
             <Text>{court.name}</Text>
             <Text>{court.address}</Text>
+            <Text>{court.county}, {court.state}</Text>
           </View>
         )}
 
