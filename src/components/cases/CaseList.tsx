@@ -16,7 +16,7 @@ interface Case {
   lawyer: string
   status: "active" | "pending" | "pending_review" | "closed"
   priority: "high" | "medium" | "low"
-  createdAt: string // Added this field
+  createdAt: string
 }
 
 const mockCases: Case[] = [
@@ -36,7 +36,7 @@ const mockCases: Case[] = [
     type: "Corporate",
     client: "Tech Corp",
     lawyer: "Michael Chang",
-    status: "pending",
+    status: "active",
     priority: "medium",
     createdAt: "2024-02-20",
   },
@@ -55,10 +55,130 @@ const mockCases: Case[] = [
     title: "Personal Injury Case",
     type: "Civil",
     client: "Jane Doe",
-    lawyer: "Pending Assignment",
-    status: "pending_review",
-    priority: "medium",
+    lawyer: "David Martinez",
+    status: "active",
+    priority: "high",
     createdAt: "2024-03-01",
+  },
+  {
+    id: "5",
+    title: "Green Energy Acquisition",
+    type: "Corporate",
+    client: "EcoTech Solutions",
+    lawyer: "Lisa Wong",
+    status: "active",
+    priority: "medium",
+    createdAt: "2024-02-15",
+  },
+  {
+    id: "6",
+    title: "Thompson Family Trust",
+    type: "Estate",
+    client: "Mary Thompson",
+    lawyer: "James Wilson",
+    status: "closed",
+    priority: "medium",
+    createdAt: "2023-10-12",
+  },
+  {
+    id: "7",
+    title: "Healthcare Compliance Review",
+    type: "Regulatory",
+    client: "MedCare Inc",
+    lawyer: "Patricia Chen",
+    status: "active",
+    priority: "high",
+    createdAt: "2024-01-30",
+  },
+  {
+    id: "8",
+    title: "Construction Dispute",
+    type: "Civil Litigation",
+    client: "BuildRight LLC",
+    lawyer: "Robert Taylor",
+    status: "closed",
+    priority: "medium",
+    createdAt: "2023-09-15",
+  },
+  {
+    id: "9",
+    title: "Intellectual Property Claim",
+    type: "IP Law",
+    client: "Innovation Tech",
+    lawyer: "Michelle Lee",
+    status: "active",
+    priority: "high",
+    createdAt: "2024-02-28",
+  },
+  {
+    id: "10",
+    title: "Employment Contract Review",
+    type: "Employment",
+    client: "Global Corp",
+    lawyer: "Daniel Brown",
+    status: "closed",
+    priority: "low",
+    createdAt: "2023-12-05",
+  },
+  {
+    id: "11",
+    title: "Real Estate Development",
+    type: "Real Estate",
+    client: "Urban Developers",
+    lawyer: "Rachel Green",
+    status: "active",
+    priority: "medium",
+    createdAt: "2024-01-20",
+  },
+  {
+    id: "12",
+    title: "Environmental Compliance",
+    type: "Environmental",
+    client: "Clean Industries",
+    lawyer: "Thomas Anderson",
+    status: "closed",
+    priority: "high",
+    createdAt: "2023-11-15",
+  },
+  {
+    id: "13",
+    title: "Patent Application",
+    type: "IP Law",
+    client: "TechStart Inc",
+    lawyer: "Jennifer Wu",
+    status: "active",
+    priority: "medium",
+    createdAt: "2024-02-10",
+  },
+  {
+    id: "14",
+    title: "Corporate Restructuring",
+    type: "Corporate",
+    client: "Legacy Corp",
+    lawyer: "Mark Stevens",
+    status: "closed",
+    priority: "high",
+    createdAt: "2023-10-30",
+  },
+  {
+    id: "15",
+    title: "Maritime Insurance Claim",
+    type: "Maritime Law",
+    client: "Ocean Shipping Co",
+    lawyer: "Christopher Lee",
+    status: "active",
+    priority: "high",
+    createdAt: "2024-03-05",
+  },
+  {
+    id: "16",
+    title: "Family Trust Dissolution",
+    type: "Estate",
+    client: "Williams Family",
+    lawyer: "Sarah Johnson",
+    status: "closed",
+    priority: "medium",
+    createdAt: "2023-09-28",
   }
 ]
 
@@ -66,13 +186,6 @@ const priorityColors = {
   high: "destructive",
   medium: "default",
   low: "secondary",
-} as const
-
-const statusColors = {
-  active: "default",
-  pending: "secondary",
-  pending_review: "secondary",
-  closed: "outline",
 } as const
 
 interface CaseListProps {
@@ -97,7 +210,6 @@ export function CaseList({ onCaseSelect, filter = "active" }: CaseListProps) {
             <TableHead>Type</TableHead>
             <TableHead>Client</TableHead>
             <TableHead>Assigned Lawyer</TableHead>
-            <TableHead>Status</TableHead>
             <TableHead>Priority</TableHead>
             <TableHead>Created</TableHead>
           </TableRow>
@@ -113,13 +225,6 @@ export function CaseList({ onCaseSelect, filter = "active" }: CaseListProps) {
               <TableCell>{case_.type}</TableCell>
               <TableCell>{case_.client}</TableCell>
               <TableCell>{case_.lawyer}</TableCell>
-              <TableCell>
-                <Badge variant={statusColors[case_.status]}>
-                  {case_.status === "pending" ? "Pending Acceptance" : 
-                   case_.status === "pending_review" ? "Pending Lawyer Review" :
-                   case_.status}
-                </Badge>
-              </TableCell>
               <TableCell>
                 <Badge variant={priorityColors[case_.priority]}>
                   {case_.priority}
