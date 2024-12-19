@@ -1,9 +1,6 @@
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { CaseOverview } from "@/components/cases/sections/CaseOverview"
@@ -14,7 +11,7 @@ import { PendingItems } from "@/components/cases/sections/PendingItems"
 
 interface CaseOverviewTabProps {
   isEditing: boolean
-  caseData: any // Replace with proper type
+  caseData: any // Using the same type as client dashboard
   onSave: () => void
 }
 
@@ -23,6 +20,14 @@ export function CaseOverviewTab({ isEditing, caseData, onSave }: CaseOverviewTab
 
   return (
     <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold">{formData.title}</h2>
+        <div className="flex items-center gap-2 mt-2">
+          <Badge variant="secondary">{formData.type}</Badge>
+          <Badge variant="outline">{formData.status}</Badge>
+        </div>
+      </div>
+
       <PendingItems />
 
       <Separator />
