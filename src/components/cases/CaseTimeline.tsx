@@ -37,6 +37,7 @@ interface CaseTimelineProps {
 export function CaseTimeline({ events, onUpdateEvent, onAddEvent }: CaseTimelineProps) {
   const [selectedEvent, setSelectedEvent] = useState<TimelineEvent | null>(null)
   const [selectedEventIndex, setSelectedEventIndex] = useState<number>(-1)
+  const [isAddEventOpen, setIsAddEventOpen] = useState(false)
   const { toast } = useToast()
 
   const handleEventUpdate = (updatedEvent: TimelineEvent) => {
@@ -49,13 +50,15 @@ export function CaseTimeline({ events, onUpdateEvent, onAddEvent }: CaseTimeline
     }
   }
 
-  const handleAddEvent = () => {
+  const handleAddEvent = (newEventData: {
+    date: string
+    title: string
+    description: string
+    status: "completed" | "current" | "upcoming"
+  }) => {
     if (onAddEvent) {
       const newEvent: TimelineEvent = {
-        date: new Date().toISOString().split('T')[0],
-        title: "New Event",
-        description: "Add description here",
-        status: "upcoming",
+        ...newEventData,
       }
       onAddEvent(newEvent)
       toast({
@@ -73,7 +76,7 @@ export function CaseTimeline({ events, onUpdateEvent, onAddEvent }: CaseTimeline
           <Button
             variant="outline"
             size="sm"
-            onClick={handleAddEvent}
+            onClick={() => setIsAddEventOpen(true)}
             className="h-8"
           >
             <Plus className="h-4 w-4 mr-2" />
@@ -178,6 +181,12 @@ export function CaseTimeline({ events, onUpdateEvent, onAddEvent }: CaseTimeline
           onUpdate={handleEventUpdate}
         />
       )}
+
+      <AddEventDialog
+        isOpen={isAddEventOpen}
+        onClose={() => setIsAddEventOpen(false)}
+        onAddEvent={handleAddEvent}
+      />
     </Card>
   )
 }
