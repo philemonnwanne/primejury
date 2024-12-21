@@ -1,5 +1,5 @@
 import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
-import { MarketplaceCaseList } from "@/components/marketplace/MarketplaceCaseList"
+import { MarketplaceStats } from "@/components/marketplace/MarketplaceStats"
 import { MarketplaceFilters } from "@/components/marketplace/MarketplaceFilters"
 import { LawyerMarketplaceProfile } from "@/components/marketplace/LawyerMarketplaceProfile"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -27,6 +27,8 @@ export default function LawyerMarketplace() {
           <h1 className="text-3xl font-bold tracking-tight">Case Marketplace</h1>
         </div>
 
+        <MarketplaceStats />
+
         <Tabs defaultValue="cases" value={activeTab} onValueChange={setActiveTab}>
           <TabsList>
             <TabsTrigger value="cases">Available Cases</TabsTrigger>
@@ -35,7 +37,6 @@ export default function LawyerMarketplace() {
           
           <TabsContent value="cases" className="space-y-6">
             <MarketplaceFilters />
-            <MarketplaceCaseList />
           </TabsContent>
           
           <TabsContent value="profile">
