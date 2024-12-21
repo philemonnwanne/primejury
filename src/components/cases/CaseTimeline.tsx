@@ -1,11 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, ArrowRight, Check, Info, Plus } from "lucide-react"
+import { Calendar, Clock, ArrowRight, Check, Info, Plus, Loader } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { TimelineEventDetails } from "./TimelineEventDetails"
 import { useToast } from "@/hooks/use-toast"
-import { AddEventDialog } from "./AddEventDialog"  // Add this import
+import { AddEventDialog } from "./AddEventDialog"
 
 interface TimelineEvent {
   date: string
@@ -35,15 +35,21 @@ interface CaseTimelineProps {
   onAddEvent?: (newEvent: TimelineEvent) => void
 }
 
-export function CaseTimeline({ events, onUpdateEvent, onAddEvent }: CaseTimelineProps) {
+export function CaseTimeline({ events: initialEvents, onUpdateEvent, onAddEvent }: CaseTimelineProps) {
   const [selectedEvent, setSelectedEvent] = useState<TimelineEvent | null>(null)
   const [selectedEventIndex, setSelectedEventIndex] = useState<number>(-1)
   const [isAddEventOpen, setIsAddEventOpen] = useState(false)
+  const [events, setEvents] = useState<TimelineEvent[]>(initialEvents)
   const { toast } = useToast()
 
   const handleEventUpdate = (updatedEvent: TimelineEvent) => {
     if (onUpdateEvent && selectedEventIndex !== -1) {
       onUpdateEvent(updatedEvent, selectedEventIndex)
+      setEvents(prevEvents => {
+        const newEvents = [...prevEvents]
+        newEvents[selectedEventIndex] = updatedEvent
+        return newEvents
+      })
       toast({
         title: "Timeline Updated",
         description: "The timeline event has been successfully updated.",
@@ -57,16 +63,19 @@ export function CaseTimeline({ events, onUpdateEvent, onAddEvent }: CaseTimeline
     description: string
     status: "completed" | "current" | "upcoming"
   }) => {
-    if (onAddEvent) {
-      const newEvent: TimelineEvent = {
-        ...newEventData,
-      }
-      onAddEvent(newEvent)
-      toast({
-        title: "Event Added",
-        description: "A new timeline event has been added.",
-      })
+    const newEvent: TimelineEvent = {
+      ...newEventData,
     }
+    
+    setEvents(prevEvents => [...prevEvents, newEvent])
+    if (onAddEvent) {
+      onAddEvent(newEvent)
+    }
+    toast({
+      title: "Event Added",
+      description: "A new timeline event has been added.",
+    })
+    setIsAddEventOpen(false)
   }
 
   return (
@@ -99,8 +108,8 @@ export function CaseTimeline({ events, onUpdateEvent, onAddEvent }: CaseTimeline
               >
                 {event.status === "completed" ? (
                   <Check className="h-3 w-3 text-white" />
-                ) : index === 0 ? (
-                  <Calendar className="h-3 w-3 text-primary-foreground" />
+                ) : event.status === "current" ? (
+                  <Loader className="h-3 w-3 text-primary-foreground animate-spin" />
                 ) : (
                   <Clock className="h-3 w-3 text-primary-foreground" />
                 )}
