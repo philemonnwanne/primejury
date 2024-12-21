@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { TimelineEventDetails } from "./TimelineEventDetails"
 import { useToast } from "@/hooks/use-toast"
+import { AddEventDialog } from "./AddEventDialog"  // Add this import
 
 interface TimelineEvent {
   date: string
