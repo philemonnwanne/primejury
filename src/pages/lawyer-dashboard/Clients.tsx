@@ -1,6 +1,5 @@
 import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
 import { ClientDirectory } from "@/components/lawyer-dashboard/clients/ClientDirectory"
-import { ClientInsightsVisuals } from "@/components/lawyer-dashboard/clients/ClientInsightsVisuals"
 import { PaymentHistoryTable } from "@/components/lawyer-dashboard/clients/PaymentHistoryTable"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
@@ -14,8 +13,6 @@ export default function LawyerClients() {
             Manage your client relationships and case information.
           </p>
         </div>
-
-        <ClientInsightsVisuals />
         
         <ClientDirectory />
 
