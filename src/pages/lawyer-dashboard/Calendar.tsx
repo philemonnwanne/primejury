@@ -10,7 +10,8 @@ import { format } from "date-fns"
 import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
 import { EventDetailsSheet } from "@/components/lawyer-dashboard/calendar/EventDetailsSheet"
-import { EventFilters } from "@/components/lawyer-dashboard/calendar/EventFilters"
+import { EventFilters, EventCategory } from "@/components/lawyer-dashboard/calendar/EventFilters"
+import { AddEventDialog } from "@/components/lawyer-dashboard/calendar/AddEventDialog"
 
 // Mock data for calendar events
 const mockEvents: CalendarEvent[] = [
@@ -70,6 +71,8 @@ export default function LawyerCalendar() {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
   const [view, setView] = useState<"month" | "week" | "day" | "list">("month")
   const [currentDate, setCurrentDate] = useState(new Date())
+  const [selectedCategories, setSelectedCategories] = useState<EventCategory[]>(["Personal", "Client", "Court", "Deadline"])
+  const [isAddEventOpen, setIsAddEventOpen] = useState(false)
 
   const handleEventClick = (event: CalendarEvent) => {
     setSelectedEvent(event)
@@ -87,6 +90,25 @@ export default function LawyerCalendar() {
     setSelectedEvent(null)
   }
 
+  const handleCategoryChange = (category: EventCategory) => {
+    setSelectedCategories(prev => 
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    )
+  }
+
+  const handleAddEvent = (newEvent: CalendarEvent) => {
+    // Here you would typically add the event to your backend
+    console.log("New event:", newEvent)
+    setIsAddEventOpen(false)
+  }
+
+  const filteredEvents = mockEvents.filter(event => {
+    const category = event.type.charAt(0).toUpperCase() + event.type.slice(1)
+    return selectedCategories.includes(category as EventCategory)
+  })
+
   return (
     <LawyerDashboardLayout>
       <div className="h-full flex flex-col space-y-4">
@@ -95,12 +117,15 @@ export default function LawyerCalendar() {
             <div className="relative">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search (Ctrl+/)"
+                placeholder="Search events..."
                 className="pl-8 w-[300px]"
               />
             </div>
           </div>
-          <Button className="bg-[#6366F1] hover:bg-[#5457E5]">
+          <Button 
+            className="bg-[#6366F1] hover:bg-[#5457E5]"
+            onClick={() => setIsAddEventOpen(true)}
+          >
             <Plus className="mr-2 h-4 w-4" /> Add Event
           </Button>
         </div>
@@ -115,7 +140,10 @@ export default function LawyerCalendar() {
                 className="w-full"
               />
             </div>
-            <EventFilters />
+            <EventFilters
+              selectedCategories={selectedCategories}
+              onCategoryChange={handleCategoryChange}
+            />
           </div>
 
           <div className="flex-1 rounded-lg border">
@@ -166,7 +194,7 @@ export default function LawyerCalendar() {
               ))}
               {Array.from({ length: 35 }).map((_, i) => {
                 const date = new Date(2024, 11, i - 4)
-                const dayEvents = mockEvents.filter(
+                const dayEvents = filteredEvents.filter(
                   (event) =>
                     format(event.start, "yyyy-MM-dd") ===
                     format(date, "yyyy-MM-dd")
@@ -212,6 +240,12 @@ export default function LawyerCalendar() {
         onClose={() => setSelectedEvent(null)}
         onUpdate={handleEventUpdate}
         onDelete={handleEventDelete}
+      />
+
+      <AddEventDialog
+        isOpen={isAddEventOpen}
+        onClose={() => setIsAddEventOpen(false)}
+        onEventAdd={handleAddEvent}
       />
     </LawyerDashboardLayout>
   )
