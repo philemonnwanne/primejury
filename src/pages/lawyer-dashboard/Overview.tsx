@@ -7,24 +7,28 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 export default function LawyerDashboard() {
   return (
     <LawyerDashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold tracking-tight">Lawyer Dashboard</h1>
         </div>
         
         <LawyerMetricsGrid />
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <LawyerCalendar />
+        <div className="grid gap-8 lg:grid-cols-12">
+          <div className="lg:col-span-8">
+            <LawyerCalendar />
+          </div>
           
-          <Card className="col-span-3">
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <LawyerQuickActions />
-            </CardContent>
-          </Card>
+          <div className="lg:col-span-4">
+            <Card className="h-full">
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <LawyerQuickActions />
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </LawyerDashboardLayout>
