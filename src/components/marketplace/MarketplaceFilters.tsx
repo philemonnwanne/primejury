@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
-import { Search, MapPin, Briefcase, Scale } from "lucide-react"
+import { Search, MapPin, Briefcase, Scale, Flag } from "lucide-react"
 
 interface MarketplaceFiltersProps {
   onFilterChange?: (filters: {
@@ -11,6 +11,7 @@ interface MarketplaceFiltersProps {
     location: string
     specialty: string
     proBono: boolean
+    fromJail: boolean
   }) => void
 }
 
@@ -23,6 +24,7 @@ export function MarketplaceFilters({ onFilterChange }: MarketplaceFiltersProps) 
         location: "all",
         specialty: "all",
         proBono: false,
+        fromJail: false,
         [key]: value,
       })
     }
@@ -90,12 +92,24 @@ export function MarketplaceFilters({ onFilterChange }: MarketplaceFiltersProps) 
         </div>
       </div>
 
-      <div className="flex items-center space-x-2">
-        <Switch 
-          id="pro-bono" 
-          onCheckedChange={(checked) => handleFilterChange("proBono", checked)}
-        />
-        <Label htmlFor="pro-bono">Show Pro Bono Cases Only</Label>
+      <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-2">
+          <Switch 
+            id="pro-bono" 
+            onCheckedChange={(checked) => handleFilterChange("proBono", checked)}
+          />
+          <Label htmlFor="pro-bono">Show Pro Bono Cases Only</Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Switch 
+            id="from-jail" 
+            onCheckedChange={(checked) => handleFilterChange("fromJail", checked)}
+          />
+          <Label htmlFor="from-jail" className="flex items-center gap-2">
+            Show Cases Posted from Jail
+            <Flag className="h-4 w-4 text-red-500" />
+          </Label>
+        </div>
       </div>
     </div>
   )

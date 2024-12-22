@@ -2,6 +2,7 @@ import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
 import { MarketplaceStats } from "@/components/marketplace/MarketplaceStats"
 import { MarketplaceFilters } from "@/components/marketplace/MarketplaceFilters"
 import { LawyerMarketplaceProfile } from "@/components/marketplace/LawyerMarketplaceProfile"
+import { AvailableCasesList } from "@/components/marketplace/AvailableCasesList"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useEffect, useState } from "react"
 
@@ -37,6 +38,7 @@ export default function LawyerMarketplace() {
           
           <TabsContent value="cases" className="space-y-6">
             <MarketplaceFilters />
+            <AvailableCasesList />
           </TabsContent>
           
           <TabsContent value="profile">
