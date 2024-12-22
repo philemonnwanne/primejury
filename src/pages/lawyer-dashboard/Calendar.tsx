@@ -1,171 +1,218 @@
 import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
 import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Search, Plus } from "lucide-react"
+import { Input } from "@/components/ui/input"
 import { useState } from "react"
-import { DayActivitiesDialog } from "@/components/lawyer-dashboard/calendar/DayActivitiesDialog"
-import { ScheduleEventDialog } from "@/components/lawyer-dashboard/calendar/ScheduleEventDialog"
-import { CalendarSync } from "@/components/lawyer-dashboard/calendar/CalendarSync"
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { CalendarEvent } from "@/types/calendar"
-import { addDays } from "date-fns"
-
-const workingHours = {
-  start: "09:00",
-  end: "17:00",
-}
+import { format } from "date-fns"
+import { Badge } from "@/components/ui/badge"
+import { toast } from "sonner"
+import { EventDetailsSheet } from "@/components/lawyer-dashboard/calendar/EventDetailsSheet"
+import { EventFilters } from "@/components/lawyer-dashboard/calendar/EventFilters"
 
 // Mock data for calendar events
 const mockEvents: CalendarEvent[] = [
   {
     id: "1",
-    title: "Client Meeting - Smith Case",
-    type: "meeting",
-    start: new Date(2024, 2, 20, 10, 0),
-    end: new Date(2024, 2, 20, 11, 0),
-    description: "Initial consultation with Smith regarding contract dispute",
-    caseId: "case_123",
-    isSharedWithClient: true,
+    title: "12a Dinner",
+    type: "personal",
+    start: new Date(2024, 11, 18, 12, 0),
+    end: new Date(2024, 11, 18, 13, 0),
+    description: "Dinner with clients"
   },
   {
     id: "2",
-    title: "Court Hearing - Johnson Case",
-    type: "court-date",
-    start: new Date(2024, 2, 21, 14, 0),
-    end: new Date(2024, 2, 21, 16, 0),
-    description: "Preliminary hearing for contract dispute case",
-    caseId: "case_456",
-    location: "Sacramento County Superior Court",
+    title: "Dart Game?",
+    type: "personal",
+    start: new Date(2024, 11, 18, 15, 0),
+    end: new Date(2024, 11, 18, 16, 0),
   },
   {
     id: "3",
-    title: "Document Review Deadline",
-    type: "deadline",
-    start: new Date(2024, 2, 22, 17, 0),
-    end: new Date(2024, 2, 22, 17, 0),
-    description: "Review and submit case documents",
-    caseId: "case_789",
+    title: "12a Doctor's Appointment",
+    type: "personal",
+    start: new Date(2024, 11, 20, 12, 0),
+    end: new Date(2024, 11, 20, 13, 0),
   },
-]
-
-// Mock data for cases
-const mockCases = [
-  { id: "case_123", title: "Smith vs. Johnson" },
-  { id: "case_456", title: "Tech Corp Merger" },
-  { id: "case_789", title: "Estate Planning - Brown" },
+  {
+    id: "4",
+    title: "Meeting With Client",
+    type: "business",
+    start: new Date(2024, 11, 20, 14, 0),
+    end: new Date(2024, 11, 20, 15, 0),
+  },
+  {
+    id: "5",
+    title: "Family Trip",
+    type: "family",
+    start: new Date(2024, 11, 22, 9, 0),
+    end: new Date(2024, 11, 23, 18, 0),
+  },
+  {
+    id: "6",
+    title: "6:27p Design Review",
+    type: "business",
+    start: new Date(2024, 11, 22, 18, 27),
+    end: new Date(2024, 11, 22, 19, 30),
+  },
+  {
+    id: "7",
+    title: "Monthly Meeting",
+    type: "business",
+    start: new Date(2025, 0, 1, 10, 0),
+    end: new Date(2025, 0, 1, 11, 0),
+  }
 ]
 
 export default function LawyerCalendar() {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [view, setView] = useState<"month" | "week" | "day">("month")
-  const [events, setEvents] = useState<CalendarEvent[]>(mockEvents)
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
+  const [view, setView] = useState<"month" | "week" | "day" | "list">("month")
+  const [currentDate, setCurrentDate] = useState(new Date())
 
-  const handleDateSelect = (date: Date) => {
-    setSelectedDate(date)
-    setIsDialogOpen(true)
+  const handleEventClick = (event: CalendarEvent) => {
+    setSelectedEvent(event)
   }
 
-  const handleEventScheduled = (newEvent: CalendarEvent) => {
-    setEvents((prevEvents) => [...prevEvents, newEvent])
+  const handleEventUpdate = (updatedEvent: CalendarEvent) => {
+    // Here you would typically update the event in your backend
+    toast.success("Event updated successfully")
+    setSelectedEvent(null)
   }
 
-  const getEventsForDate = (date: Date): CalendarEvent[] => {
-    return events.filter((event) => {
-      const eventDate = new Date(event.start)
-      return (
-        eventDate.getDate() === date.getDate() &&
-        eventDate.getMonth() === date.getMonth() &&
-        eventDate.getFullYear() === date.getFullYear()
-      )
-    })
-  }
-
-  const getDayContent = (date: Date) => {
-    const dayEvents = getEventsForDate(date)
-    return dayEvents.length > 0 ? (
-      <div className="w-full h-full">
-        <div className="text-right">{date.getDate()}</div>
-        <div className="mt-1">
-          {dayEvents.map((event) => (
-            <div
-              key={event.id}
-              className="text-xs truncate px-1 rounded-sm mb-1"
-              style={{
-                backgroundColor:
-                  event.type === "court-date"
-                    ? "rgba(239, 68, 68, 0.2)"
-                    : event.type === "deadline"
-                    ? "rgba(245, 158, 11, 0.2)"
-                    : "rgba(59, 130, 246, 0.2)",
-              }}
-            >
-              {event.title}
-            </div>
-          ))}
-        </div>
-      </div>
-    ) : (
-      <div className="text-right">{date.getDate()}</div>
-    )
+  const handleEventDelete = (eventId: string) => {
+    // Here you would typically delete the event from your backend
+    toast.success("Event deleted successfully")
+    setSelectedEvent(null)
   }
 
   return (
     <LawyerDashboardLayout>
-      <div className="space-y-6">
+      <div className="h-full flex flex-col space-y-4">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Calendar</h1>
-            <p className="text-muted-foreground">
-              Manage your schedule and appointments
-            </p>
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search (Ctrl+/)"
+                className="pl-8 w-[300px]"
+              />
+            </div>
           </div>
-          <div className="flex items-center gap-4">
-            <Select value={view} onValueChange={(v) => setView(v as any)}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select view" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="month">Month View</SelectItem>
-                <SelectItem value="week">Week View</SelectItem>
-                <SelectItem value="day">Day View</SelectItem>
-              </SelectContent>
-            </Select>
-            <CalendarSync />
-            <ScheduleEventDialog
-              onEventScheduled={handleEventScheduled}
-              selectedDate={selectedDate}
-              cases={mockCases}
-            />
-          </div>
+          <Button className="bg-[#6366F1] hover:bg-[#5457E5]">
+            <Plus className="mr-2 h-4 w-4" /> Add Event
+          </Button>
         </div>
 
-        <Card>
-          <CardContent className="p-6">
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={(date) => date && handleDateSelect(date)}
-              className="rounded-md border"
-              components={{
-                DayContent: ({ date }) => getDayContent(date),
-              }}
-            />
-          </CardContent>
-        </Card>
+        <div className="flex gap-6">
+          <div className="w-[300px] space-y-6">
+            <div className="rounded-lg border bg-card text-card-foreground">
+              <Calendar
+                mode="single"
+                selected={currentDate}
+                onSelect={(date) => date && setCurrentDate(date)}
+                className="w-full"
+              />
+            </div>
+            <EventFilters />
+          </div>
 
-        <DayActivitiesDialog
-          isOpen={isDialogOpen}
-          onOpenChange={setIsDialogOpen}
-          date={selectedDate}
-          events={events}
-          workingHours={workingHours}
-          onEventScheduled={(event) => {
-            handleEventScheduled(event)
-            setIsDialogOpen(false)
-          }}
-        />
+          <div className="flex-1 rounded-lg border">
+            <div className="p-4 flex items-center justify-between border-b">
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="icon">
+                  ←
+                </Button>
+                <Button variant="outline" size="icon">
+                  →
+                </Button>
+                <h2 className="text-xl font-semibold">December 2024</h2>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant={view === "month" ? "default" : "ghost"}
+                  onClick={() => setView("month")}
+                  className="bg-[#6366F1] text-white hover:bg-[#5457E5]"
+                >
+                  Month
+                </Button>
+                <Button
+                  variant={view === "week" ? "default" : "ghost"}
+                  onClick={() => setView("week")}
+                >
+                  Week
+                </Button>
+                <Button
+                  variant={view === "day" ? "default" : "ghost"}
+                  onClick={() => setView("day")}
+                >
+                  Day
+                </Button>
+                <Button
+                  variant={view === "list" ? "default" : "ghost"}
+                  onClick={() => setView("list")}
+                >
+                  List
+                </Button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-7 gap-px bg-muted">
+              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+                <div key={day} className="bg-background p-2 text-center text-sm">
+                  {day}
+                </div>
+              ))}
+              {Array.from({ length: 35 }).map((_, i) => {
+                const date = new Date(2024, 11, i - 4)
+                const dayEvents = mockEvents.filter(
+                  (event) =>
+                    format(event.start, "yyyy-MM-dd") ===
+                    format(date, "yyyy-MM-dd")
+                )
+                return (
+                  <div
+                    key={i}
+                    className="bg-background p-2 min-h-[120px] relative"
+                  >
+                    <span className="text-sm text-muted-foreground">
+                      {format(date, "d")}
+                    </span>
+                    <div className="space-y-1 mt-1">
+                      {dayEvents.map((event) => (
+                        <div
+                          key={event.id}
+                          onClick={() => handleEventClick(event)}
+                          className={`
+                            text-xs p-1 rounded cursor-pointer truncate
+                            ${
+                              event.type === "business"
+                                ? "bg-blue-100 text-blue-700"
+                                : event.type === "personal"
+                                ? "bg-orange-100 text-orange-700"
+                                : "bg-green-100 text-green-700"
+                            }
+                          `}
+                        >
+                          {event.title}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
       </div>
+
+      <EventDetailsSheet
+        event={selectedEvent}
+        onClose={() => setSelectedEvent(null)}
+        onUpdate={handleEventUpdate}
+        onDelete={handleEventDelete}
+      />
     </LawyerDashboardLayout>
   )
 }

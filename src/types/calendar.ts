@@ -1,13 +1,16 @@
 export type CalendarEventType = 
+  | "business"
+  | "personal"
+  | "family"
+  | "holiday"
   | "meeting"
   | "video-conference"
   | "court-date"
   | "deadline"
-  | "holiday"
   | "blocked"
   | "statute-limitation";
 
-export type CalendarView = "month" | "week" | "day";
+export type CalendarView = "month" | "week" | "day" | "list";
 
 export type CalendarSource = {
   id: string;
@@ -33,7 +36,7 @@ export interface CalendarEvent {
   color?: string;
   recurring?: boolean;
   recurrencePattern?: string;
-  calendarId?: string; // Reference to the calendar source
+  calendarId?: string;
 }
 
 export interface SharedCalendarLink {
