@@ -21,9 +21,9 @@ export function FloatingTimer() {
   const { toast } = useToast()
 
   useEffect(() => {
-    // Show timer after 2 minutes on case details page
+    // Show timer after 2 seconds on case details page
     if (location.pathname.includes("/lawyer-dashboard/case-insights")) {
-      const timer = setTimeout(() => setIsVisible(true), 120000)
+      const timer = setTimeout(() => setIsVisible(true), 2000)
       return () => clearTimeout(timer)
     }
   }, [location])
