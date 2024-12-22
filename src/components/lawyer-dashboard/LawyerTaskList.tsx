@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { TaskTable } from "./TaskTable"
 import { Task, TaskStatus, TaskPriority, SortOption } from "./types"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 interface LawyerTaskListProps {
   status: TaskStatus | "all"
@@ -12,6 +13,7 @@ interface LawyerTaskListProps {
 
 export function LawyerTaskList({ status, priority, sortBy, selectedCase }: LawyerTaskListProps) {
   const [tasks, setTasks] = useState<Task[]>(mockTasks)
+  const [viewType, setViewType] = useState<"active" | "completed">("active")
   const { toast } = useToast()
 
   const handleStatusChange = (taskId: number, newStatus: TaskStatus) => {
@@ -48,15 +50,22 @@ export function LawyerTaskList({ status, priority, sortBy, selectedCase }: Lawye
 
   return (
     <div className="space-y-8">
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Active Tasks</h3>
-        <TaskTable tasks={activeTasks} onStatusChange={handleStatusChange} />
+      <div className="flex justify-center mb-6">
+        <ToggleGroup type="single" value={viewType} onValueChange={(value) => value && setViewType(value as "active" | "completed")}>
+          <ToggleGroupItem value="active" aria-label="View active tasks">
+            Active Tasks
+          </ToggleGroupItem>
+          <ToggleGroupItem value="completed" aria-label="View completed tasks">
+            Completed Tasks
+          </ToggleGroupItem>
+        </ToggleGroup>
       </div>
 
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Completed Tasks</h3>
+      {viewType === "active" ? (
+        <TaskTable tasks={activeTasks} onStatusChange={handleStatusChange} />
+      ) : (
         <TaskTable tasks={completedTasks} onStatusChange={handleStatusChange} />
-      </div>
+      )}
     </div>
   )
 }
