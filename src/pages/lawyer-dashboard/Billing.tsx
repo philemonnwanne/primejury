@@ -25,12 +25,13 @@ export default function LawyerBilling() {
             <TabsTrigger value="cases">Case Billing</TabsTrigger>
             <TabsTrigger value="structures">Payment Structures</TabsTrigger>
             <TabsTrigger value="requests">Payment Requests</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="reports">Reports</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview">
+          <TabsContent value="overview" className="space-y-6">
             <BillingOverview />
+            <ClientInsightsVisuals />
+            <BillingAnalytics />
           </TabsContent>
 
           <TabsContent value="cases">
@@ -43,11 +44,6 @@ export default function LawyerBilling() {
 
           <TabsContent value="requests">
             <PaymentRequests />
-          </TabsContent>
-
-          <TabsContent value="analytics" className="space-y-6">
-            <ClientInsightsVisuals />
-            <BillingAnalytics />
           </TabsContent>
 
           <TabsContent value="reports">
