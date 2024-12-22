@@ -20,7 +20,6 @@ import LawyerNewsFeed from "./pages/lawyer-dashboard/NewsFeed"
 import LawyerTasks from "./pages/lawyer-dashboard/Tasks"
 import LawyerDocuments from "./pages/lawyer-dashboard/Documents"
 import LawyerCalendar from "./pages/lawyer-dashboard/Calendar"
-import LawyerAnalytics from "./pages/lawyer-dashboard/Analytics"
 import LawyerMarketplace from "./pages/lawyer-dashboard/Marketplace"
 import LawyerCommunications from "./pages/lawyer-dashboard/Communications"
 import ClientDashboard from "./pages/client-dashboard/Overview"
@@ -63,7 +62,6 @@ function App() {
             <Route path="/lawyer-dashboard/tasks" element={<LawyerTasks />} />
             <Route path="/lawyer-dashboard/documents" element={<LawyerDocuments />} />
             <Route path="/lawyer-dashboard/calendar" element={<LawyerCalendar />} />
-            <Route path="/lawyer-dashboard/analytics" element={<LawyerAnalytics />} />
             <Route path="/lawyer-dashboard/marketplace" element={<LawyerMarketplace />} />
             <Route path="/lawyer-dashboard/communications" element={<LawyerCommunications />} />
             <Route path="/client-dashboard" element={<ClientDashboard />} />
