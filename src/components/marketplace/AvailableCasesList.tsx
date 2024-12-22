@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Prison, AlertCircle } from "lucide-react"
+import { Lock, AlertCircle, Search } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { CaseDetailsDialog } from "./CaseDetailsDialog"
 import { toast } from "sonner"
@@ -96,7 +96,7 @@ export function AvailableCasesList() {
                   <div className="flex items-center gap-2">
                     <CardTitle className="text-lg">{case_.title}</CardTitle>
                     {case_.fromJail && (
-                      <Prison className="h-4 w-4 text-red-500" />
+                      <Lock className="h-4 w-4 text-red-500" />
                     )}
                   </div>
                   <div className="flex gap-2">

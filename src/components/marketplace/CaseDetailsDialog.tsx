@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Prison, AlertCircle, Calendar, DollarSign, MapPin, FileText } from "lucide-react"
+import { Lock, AlertCircle, Calendar, DollarSign, MapPin, FileText } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 
@@ -63,7 +63,7 @@ export function CaseDetailsDialog({ case_, onClose, onBidSubmitted }: CaseDetail
             <div className="flex gap-2">
               {case_?.fromJail && (
                 <Badge variant="outline" className="flex items-center gap-1">
-                  <Prison className="h-4 w-4" />
+                  <Lock className="h-4 w-4" />
                   Posted from Facility
                 </Badge>
               )}

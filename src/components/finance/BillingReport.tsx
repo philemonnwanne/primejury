@@ -16,8 +16,7 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: 10,
   },
-  table: {
-    display: "table",
+  tableContainer: {
     width: "100%",
     borderStyle: "solid",
     borderWidth: 1,
@@ -69,7 +68,7 @@ export function BillingReport({ data }: BillingReportProps) {
           <Text>Outstanding Amount: ${data.outstandingAmount}</Text>
         </View>
 
-        <View style={styles.table}>
+        <View style={styles.tableContainer}>
           <View style={styles.tableRow}>
             <View style={styles.tableCell}>
               <Text>Case</Text>
