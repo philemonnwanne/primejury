@@ -8,6 +8,7 @@ import { DocumentsTab } from "./tabs/DocumentsTab"
 import { BillingTab } from "./tabs/BillingTab"
 import { useToast } from "@/hooks/use-toast"
 import { mockCases } from "@/components/cases/mock-data/cases"
+import { FloatingTimer } from "../timer/FloatingTimer"
 
 interface LawyerCaseDetailsProps {
   caseId: string
@@ -62,6 +63,7 @@ export function LawyerCaseDetails({ caseId }: LawyerCaseDetailsProps) {
 
   return (
     <div className="space-y-6">
+      <FloatingTimer />
       <div className="flex justify-end">
         <Button
           variant="outline"
