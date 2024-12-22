@@ -1,17 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Plus, Trash2 } from "lucide-react"
+import { Check, X } from "lucide-react"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 
 interface SettlementOffer {
   id: string
@@ -26,75 +18,32 @@ interface SettlementOffersProps {
 
 export function SettlementOffers({ offers: initialOffers }: SettlementOffersProps) {
   const [offers, setOffers] = useState(initialOffers)
-  const [newOffer, setNewOffer] = useState("")
-  const [showAddDialog, setShowAddDialog] = useState(false)
   const { toast } = useToast()
 
-  const handleAddOffer = () => {
-    if (!newOffer) {
-      toast({
-        title: "Error",
-        description: "Please enter a settlement amount",
-        variant: "destructive",
-      })
-      return
-    }
-
-    const offer = {
-      id: `${Date.now()}`,
-      amount: newOffer,
-      status: "pending",
-      date: new Date().toISOString().split('T')[0],
-    }
-
-    setOffers([offer, ...offers])
-    setNewOffer("")
-    setShowAddDialog(false)
-    
+  const handleAcceptOffer = (id: string) => {
+    setOffers(offers.map(offer => 
+      offer.id === id ? { ...offer, status: "accepted" } : offer
+    ))
     toast({
-      title: "Settlement Offer Added",
-      description: "The new settlement offer has been added successfully.",
+      title: "Offer Accepted",
+      description: "The settlement offer has been accepted successfully.",
     })
   }
 
-  const handleRemoveOffer = (id: string) => {
-    setOffers(offers.filter(offer => offer.id !== id))
+  const handleDeclineOffer = (id: string) => {
+    setOffers(offers.map(offer => 
+      offer.id === id ? { ...offer, status: "rejected" } : offer
+    ))
     toast({
-      title: "Settlement Offer Removed",
-      description: "The settlement offer has been removed successfully.",
+      title: "Offer Declined",
+      description: "The settlement offer has been declined.",
     })
   }
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader>
         <CardTitle>Settlement Offers</CardTitle>
-        <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Offer
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add Settlement Offer</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 pt-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Settlement Amount</label>
-                <Input
-                  placeholder="Enter amount (e.g. $50,000)"
-                  value={newOffer}
-                  onChange={(e) => setNewOffer(e.target.value)}
-                />
-              </div>
-              <Button onClick={handleAddOffer} className="w-full">
-                Add Offer
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
       </CardHeader>
       <CardContent className="space-y-4">
         {offers.map((offer) => (
@@ -120,13 +69,27 @@ export function SettlementOffers({ offers: initialOffers }: SettlementOffersProp
               >
                 {offer.status}
               </Badge>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handleRemoveOffer(offer.id)}
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
+              {offer.status === "pending" && (
+                <div className="flex gap-2">
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={() => handleAcceptOffer(offer.id)}
+                    className="bg-green-500 hover:bg-green-600"
+                  >
+                    <Check className="h-4 w-4 mr-1" />
+                    Accept
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => handleDeclineOffer(offer.id)}
+                  >
+                    <X className="h-4 w-4 mr-1" />
+                    Decline
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         ))}
