@@ -22,6 +22,7 @@ import LawyerDocuments from "./pages/lawyer-dashboard/Documents"
 import LawyerCalendar from "./pages/lawyer-dashboard/Calendar"
 import LawyerMarketplace from "./pages/lawyer-dashboard/Marketplace"
 import LawyerCommunications from "./pages/lawyer-dashboard/Communications"
+import LawyerAnalytics from "./pages/lawyer-dashboard/Analytics"
 import ClientDashboard from "./pages/client-dashboard/Overview"
 import ClientCases from "./pages/client-dashboard/Cases"
 import ClientForms from "./pages/client-dashboard/Forms"
@@ -64,6 +65,7 @@ function App() {
             <Route path="/lawyer-dashboard/calendar" element={<LawyerCalendar />} />
             <Route path="/lawyer-dashboard/marketplace" element={<LawyerMarketplace />} />
             <Route path="/lawyer-dashboard/communications" element={<LawyerCommunications />} />
+            <Route path="/lawyer-dashboard/analytics" element={<LawyerAnalytics />} />
             <Route path="/client-dashboard" element={<ClientDashboard />} />
             <Route path="/client-dashboard/cases" element={<ClientCases />} />
             <Route path="/client-dashboard/forms" element={<ClientForms />} />
