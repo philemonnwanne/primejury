@@ -13,6 +13,7 @@ export default function LawyerTasks() {
   const [selectedStatus, setSelectedStatus] = useState<TaskStatus | "all">("all")
   const [selectedPriority, setSelectedPriority] = useState<TaskPriority | "all">("all")
   const [sortBy, setSortBy] = useState<SortOption>("priority")
+  const [selectedCase, setSelectedCase] = useState<string | "all">("all")
 
   return (
     <LawyerDashboardLayout>
@@ -31,14 +32,17 @@ export default function LawyerTasks() {
               status={selectedStatus}
               priority={selectedPriority}
               sortBy={sortBy}
+              selectedCase={selectedCase}
               onStatusChange={setSelectedStatus}
               onPriorityChange={setSelectedPriority}
               onSortChange={setSortBy}
+              onCaseChange={setSelectedCase}
             />
             <LawyerTaskList
               status={selectedStatus}
               priority={selectedPriority}
               sortBy={sortBy}
+              selectedCase={selectedCase}
             />
           </CardContent>
         </Card>
