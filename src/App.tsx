@@ -35,7 +35,6 @@ import LawyerPublicProfiles from "./pages/lawyers/LawyerPublicProfiles"
 import LawyerProfile from "./pages/lawyers/LawyerProfile"
 import CaseBids from "./pages/client-dashboard/CaseBids"
 import LawyerClients from "./pages/lawyer-dashboard/Clients"
-import Timesheet from "./pages/lawyer-dashboard/Timesheet"
 
 const queryClient = new QueryClient()
 
@@ -67,7 +66,6 @@ function App() {
             <Route path="/lawyer-dashboard/analytics" element={<LawyerAnalytics />} />
             <Route path="/lawyer-dashboard/marketplace" element={<LawyerMarketplace />} />
             <Route path="/lawyer-dashboard/communications" element={<LawyerCommunications />} />
-            <Route path="/lawyer-dashboard/timesheet" element={<Timesheet />} />
             <Route path="/client-dashboard" element={<ClientDashboard />} />
             <Route path="/client-dashboard/cases" element={<ClientCases />} />
             <Route path="/client-dashboard/forms" element={<ClientForms />} />

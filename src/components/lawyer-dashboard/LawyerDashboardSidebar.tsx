@@ -10,7 +10,6 @@ import {
   Network,
   MessageSquare,
   Users,
-  Clock
 } from "lucide-react"
 import {
   Sidebar,
@@ -28,7 +27,6 @@ const menuItems = [
   { title: "Case Insights", icon: FileText, url: "/lawyer-dashboard/case-insights" },
   { title: "Clients", icon: Users, url: "/lawyer-dashboard/clients" },
   { title: "Billing", icon: CreditCard, url: "/lawyer-dashboard/billing" },
-  { title: "Timesheet", icon: Clock, url: "/lawyer-dashboard/timesheet" },
   { title: "News Feed", icon: Newspaper, url: "/lawyer-dashboard/news" },
   { title: "Tasks", icon: ListCheck, url: "/lawyer-dashboard/tasks" },
   { title: "Document Center", icon: FolderOpen, url: "/lawyer-dashboard/documents" },
