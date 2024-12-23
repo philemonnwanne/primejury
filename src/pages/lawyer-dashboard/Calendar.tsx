@@ -12,8 +12,9 @@ import { toast } from "sonner"
 import { EventDetailsSheet } from "@/components/lawyer-dashboard/calendar/EventDetailsSheet"
 import { EventFilters, EventCategory } from "@/components/lawyer-dashboard/calendar/EventFilters"
 import { AddEventDialog } from "@/components/lawyer-dashboard/calendar/AddEventDialog"
+import { CalendarViewContent } from "@/components/lawyer-dashboard/calendar/CalendarViewContent"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
-// Mock data for calendar events
 const mockEvents: CalendarEvent[] = [
   {
     id: "1",
@@ -69,7 +70,7 @@ const mockEvents: CalendarEvent[] = [
 
 export default function LawyerCalendar() {
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
-  const [view, setView] = useState<"month" | "week" | "day" | "list">("month")
+  const [view, setView] = useState<"week" | "day" | "list">("week")
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedCategories, setSelectedCategories] = useState<EventCategory[]>(["Personal", "Client", "Court", "Deadline"])
   const [isAddEventOpen, setIsAddEventOpen] = useState(false)
@@ -79,13 +80,11 @@ export default function LawyerCalendar() {
   }
 
   const handleEventUpdate = (updatedEvent: CalendarEvent) => {
-    // Here you would typically update the event in your backend
     toast.success("Event updated successfully")
     setSelectedEvent(null)
   }
 
   const handleEventDelete = (eventId: string) => {
-    // Here you would typically delete the event from your backend
     toast.success("Event deleted successfully")
     setSelectedEvent(null)
   }
@@ -99,7 +98,6 @@ export default function LawyerCalendar() {
   }
 
   const handleAddEvent = (newEvent: CalendarEvent) => {
-    // Here you would typically add the event to your backend
     console.log("New event:", newEvent)
     setIsAddEventOpen(false)
   }
@@ -149,87 +147,37 @@ export default function LawyerCalendar() {
           <div className="flex-1 rounded-lg border">
             <div className="p-4 flex items-center justify-between border-b">
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="icon">
+                <Button variant="outline" size="icon" onClick={() => {
+                  const newDate = new Date(currentDate)
+                  newDate.setDate(currentDate.getDate() - (view === "week" ? 7 : 1))
+                  setCurrentDate(newDate)
+                }}>
                   ←
                 </Button>
-                <Button variant="outline" size="icon">
+                <Button variant="outline" size="icon" onClick={() => {
+                  const newDate = new Date(currentDate)
+                  newDate.setDate(currentDate.getDate() + (view === "week" ? 7 : 1))
+                  setCurrentDate(newDate)
+                }}>
                   →
                 </Button>
-                <h2 className="text-xl font-semibold">December 2024</h2>
+                <h2 className="text-xl font-semibold">
+                  {format(currentDate, "MMMM yyyy")}
+                </h2>
               </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant={view === "month" ? "default" : "ghost"}
-                  onClick={() => setView("month")}
-                  className="bg-[#6366F1] text-white hover:bg-[#5457E5]"
-                >
-                  Month
-                </Button>
-                <Button
-                  variant={view === "week" ? "default" : "ghost"}
-                  onClick={() => setView("week")}
-                >
-                  Week
-                </Button>
-                <Button
-                  variant={view === "day" ? "default" : "ghost"}
-                  onClick={() => setView("day")}
-                >
-                  Day
-                </Button>
-                <Button
-                  variant={view === "list" ? "default" : "ghost"}
-                  onClick={() => setView("list")}
-                >
-                  List
-                </Button>
-              </div>
+              <ToggleGroup type="single" value={view} onValueChange={(value) => value && setView(value as "week" | "day" | "list")}>
+                <ToggleGroupItem value="week">Week</ToggleGroupItem>
+                <ToggleGroupItem value="day">Day</ToggleGroupItem>
+                <ToggleGroupItem value="list">List</ToggleGroupItem>
+              </ToggleGroup>
             </div>
 
-            <div className="grid grid-cols-7 gap-px bg-muted">
-              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                <div key={day} className="bg-background p-2 text-center text-sm">
-                  {day}
-                </div>
-              ))}
-              {Array.from({ length: 35 }).map((_, i) => {
-                const date = new Date(2024, 11, i - 4)
-                const dayEvents = filteredEvents.filter(
-                  (event) =>
-                    format(event.start, "yyyy-MM-dd") ===
-                    format(date, "yyyy-MM-dd")
-                )
-                return (
-                  <div
-                    key={i}
-                    className="bg-background p-2 min-h-[120px] relative"
-                  >
-                    <span className="text-sm text-muted-foreground">
-                      {format(date, "d")}
-                    </span>
-                    <div className="space-y-1 mt-1">
-                      {dayEvents.map((event) => (
-                        <div
-                          key={event.id}
-                          onClick={() => handleEventClick(event)}
-                          className={`
-                            text-xs p-1 rounded cursor-pointer truncate
-                            ${
-                              event.type === "business"
-                                ? "bg-blue-100 text-blue-700"
-                                : event.type === "personal"
-                                ? "bg-orange-100 text-orange-700"
-                                : "bg-green-100 text-green-700"
-                            }
-                          `}
-                        >
-                          {event.title}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )
-              })}
+            <div className="p-4">
+              <CalendarViewContent
+                view={view}
+                selectedDate={currentDate}
+                events={filteredEvents}
+              />
             </div>
           </div>
         </div>
