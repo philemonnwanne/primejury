@@ -2,12 +2,11 @@ import { useState } from "react"
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { CalendarEvent } from "@/types/calendar"
 import { ScheduleEventDialog } from "./calendar/ScheduleEventDialog"
 import { CalendarSync } from "./calendar/CalendarSync"
 import { DayActivitiesDialog } from "./calendar/DayActivitiesDialog"
-import { CalendarViews } from "./calendar/CalendarViews"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 const mockEvents: CalendarEvent[] = [
   {
@@ -37,67 +36,32 @@ const mockCases = [
 export function LawyerCalendar() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [view, setView] = useState<"week" | "day" | "list">("week")
-  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
 
   const workingHours = {
     start: "09:00",
     end: "17:00"
   }
 
+  const getEventsForDate = (date: Date) => {
+    return mockEvents.filter(event => {
+      const eventDate = new Date(event.start)
+      return (
+        eventDate.getDate() === date.getDate() &&
+        eventDate.getMonth() === date.getMonth() &&
+        eventDate.getFullYear() === date.getFullYear()
+      )
+    })
+  }
+
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
       setSelectedDate(date)
+      setIsDialogOpen(true)
     }
   }
 
-  const handleEventClick = (event: CalendarEvent) => {
-    setSelectedEvent(event)
-    setIsDialogOpen(true)
-  }
-
   return (
-    <div className="grid gap-6 lg:grid-cols-[300px_1fr]">
-      <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Mini Calendar</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={handleDateSelect}
-              className="rounded-md border"
-            />
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>View Options</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ToggleGroup
-              type="single"
-              value={view}
-              onValueChange={(value) => value && setView(value as typeof view)}
-              className="flex flex-col space-y-2"
-            >
-              <ToggleGroupItem value="week" className="w-full">
-                Week View
-              </ToggleGroupItem>
-              <ToggleGroupItem value="day" className="w-full">
-                Day View
-              </ToggleGroupItem>
-              <ToggleGroupItem value="list" className="w-full">
-                List View
-              </ToggleGroupItem>
-            </ToggleGroup>
-          </CardContent>
-        </Card>
-      </div>
-
+    <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Calendar</CardTitle>
@@ -113,12 +77,42 @@ export function LawyerCalendar() {
           </div>
         </CardHeader>
         <CardContent>
-          <CalendarViews
-            selectedDate={selectedDate || new Date()}
-            view={view}
-            events={mockEvents}
-            onEventClick={handleEventClick}
+          <Calendar
+            mode="single"
+            selected={selectedDate}
+            onSelect={handleDateSelect}
+            className="rounded-md border"
           />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Upcoming Events</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {mockEvents.map((event) => (
+              <div
+                key={event.id}
+                className="flex flex-col space-y-2 rounded-lg border p-3"
+              >
+                <div className="flex items-center justify-between">
+                  <h4 className="font-medium">{event.title}</h4>
+                  <Badge variant="outline">{event.type}</Badge>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {event.start.toLocaleTimeString()} -{" "}
+                  {event.end.toLocaleTimeString()}
+                </p>
+                {event.description && (
+                  <p className="text-sm text-muted-foreground">
+                    {event.description}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
 
@@ -127,7 +121,7 @@ export function LawyerCalendar() {
           isOpen={isDialogOpen}
           onOpenChange={setIsDialogOpen}
           date={selectedDate}
-          events={mockEvents}
+          events={getEventsForDate(selectedDate)}
           workingHours={workingHours}
           onEventScheduled={(event) => {
             console.log("Event scheduled:", event)
