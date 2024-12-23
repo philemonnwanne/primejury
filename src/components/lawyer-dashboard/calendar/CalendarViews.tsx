@@ -7,7 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface CalendarViewsProps {
   selectedDate: Date
-  view: "month" | "week" | "day" | "list"
+  view: "week" | "day" | "list"
   events: CalendarEvent[]
   onEventClick: (event: CalendarEvent) => void
 }
