@@ -4,7 +4,7 @@ import { CalendarEvent } from "@/types/calendar"
 import { Card } from "@/components/ui/card"
 
 interface CalendarViewContentProps {
-  view: "week" | "day" | "list"
+  view: "month" | "week" | "day" | "list"
   selectedDate: Date
   events: CalendarEvent[]
 }
@@ -91,12 +91,53 @@ export function CalendarViewContent({
     )
   }
 
-  // Week view
+  if (view === "week") {
+    return (
+      <div className="grid grid-cols-7 gap-4">
+        {Array.from({ length: 7 }).map((_, dayIndex) => {
+          const currentDate = new Date(selectedDate)
+          currentDate.setDate(selectedDate.getDate() - selectedDate.getDay() + dayIndex)
+          
+          const dayEvents = filteredEvents.filter((event) => {
+            const eventDate = new Date(event.start)
+            return (
+              eventDate.getDate() === currentDate.getDate() &&
+              eventDate.getMonth() === currentDate.getMonth() &&
+              eventDate.getFullYear() === currentDate.getFullYear()
+            )
+          })
+
+          return (
+            <div key={dayIndex} className="space-y-2">
+              <div className="text-sm font-medium">
+                {format(currentDate, "EEE, MMM d")}
+              </div>
+              {dayEvents.map((event) => (
+                <Card key={event.id} className="p-2">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium">{event.title}</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {format(event.start, "p")}
+                      </p>
+                    </div>
+                    <Badge variant="outline">{event.type}</Badge>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+
+  // Month view (default)
   return (
     <div className="grid grid-cols-7 gap-4">
-      {Array.from({ length: 7 }).map((_, dayIndex) => {
-        const currentDate = new Date(selectedDate)
-        currentDate.setDate(selectedDate.getDate() - selectedDate.getDay() + dayIndex)
+      {Array.from({ length: 35 }).map((_, index) => {
+        const currentDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1)
+        currentDate.setDate(currentDate.getDate() + index - currentDate.getDay())
         
         const dayEvents = filteredEvents.filter((event) => {
           const eventDate = new Date(event.start)
@@ -107,21 +148,25 @@ export function CalendarViewContent({
           )
         })
 
+        const isCurrentMonth = currentDate.getMonth() === selectedDate.getMonth()
+
         return (
-          <div key={dayIndex} className="space-y-2">
+          <div
+            key={index}
+            className={`space-y-2 p-2 rounded-lg ${
+              isCurrentMonth ? "bg-card" : "bg-muted/50"
+            }`}
+          >
             <div className="text-sm font-medium">
-              {format(currentDate, "EEE, MMM d")}
+              {format(currentDate, "d")}
             </div>
             {dayEvents.map((event) => (
               <Card key={event.id} className="p-2">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-medium">{event.title}</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {format(event.start, "p")}
-                    </p>
-                  </div>
-                  <Badge variant="outline">{event.type}</Badge>
+                  <h4 className="font-medium text-sm">{event.title}</h4>
+                  <Badge variant="outline" className="text-xs">
+                    {event.type}
+                  </Badge>
                 </div>
               </Card>
             ))}
