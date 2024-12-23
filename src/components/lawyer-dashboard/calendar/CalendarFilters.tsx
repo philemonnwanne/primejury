@@ -3,8 +3,8 @@ import { Calendar, Clock, Users } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 
 interface CalendarFiltersProps {
-  selectedView: "month" | "week" | "day" | "list"
-  onViewChange: (view: "month" | "week" | "day" | "list") => void
+  selectedView: "month" | "week" | "day"
+  onViewChange: (view: "month" | "week" | "day") => void
 }
 
 export function CalendarFilters({
@@ -35,13 +35,6 @@ export function CalendarFilters({
             onClick={() => onViewChange("day")}
           >
             Day
-          </Button>
-          <Button
-            variant={selectedView === "list" ? "default" : "outline"}
-            size="sm"
-            onClick={() => onViewChange("list")}
-          >
-            List
           </Button>
         </div>
         <div className="flex items-center space-x-2">
