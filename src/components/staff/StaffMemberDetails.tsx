@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -7,36 +7,18 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
 import { StaffMember } from "./mock-data"
-import { X, Edit2 } from "lucide-react"
+import { X } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { DemographicsSection } from "./details/DemographicsSection"
-import { EducationSection } from "./details/EducationSection"
-import { AchievementsSection } from "./details/AchievementsSection"
 
 interface StaffMemberDetailsProps {
   staffMember: StaffMember
 }
 
-export function StaffMemberDetails({ staffMember: initialStaffMember }: StaffMemberDetailsProps) {
+export function StaffMemberDetails({ staffMember }: StaffMemberDetailsProps) {
   const { toast } = useToast()
-  const [staffMember, setStaffMember] = useState(initialStaffMember)
   const [permissions, setPermissions] = useState(staffMember.permissions || [])
   const [assignedCases, setAssignedCases] = useState(staffMember.assignedCases || [])
   const [assignedTasks, setAssignedTasks] = useState(staffMember.assignedTasks || [])
-  const [isEditing, setIsEditing] = useState(false)
-
-  const handleFieldChange = (field: string, value: string) => {
-    setStaffMember(prev => ({ ...prev, [field]: value }))
-  }
-
-  const handleEducationChange = (education: StaffMember['education']) => {
-    setStaffMember(prev => ({ ...prev, education }))
-  }
-
-  const handleAchievementsChange = (achievements: string[]) => {
-    setStaffMember(prev => ({ ...prev, achievements }))
-  }
 
   const handlePermissionChange = (permissionId: string) => {
     setPermissions(prev => 
@@ -66,14 +48,6 @@ export function StaffMemberDetails({ staffMember: initialStaffMember }: StaffMem
     })
   }
 
-  const handleSave = () => {
-    setIsEditing(false)
-    toast({
-      title: "Changes Saved",
-      description: "Staff member details have been updated successfully.",
-    })
-  }
-
   return (
     <div className="space-y-6">
       <Tabs defaultValue="details" className="w-full">
@@ -87,63 +61,78 @@ export function StaffMemberDetails({ staffMember: initialStaffMember }: StaffMem
         <TabsContent value="details">
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>Staff Member Information</CardTitle>
-                {isEditing ? (
-                  <Button onClick={handleSave}>Save Changes</Button>
-                ) : (
-                  <Button variant="outline" size="icon" onClick={() => setIsEditing(true)}>
-                    <Edit2 className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
+              <CardTitle>Staff Member Information</CardTitle>
             </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[600px] pr-4">
-                <div className="space-y-6">
-                  <DemographicsSection
-                    staffMember={staffMember}
-                    isEditing={isEditing}
-                    onFieldChange={handleFieldChange}
-                  />
-
-                  <Separator />
-
-                  <EducationSection
-                    staffMember={staffMember}
-                    isEditing={isEditing}
-                    onEducationChange={handleEducationChange}
-                  />
-
-                  <Separator />
-
-                  <AchievementsSection
-                    staffMember={staffMember}
-                    isEditing={isEditing}
-                    onAchievementsChange={handleAchievementsChange}
-                  />
-
-                  <Separator />
-
+            <CardContent className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Demographics</h3>
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <h3 className="text-lg font-semibold mb-2">Performance Overview</h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-sm text-muted-foreground">Active Cases</p>
-                        <p className="font-medium">{staffMember.activeCases}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Completed Cases</p>
-                        <p className="font-medium">{staffMember.completedCases}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Pending Tasks</p>
-                        <p className="font-medium">{staffMember.pendingTasks}</p>
-                      </div>
-                    </div>
+                    <p className="text-sm text-muted-foreground">Full Name</p>
+                    <p className="font-medium">{staffMember.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Role</p>
+                    <Badge>{staffMember.role}</Badge>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Email</p>
+                    <p className="font-medium">{staffMember.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Phone</p>
+                    <p className="font-medium">{staffMember.phone}</p>
                   </div>
                 </div>
-              </ScrollArea>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Education</h3>
+                <div className="space-y-2">
+                  {staffMember.education?.map((edu, index) => (
+                    <div key={index} className="p-3 bg-muted rounded-lg">
+                      <p className="font-medium">{edu.degree}</p>
+                      <p className="text-sm text-muted-foreground">{edu.institution}, {edu.year}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Achievements</h3>
+                <div className="space-y-2">
+                  {staffMember.achievements?.map((achievement, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <Badge variant="outline" className="h-2 w-2 rounded-full p-0" />
+                      <p>{achievement}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Performance Overview</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Active Cases</p>
+                    <p className="font-medium">{staffMember.activeCases}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Completed Cases</p>
+                    <p className="font-medium">{staffMember.completedCases}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Pending Tasks</p>
+                    <p className="font-medium">{staffMember.pendingTasks}</p>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
