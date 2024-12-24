@@ -1,80 +1,76 @@
-import { useState } from "react"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Pencil, Check, Plus, X } from "lucide-react"
+import { Plus, X } from "lucide-react"
 import { StaffMember } from "../mock-data"
 
 interface AchievementsSectionProps {
   staffMember: StaffMember
-  onUpdate: (achievements: string[]) => void
+  isEditing: boolean
+  onAchievementsChange: (achievements: string[]) => void
 }
 
-export function AchievementsSection({ staffMember, onUpdate }: AchievementsSectionProps) {
-  const [isEditing, setIsEditing] = useState(false)
-  const [achievements, setAchievements] = useState(staffMember.achievements || [])
-  const [newAchievement, setNewAchievement] = useState("")
-
-  const handleAdd = () => {
-    if (newAchievement.trim()) {
-      setAchievements([...achievements, newAchievement.trim()])
-      setNewAchievement("")
-    }
+export function AchievementsSection({ 
+  staffMember, 
+  isEditing, 
+  onAchievementsChange 
+}: AchievementsSectionProps) {
+  const handleAddAchievement = () => {
+    onAchievementsChange([...(staffMember.achievements || []), ""])
   }
 
-  const handleRemove = (index: number) => {
-    setAchievements(achievements.filter((_, i) => i !== index))
+  const handleRemoveAchievement = (index: number) => {
+    const newAchievements = staffMember.achievements?.filter((_, i) => i !== index)
+    onAchievementsChange(newAchievements || [])
   }
 
-  const handleSave = () => {
-    onUpdate(achievements)
-    setIsEditing(false)
+  const handleAchievementChange = (index: number, value: string) => {
+    const newAchievements = staffMember.achievements?.map((achievement, i) => {
+      if (i === index) return value
+      return achievement
+    })
+    onAchievementsChange(newAchievements || [])
+  }
+
+  if (isEditing) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold">Achievements</h3>
+          <Button type="button" size="sm" onClick={handleAddAchievement}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Achievement
+          </Button>
+        </div>
+        <div className="space-y-2">
+          {staffMember.achievements?.map((achievement, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <Input
+                value={achievement}
+                onChange={(e) => handleAchievementChange(index, e.target.value)}
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                onClick={() => handleRemoveAchievement(index)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
   }
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-2">
-        <h3 className="text-lg font-semibold">Achievements</h3>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-        >
-          {isEditing ? <Check className="h-4 w-4" /> : <Pencil className="h-4 w-4" />}
-        </Button>
-      </div>
+      <h3 className="text-lg font-semibold mb-2">Achievements</h3>
       <div className="space-y-2">
-        {isEditing && (
-          <div className="flex gap-2">
-            <Input
-              value={newAchievement}
-              onChange={(e) => setNewAchievement(e.target.value)}
-              placeholder="Add new achievement"
-              onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-            />
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handleAdd}
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
-        )}
-        {achievements.map((achievement, index) => (
+        {staffMember.achievements?.map((achievement, index) => (
           <div key={index} className="flex items-center gap-2">
-            {isEditing ? (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6 rounded-full hover:bg-destructive hover:text-destructive-foreground"
-                onClick={() => handleRemove(index)}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            ) : (
-              <Badge variant="outline" className="h-2 w-2 rounded-full p-0" />
-            )}
+            <Badge variant="outline" className="h-2 w-2 rounded-full p-0" />
             <p>{achievement}</p>
           </div>
         ))}
