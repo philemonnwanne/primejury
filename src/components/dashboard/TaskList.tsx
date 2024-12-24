@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/select"
 import { mockTasks } from "./mock-data"
 import { Task } from "./types"
+import { Badge } from "@/components/ui/badge"
+import { Card } from "@/components/ui/card"
 
 export function TaskList() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -34,7 +36,7 @@ export function TaskList() {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
       <div className="flex flex-col gap-4 md:flex-row">
         <div className="relative flex-1">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -98,43 +100,46 @@ export function TaskList() {
 
       <div className="space-y-4">
         {filteredTasks.map((task) => (
-          <div
-            key={task.id}
-            className="flex items-center justify-between space-x-4 rounded-lg border p-4"
-          >
-            <div className="flex items-start space-x-4">
-              {task.status === "overdue" ? (
-                <AlertCircle className="h-5 w-5 text-destructive" />
-              ) : task.status === "pending" ? (
-                <Clock className="h-5 w-5 text-yellow-500" />
-              ) : (
-                <CheckSquare className="h-5 w-5 text-primary" />
-              )}
-              <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">{task.title}</p>
-                <p className="text-sm text-muted-foreground">{task.description}</p>
-                <div className="flex gap-2 text-sm text-muted-foreground">
-                  <span>Due: {new Date(task.dueDate).toLocaleDateString()}</span>
-                  <span>•</span>
-                  <span>Assigned to: {task.assignedTo.name}</span>
-                  <span>•</span>
-                  <span>Case: {task.case.title}</span>
+          <Card key={task.id} className="p-4">
+            <div className="flex items-center justify-between space-x-4">
+              <div className="flex items-start space-x-4">
+                {task.status === "overdue" ? (
+                  <AlertCircle className="h-5 w-5 text-destructive" />
+                ) : task.status === "pending" ? (
+                  <Clock className="h-5 w-5 text-yellow-500" />
+                ) : (
+                  <CheckSquare className="h-5 w-5 text-primary" />
+                )}
+                <div className="space-y-1">
+                  <p className="text-sm font-medium leading-none">{task.title}</p>
+                  <p className="text-sm text-muted-foreground">{task.description}</p>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    <Badge variant="outline">Due: {new Date(task.dueDate).toLocaleDateString()}</Badge>
+                    <Badge variant="outline">Assigned to: {task.assignedTo.name}</Badge>
+                    <Badge variant="outline">Case: {task.case.title}</Badge>
+                    <Badge 
+                      variant="outline"
+                      className={
+                        task.priority === "high"
+                          ? "text-destructive border-destructive"
+                          : task.priority === "medium"
+                          ? "text-yellow-500 border-yellow-500"
+                          : "text-muted-foreground"
+                      }
+                    >
+                      {task.priority.toUpperCase()}
+                    </Badge>
+                  </div>
                 </div>
               </div>
             </div>
-            <span
-              className={`text-xs font-medium ${
-                task.priority === "high"
-                  ? "text-destructive"
-                  : task.priority === "medium"
-                  ? "text-yellow-500"
-                  : "text-muted-foreground"
-              }`}
-            >
-              {task.priority.toUpperCase()}
-            </span>
-          </div>
+          </Card>
         ))}
+        {filteredTasks.length === 0 && (
+          <div className="text-center py-8 text-muted-foreground">
+            No tasks found matching your filters
+          </div>
+        )}
       </div>
     </div>
   )
