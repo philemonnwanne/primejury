@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
 import { StaffMember } from "./mock-data"
 import { X } from "lucide-react"
+import { Separator } from "@/components/ui/separator"
 
 interface StaffMemberDetailsProps {
   staffMember: StaffMember
@@ -49,20 +50,92 @@ export function StaffMemberDetails({ staffMember }: StaffMemberDetailsProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">{staffMember.name}</h2>
-          <p className="text-muted-foreground">{staffMember.email}</p>
-        </div>
-        <Badge>{staffMember.role}</Badge>
-      </div>
-
-      <Tabs defaultValue="cases" className="w-full">
+      <Tabs defaultValue="details" className="w-full">
         <TabsList>
+          <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="cases">Assigned Cases</TabsTrigger>
           <TabsTrigger value="tasks">Tasks</TabsTrigger>
           <TabsTrigger value="permissions">Permissions</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="details">
+          <Card>
+            <CardHeader>
+              <CardTitle>Staff Member Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Demographics</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Full Name</p>
+                    <p className="font-medium">{staffMember.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Role</p>
+                    <Badge>{staffMember.role}</Badge>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Email</p>
+                    <p className="font-medium">{staffMember.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Phone</p>
+                    <p className="font-medium">{staffMember.phone}</p>
+                  </div>
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Education</h3>
+                <div className="space-y-2">
+                  {staffMember.education?.map((edu, index) => (
+                    <div key={index} className="p-3 bg-muted rounded-lg">
+                      <p className="font-medium">{edu.degree}</p>
+                      <p className="text-sm text-muted-foreground">{edu.institution}, {edu.year}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Achievements</h3>
+                <div className="space-y-2">
+                  {staffMember.achievements?.map((achievement, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <Badge variant="outline" className="h-2 w-2 rounded-full p-0" />
+                      <p>{achievement}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Performance Overview</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Active Cases</p>
+                    <p className="font-medium">{staffMember.activeCases}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Completed Cases</p>
+                    <p className="font-medium">{staffMember.completedCases}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Pending Tasks</p>
+                    <p className="font-medium">{staffMember.pendingTasks}</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="cases">
           <Card>

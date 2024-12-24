@@ -7,6 +7,12 @@ export interface StaffMember {
   activeCases: number
   completedCases: number
   pendingTasks: number
+  education?: Array<{
+    degree: string
+    institution: string
+    year: number
+  }>
+  achievements?: string[]
   assignedCases?: Array<{
     id: string
     title: string
