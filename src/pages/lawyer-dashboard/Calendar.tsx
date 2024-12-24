@@ -79,11 +79,13 @@ export default function LawyerCalendar() {
   }
 
   const handleEventUpdate = (updatedEvent: CalendarEvent) => {
+    // Here you would typically update the event in your backend
     toast.success("Event updated successfully")
     setSelectedEvent(null)
   }
 
   const handleEventDelete = (eventId: string) => {
+    // Here you would typically delete the event from your backend
     toast.success("Event deleted successfully")
     setSelectedEvent(null)
   }
@@ -97,6 +99,7 @@ export default function LawyerCalendar() {
   }
 
   const handleAddEvent = (newEvent: CalendarEvent) => {
+    // Here you would typically add the event to your backend
     console.log("New event:", newEvent)
     setIsAddEventOpen(false)
   }
