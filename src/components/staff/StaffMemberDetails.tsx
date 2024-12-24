@@ -1,9 +1,4 @@
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { X } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -109,91 +104,91 @@ export function StaffMemberDetails({ staffMember }: StaffMemberDetailsProps) {
             </Card>
           </TabsContent>
 
-          <TabsContent value="cases">
-            <Card>
-              <CardHeader>
-                <CardTitle>Assigned Cases</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {assignedCases.map(case_ => (
-                    <div key={case_.id} className="relative flex items-center justify-between p-4 border rounded-lg">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-background shadow-sm hover:bg-destructive hover:text-destructive-foreground"
-                        onClick={() => handleUnassignCase(case_.id)}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                      <div>
-                        <p className="font-medium">{case_.title}</p>
-                        <p className="text-sm text-muted-foreground">Status: {case_.status}</p>
-                      </div>
-                      <Button variant="outline" size="sm">View Case</Button>
+        <TabsContent value="cases">
+          <Card>
+            <CardHeader>
+              <CardTitle>Assigned Cases</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {assignedCases.map(case_ => (
+                  <div key={case_.id} className="relative flex items-center justify-between p-4 border rounded-lg">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-background shadow-sm hover:bg-destructive hover:text-destructive-foreground"
+                      onClick={() => handleUnassignCase(case_.id)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                    <div>
+                      <p className="font-medium">{case_.title}</p>
+                      <p className="text-sm text-muted-foreground">Status: {case_.status}</p>
                     </div>
-                  ))}
-                  <Button className="w-full">Assign New Case</Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                    <Button variant="outline" size="sm">View Case</Button>
+                  </div>
+                ))}
+                <Button className="w-full">Assign New Case</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-          <TabsContent value="tasks">
-            <Card>
-              <CardHeader>
-                <CardTitle>Tasks</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {assignedTasks.map(task => (
-                    <div key={task.id} className="relative flex items-center justify-between p-4 border rounded-lg">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-background shadow-sm hover:bg-destructive hover:text-destructive-foreground"
-                        onClick={() => handleUnassignTask(task.id)}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                      <div>
-                        <p className="font-medium">{task.title}</p>
-                        <div className="flex gap-2 mt-1">
-                          <Badge variant="outline">{task.priority}</Badge>
-                          <Badge variant="outline">{task.status}</Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground mt-1">Due: {task.dueDate}</p>
+        <TabsContent value="tasks">
+          <Card>
+            <CardHeader>
+              <CardTitle>Tasks</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {assignedTasks.map(task => (
+                  <div key={task.id} className="relative flex items-center justify-between p-4 border rounded-lg">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-background shadow-sm hover:bg-destructive hover:text-destructive-foreground"
+                      onClick={() => handleUnassignTask(task.id)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                    <div>
+                      <p className="font-medium">{task.title}</p>
+                      <div className="flex gap-2 mt-1">
+                        <Badge variant="outline">{task.priority}</Badge>
+                        <Badge variant="outline">{task.status}</Badge>
                       </div>
-                      <Button variant="outline" size="sm">View Task</Button>
+                      <p className="text-sm text-muted-foreground mt-1">Due: {task.dueDate}</p>
                     </div>
-                  ))}
-                  <Button className="w-full">Assign New Task</Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                    <Button variant="outline" size="sm">View Task</Button>
+                  </div>
+                ))}
+                <Button className="w-full">Assign New Task</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-          <TabsContent value="permissions">
-            <Card>
-              <CardHeader>
-                <CardTitle>Role & Permissions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {permissions.map(permission => (
-                    <div key={permission.id} className="flex items-center justify-between">
-                      <Label htmlFor={permission.id}>{permission.name}</Label>
-                      <Switch
-                        id={permission.id}
-                        checked={permission.granted}
-                        onCheckedChange={() => handlePermissionChange(permission.id)}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+        <TabsContent value="permissions">
+          <Card>
+            <CardHeader>
+              <CardTitle>Role & Permissions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {permissions.map(permission => (
+                  <div key={permission.id} className="flex items-center justify-between">
+                    <Label htmlFor={permission.id}>{permission.name}</Label>
+                    <Switch
+                      id={permission.id}
+                      checked={permission.granted}
+                      onCheckedChange={() => handlePermissionChange(permission.id)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
         </ScrollArea>
       </Tabs>
     </div>
