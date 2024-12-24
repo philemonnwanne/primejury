@@ -12,6 +12,7 @@ import { mockTasks } from "./mock-data"
 import { Task } from "./types"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
+import { TaskDetails } from "./TaskDetails"
 
 export function TaskList() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -19,6 +20,7 @@ export function TaskList() {
   const [selectedAssignee, setSelectedAssignee] = useState<number | "all">("all")
   const [selectedPriority, setSelectedPriority] = useState<Task["priority"] | "all">("all")
   const [selectedStatus, setSelectedStatus] = useState<Task["status"] | "all">("all")
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null)
 
   // Get unique cases and assignees for filters
   const cases = Array.from(new Set(mockTasks.map(task => task.case)))
@@ -100,7 +102,11 @@ export function TaskList() {
 
       <div className="space-y-4">
         {filteredTasks.map((task) => (
-          <Card key={task.id} className="p-4">
+          <Card 
+            key={task.id} 
+            className="p-4 cursor-pointer hover:bg-accent/50 transition-colors"
+            onClick={() => setSelectedTask(task)}
+          >
             <div className="flex items-center justify-between space-x-4">
               <div className="flex items-start space-x-4">
                 {task.status === "overdue" ? (
@@ -141,6 +147,12 @@ export function TaskList() {
           </div>
         )}
       </div>
+
+      <TaskDetails
+        task={selectedTask}
+        isOpen={!!selectedTask}
+        onClose={() => setSelectedTask(null)}
+      />
     </div>
   )
 }
