@@ -11,8 +11,17 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
-import { Bell, Calendar, MessageSquare, User } from "lucide-react"
+import { Bell, Calendar, MessageSquare, User, UserMinus, UserPlus, PenSquare } from "lucide-react"
 import { Task } from "./types"
+import { staffMembers } from "../staff/mock-data"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
 
 interface TaskDetailsProps {
   task: Task | null
@@ -22,6 +31,9 @@ interface TaskDetailsProps {
 
 export function TaskDetails({ task, isOpen, onClose }: TaskDetailsProps) {
   const [note, setNote] = useState("")
+  const [isEditing, setIsEditing] = useState(false)
+  const [editedDescription, setEditedDescription] = useState("")
+  const [editedDueDate, setEditedDueDate] = useState("")
   const { toast } = useToast()
 
   if (!task) return null
@@ -43,6 +55,34 @@ export function TaskDetails({ task, isOpen, onClose }: TaskDetailsProps) {
     setNote("")
   }
 
+  const handleAssignStaff = (staffId: string) => {
+    toast({
+      title: "Staff Assigned",
+      description: "The task has been assigned to the selected staff member",
+    })
+  }
+
+  const handleUnassignStaff = () => {
+    toast({
+      title: "Staff Unassigned",
+      description: "The staff member has been unassigned from this task",
+    })
+  }
+
+  const handleStartEditing = () => {
+    setIsEditing(true)
+    setEditedDescription(task.description)
+    setEditedDueDate(task.dueDate.split('T')[0]) // Format date for input
+  }
+
+  const handleSaveEdits = () => {
+    toast({
+      title: "Task Updated",
+      description: "The task details have been updated successfully",
+    })
+    setIsEditing(false)
+  }
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl">
@@ -55,13 +95,68 @@ export function TaskDetails({ task, isOpen, onClose }: TaskDetailsProps) {
         <ScrollArea className="max-h-[60vh]">
           <div className="space-y-6 p-4">
             <div className="grid gap-4">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm">Due: {new Date(task.dueDate).toLocaleDateString()}</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  {isEditing ? (
+                    <Input
+                      type="date"
+                      value={editedDueDate}
+                      onChange={(e) => setEditedDueDate(e.target.value)}
+                      className="w-40"
+                    />
+                  ) : (
+                    <span className="text-sm">Due: {new Date(task.dueDate).toLocaleDateString()}</span>
+                  )}
+                </div>
+                {!isEditing && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleStartEditing}
+                    className="gap-2"
+                  >
+                    <PenSquare className="h-4 w-4" />
+                    Edit Task
+                  </Button>
+                )}
+                {isEditing && (
+                  <Button
+                    size="sm"
+                    onClick={handleSaveEdits}
+                    className="gap-2"
+                  >
+                    Save Changes
+                  </Button>
+                )}
               </div>
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm">Assigned to: {task.assignedTo.name}</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm">Assigned to: {task.assignedTo.name}</span>
+                </div>
+                <div className="flex gap-2">
+                  <Select onValueChange={handleAssignStaff}>
+                    <SelectTrigger className="w-[200px]">
+                      <SelectValue placeholder="Assign to staff" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {staffMembers.map((staff) => (
+                        <SelectItem key={staff.id} value={String(staff.id)}>
+                          {staff.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handleUnassignStaff}
+                    title="Unassign staff"
+                  >
+                    <UserMinus className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <Badge 
@@ -91,7 +186,15 @@ export function TaskDetails({ task, isOpen, onClose }: TaskDetailsProps) {
 
             <div className="space-y-2">
               <h3 className="font-medium">Description</h3>
-              <p className="text-sm text-muted-foreground">{task.description}</p>
+              {isEditing ? (
+                <Textarea
+                  value={editedDescription}
+                  onChange={(e) => setEditedDescription(e.target.value)}
+                  className="min-h-[100px]"
+                />
+              ) : (
+                <p className="text-sm text-muted-foreground">{task.description}</p>
+              )}
             </div>
 
             <div className="space-y-4">
