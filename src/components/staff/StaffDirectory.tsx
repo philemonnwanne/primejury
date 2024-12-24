@@ -16,6 +16,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { StaffMemberDetails } from "./StaffMemberDetails"
 import { staffMembers } from "./mock-data"
 
@@ -49,68 +55,67 @@ export function StaffDirectory() {
         </Select>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Contact</TableHead>
-                <TableHead>Workload</TableHead>
-                <TableHead>Tasks</TableHead>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Contact</TableHead>
+              <TableHead>Workload</TableHead>
+              <TableHead>Tasks</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {staffMembers.map((staff) => (
+              <TableRow 
+                key={staff.id}
+                className="cursor-pointer hover:bg-accent"
+                onClick={() => setSelectedStaff(staff.id)}
+              >
+                <TableCell className="font-medium">
+                  {staff.name}
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline">{staff.role}</Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="space-y-1">
+                    <div className="text-sm">{staff.email}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {staff.phone}
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="space-y-1">
+                    <div className="text-sm">
+                      Active Cases: {staff.activeCases}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Completed: {staff.completedCases}
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Badge variant="secondary">{staff.pendingTasks} pending</Badge>
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {staffMembers.map((staff) => (
-                <TableRow 
-                  key={staff.id}
-                  className="cursor-pointer hover:bg-accent"
-                  onClick={() => setSelectedStaff(staff.id)}
-                >
-                  <TableCell className="font-medium">
-                    {staff.name}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{staff.role}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="space-y-1">
-                      <div className="text-sm">{staff.email}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {staff.phone}
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="space-y-1">
-                      <div className="text-sm">
-                        Active Cases: {staff.activeCases}
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        Completed: {staff.completedCases}
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="secondary">{staff.pendingTasks} pending</Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-
-        <div className="border rounded-lg p-6">
-          {selectedMember ? (
-            <StaffMemberDetails staffMember={selectedMember} />
-          ) : (
-            <div className="flex items-center justify-center h-full text-muted-foreground">
-              Select a staff member to view details
-            </div>
-          )}
-        </div>
+            ))}
+          </TableBody>
+        </Table>
       </div>
+
+      <Dialog open={selectedStaff !== null} onOpenChange={() => setSelectedStaff(null)}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>Staff Member Details</DialogTitle>
+          </DialogHeader>
+          {selectedMember && (
+            <StaffMemberDetails staffMember={selectedMember} />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
