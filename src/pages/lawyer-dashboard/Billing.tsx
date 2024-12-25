@@ -7,6 +7,7 @@ import { PaymentRequests } from "@/components/finance/PaymentRequests"
 import { BillingReports } from "@/components/finance/BillingReports"
 import { ClientInsightsVisuals } from "@/components/lawyer-dashboard/clients/ClientInsightsVisuals"
 import { BillingAnalytics } from "@/components/finance/BillingAnalytics"
+import { ExpenseManager } from "@/components/finance/ExpenseManager"
 
 export default function LawyerBilling() {
   return (
@@ -15,7 +16,7 @@ export default function LawyerBilling() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Billing Management</h1>
           <p className="text-muted-foreground">
-            Manage case billing, payment structures, and client payments
+            Manage case billing, payment structures, expenses, and client payments
           </p>
         </div>
 
@@ -23,6 +24,7 @@ export default function LawyerBilling() {
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="cases">Case Billing</TabsTrigger>
+            <TabsTrigger value="expenses">Expenses</TabsTrigger>
             <TabsTrigger value="structures">Payment Structures</TabsTrigger>
             <TabsTrigger value="requests">Payment Requests</TabsTrigger>
             <TabsTrigger value="reports">Reports</TabsTrigger>
@@ -36,6 +38,10 @@ export default function LawyerBilling() {
 
           <TabsContent value="cases">
             <BillingCaseList />
+          </TabsContent>
+
+          <TabsContent value="expenses">
+            <ExpenseManager />
           </TabsContent>
 
           <TabsContent value="structures">
