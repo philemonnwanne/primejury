@@ -24,7 +24,7 @@ import {
 
 const menuItems = [
   { title: "Overview", icon: LayoutDashboard, url: "/lawyer-dashboard" },
-  { title: "Case Insights", icon: FileText, url: "/lawyer-dashboard/case-insights" },
+  { title: "Cases", icon: FileText, url: "/lawyer-dashboard/case-insights" },
   { title: "Clients", icon: Users, url: "/lawyer-dashboard/clients" },
   { title: "Billing", icon: CreditCard, url: "/lawyer-dashboard/billing" },
   { title: "News Feed", icon: Newspaper, url: "/lawyer-dashboard/news" },

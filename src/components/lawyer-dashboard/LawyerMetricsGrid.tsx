@@ -11,7 +11,7 @@ const metrics = [
     link: "/lawyer-dashboard/case-insights",
   },
   {
-    title: "Pending Cases",
+    title: "Bids",
     value: "8",
     description: "2 awaiting response",
     icon: Clock,
