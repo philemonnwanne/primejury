@@ -1,9 +1,9 @@
 import { Card } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Toggle } from "@/components/ui/toggle"
 import { Star, ChevronRight } from "lucide-react"
 import { lawyerProfiles } from "@/data/lawyerProfiles"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface LawyerListProps {
   showCurrentOnly: boolean
@@ -20,16 +20,12 @@ export function LawyerList({ showCurrentOnly, onSelectLawyer, onToggleView }: La
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end mb-4">
-        <Toggle 
-          pressed={showCurrentOnly}
-          onPressedChange={onToggleView}
-          variant="outline"
-          className="px-4"
-        >
-          {showCurrentOnly ? "Show All Lawyers" : "Current Lawyer Only"}
-        </Toggle>
-      </div>
+      <Tabs defaultValue={showCurrentOnly ? "current" : "previous"} className="w-full" onValueChange={(value) => onToggleView(value === "current")}>
+        <TabsList className="grid w-[400px] grid-cols-2 mb-6">
+          <TabsTrigger value="current">Current Cases</TabsTrigger>
+          <TabsTrigger value="previous">Previous Cases</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       {displayedLawyers.map((lawyer) => (
         <Card

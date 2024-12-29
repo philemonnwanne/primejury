@@ -26,7 +26,7 @@ export function LawyerReviews({ lawyerId }: LawyerReviewsProps) {
   const [review, setReview] = useState("")
   
   // In a real app, these would be fetched based on the lawyerId
-  const hasClosedCase = false // This would be determined by checking case status
+  const hasReviewedBefore = false // This would check if the client has already reviewed this lawyer for this case
   const previousReviews: Review[] = [
     {
       id: "1",
@@ -45,8 +45,8 @@ export function LawyerReviews({ lawyerId }: LawyerReviewsProps) {
   ]
 
   const handleSubmitReview = () => {
-    if (!hasClosedCase) {
-      toast.error("You can only write a review after your case is closed")
+    if (hasReviewedBefore) {
+      toast.error("You have already submitted a review for this lawyer")
       return
     }
     
@@ -66,58 +66,55 @@ export function LawyerReviews({ lawyerId }: LawyerReviewsProps) {
 
   return (
     <div className="space-y-6">
-      {!hasClosedCase && (
+      {hasReviewedBefore ? (
         <Alert>
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            You can write a review once your case is closed
+            You have already submitted a review for this lawyer
           </AlertDescription>
         </Alert>
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>Write a Review</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center gap-1">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Button
+                  key={star}
+                  variant="ghost"
+                  size="sm"
+                  className="p-0 h-8 w-8"
+                  onClick={() => setRating(star)}
+                >
+                  <Star 
+                    className={`h-6 w-6 ${
+                      star <= rating 
+                        ? "text-yellow-400 fill-yellow-400" 
+                        : "text-muted-foreground"
+                    }`} 
+                  />
+                </Button>
+              ))}
+            </div>
+
+            <Textarea
+              placeholder="Write your review here..."
+              value={review}
+              onChange={(e) => setReview(e.target.value)}
+              className="min-h-[100px]"
+            />
+
+            <Button 
+              onClick={handleSubmitReview} 
+              className="w-full"
+            >
+              Submit Review
+            </Button>
+          </CardContent>
+        </Card>
       )}
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Write a Review</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center gap-1">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Button
-                key={star}
-                variant="ghost"
-                size="sm"
-                className="p-0 h-8 w-8"
-                onClick={() => setRating(star)}
-                disabled={!hasClosedCase}
-              >
-                <Star 
-                  className={`h-6 w-6 ${
-                    star <= rating 
-                      ? "text-yellow-400 fill-yellow-400" 
-                      : "text-muted-foreground"
-                  }`} 
-                />
-              </Button>
-            ))}
-          </div>
-
-          <Textarea
-            placeholder="Write your review here..."
-            value={review}
-            onChange={(e) => setReview(e.target.value)}
-            className="min-h-[100px]"
-            disabled={!hasClosedCase}
-          />
-
-          <Button 
-            onClick={handleSubmitReview} 
-            className="w-full"
-            disabled={!hasClosedCase}
-          >
-            Submit Review
-          </Button>
-        </CardContent>
-      </Card>
 
       <Card>
         <CardHeader>
