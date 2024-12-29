@@ -26,7 +26,7 @@ export default function MyLawyer() {
           <LawyerList 
             showCurrentOnly={showCurrentOnly}
             onSelectLawyer={(id) => setSelectedLawyerId(id)}
-            onToggleView={setShowCurrentOnly}
+            onToggleView={(value) => setShowCurrentOnly(value)}
           />
         ) : (
           <Tabs defaultValue="profile" className="space-y-4">
