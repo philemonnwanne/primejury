@@ -45,41 +45,44 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/dashboard" element={<DashboardOverview />} />
-            <Route path="/dashboard/cases" element={<Cases />} />
-            <Route path="/dashboard/staff" element={<Staff />} />
-            <Route path="/dashboard/staff/:id" element={<StaffProfile />} />
-            <Route path="/dashboard/tasks" element={<Tasks />} />
-            <Route path="/dashboard/documents" element={<Documents />} />
-            <Route path="/dashboard/finance" element={<Finance />} />
-            <Route path="/dashboard/analytics" element={<Analytics />} />
-            <Route path="/dashboard/settings" element={<Settings />} />
-            <Route path="/lawyer-dashboard" element={<LawyerDashboard />} />
-            <Route path="/lawyer-dashboard/case-insights" element={<LawyerCaseInsights />} />
-            <Route path="/lawyer-dashboard/billing" element={<LawyerBilling />} />
-            <Route path="/lawyer-dashboard/news" element={<LawyerNewsFeed />} />
-            <Route path="/lawyer-dashboard/tasks" element={<LawyerTasks />} />
-            <Route path="/lawyer-dashboard/documents" element={<LawyerDocuments />} />
-            <Route path="/lawyer-dashboard/calendar" element={<LawyerCalendar />} />
-            <Route path="/lawyer-dashboard/marketplace" element={<LawyerMarketplace />} />
-            <Route path="/lawyer-dashboard/communications" element={<LawyerCommunications />} />
-            <Route path="/lawyer-dashboard/analytics" element={<LawyerAnalytics />} />
-            <Route path="/client-dashboard" element={<ClientDashboard />} />
-            <Route path="/client-dashboard/cases" element={<ClientCases />} />
-            <Route path="/client-dashboard/forms" element={<ClientForms />} />
-            <Route path="/client-dashboard/documents" element={<ClientDocuments />} />
-            <Route path="/client-dashboard/insights" element={<ClientInsights />} />
-            <Route path="/client-dashboard/news" element={<ClientNewsFeed />} />
-            <Route path="/client-dashboard/communications/:lawyerId?" element={<ClientCommunications />} />
-            <Route path="/client-dashboard/billing" element={<ClientBilling />} />
-            <Route path="/client-dashboard/case-bids" element={<CaseBids />} />
-            <Route path="/lawyers" element={<LawyerPublicProfiles />} />
-            <Route path="/lawyers/:id" element={<LawyerProfile />} />
-            <Route path="/lawyer-dashboard/clients" element={<LawyerClients />} />
-            <Route path="/lawyer-marketplace" element={<Navigate to="/lawyers" replace />} />
-          </Routes>
+
+<Routes>
+  <Route path="/" element={<Index />} />
+  <Route path="/dashboard" element={<DashboardOverview />} />
+  <Route path="/dashboard/cases" element={<Cases />} />
+  <Route path="/dashboard/staff" element={<Staff />} />
+  <Route path="/dashboard/staff/:id" element={<StaffProfile />} />
+  <Route path="/dashboard/tasks" element={<Tasks />} />
+  <Route path="/dashboard/documents" element={<Documents />} />
+  <Route path="/dashboard/finance" element={<Finance />} />
+  <Route path="/dashboard/analytics" element={<Analytics />} />
+  <Route path="/dashboard/settings" element={<Settings />} />
+  <Route path="/lawyer-dashboard" element={<LawyerDashboard />} />
+  <Route path="/lawyer-dashboard/case-insights" element={<LawyerCaseInsights />} />
+  <Route path="/lawyer-dashboard/billing" element={<LawyerBilling />} />
+  <Route path="/lawyer-dashboard/news" element={<LawyerNewsFeed />} />
+  <Route path="/lawyer-dashboard/tasks" element={<LawyerTasks />} />
+  <Route path="/lawyer-dashboard/documents" element={<LawyerDocuments />} />
+  <Route path="/lawyer-dashboard/calendar" element={<LawyerCalendar />} />
+  <Route path="/lawyer-dashboard/marketplace" element={<LawyerMarketplace />} />
+  <Route path="/lawyer-dashboard/communications" element={<LawyerCommunications />} />
+  <Route path="/lawyer-dashboard/analytics" element={<LawyerAnalytics />} />
+  <Route path="/client-dashboard" element={<ClientDashboard />} />
+  <Route path="/client-dashboard/cases" element={<ClientCases />} />
+  <Route path="/client-dashboard/forms" element={<ClientForms />} />
+  <Route path="/client-dashboard/documents" element={<ClientDocuments />} />
+  <Route path="/client-dashboard/insights" element={<ClientInsights />} />
+  <Route path="/client-dashboard/news" element={<ClientNewsFeed />} />
+  <Route path="/client-dashboard/communications/:lawyerId?" element={<ClientCommunications />} />
+  <Route path="/client-dashboard/billing" element={<ClientBilling />} />
+  <Route path="/client-dashboard/case-bids" element={<CaseBids />} />
+  <Route path="/client-dashboard/my-lawyer" element={<MyLawyer />} />
+  <Route path="/lawyers" element={<LawyerPublicProfiles />} />
+  <Route path="/lawyers/:id" element={<LawyerProfile />} />
+  <Route path="/lawyer-dashboard/clients" element={<LawyerClients />} />
+  <Route path="/lawyer-marketplace" element={<Navigate to="/lawyers" replace />} />
+</Routes>
+
         </TooltipProvider>
       </BrowserRouter>
     </QueryClientProvider>

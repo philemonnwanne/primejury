@@ -8,6 +8,7 @@ import {
   MessageSquare,
   CreditCard,
   Gavel,
+  UserRound,
 } from "lucide-react"
 import {
   Sidebar,
@@ -29,6 +30,11 @@ const menuItems = [
     icon: Briefcase, 
     url: "/client-dashboard/cases",
     badge: { count: 2, variant: "destructive" as const }
+  },
+  { 
+    title: "My Lawyer",
+    icon: UserRound,
+    url: "/client-dashboard/my-lawyer"
   },
   { 
     title: "Legal Forms", 
