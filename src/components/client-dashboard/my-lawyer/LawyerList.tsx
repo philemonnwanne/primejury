@@ -20,13 +20,14 @@ export function LawyerList({ showCurrentOnly, onSelectLawyer, onToggleView }: La
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
+      <div className="flex justify-end mb-4">
         <Toggle 
           pressed={showCurrentOnly}
           onPressedChange={onToggleView}
-          className="data-[state=on]:bg-primary"
+          variant="outline"
+          className="px-4"
         >
-          {showCurrentOnly ? "Current Lawyer" : "All Lawyers"}
+          {showCurrentOnly ? "Show All Lawyers" : "Current Lawyer Only"}
         </Toggle>
       </div>
 
