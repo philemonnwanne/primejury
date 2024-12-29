@@ -22,8 +22,8 @@ export function LawyerList({ showCurrentOnly, onSelectLawyer, onToggleView }: La
     <div className="space-y-4">
       <Tabs defaultValue={showCurrentOnly ? "current" : "previous"} className="w-full" onValueChange={(value) => onToggleView(value === "current")}>
         <TabsList className="grid w-[400px] grid-cols-2 mb-6">
-          <TabsTrigger value="current">Current Cases</TabsTrigger>
-          <TabsTrigger value="previous">Previous Cases</TabsTrigger>
+          <TabsTrigger value="current">Current Lawyer</TabsTrigger>
+          <TabsTrigger value="previous">Previous Lawyers</TabsTrigger>
         </TabsList>
       </Tabs>
 
