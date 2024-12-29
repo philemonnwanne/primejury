@@ -73,16 +73,18 @@ export function BillingReports() {
         <div className="flex justify-between">
           <Button onClick={generateReport}>Generate Report</Button>
           {reportData && (
-            <PDFDownloadLink
-              document={<BillingReport data={reportData} />}
-              fileName={`billing-report-${reportDate}.pdf`}
-            >
-              {({ loading }) => (
-                <Button disabled={loading}>
-                  {loading ? "Generating..." : "Download Report"}
-                </Button>
-              )}
-            </PDFDownloadLink>
+
+<PDFDownloadLink
+  document={<BillingReport data={reportData} />}
+  fileName={`billing-report-${reportDate}.pdf`}
+>
+  {({ loading }) => (
+    <Button disabled={loading} type="button">
+      {loading ? "Generating..." : "Download Report"}
+    </Button>
+  )}
+</PDFDownloadLink>
+
           )}
         </div>
       </CardContent>
