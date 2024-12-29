@@ -25,15 +25,17 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 
-interface Document {
-  id: string
-  name: string
-  type: string
-  size: string
-  uploadDate: string
-  case: string
-  accessLevel: "firm-wide" | "lawyer-only" | "client-accessible"
-  url: string
+export type DocumentAccessLevel = "firm-wide" | "lawyer-only" | "client-accessible";
+
+export interface Document {
+  id: string;
+  name: string;
+  type: string;
+  size: string;
+  uploadDate: string;
+  case: string;
+  accessLevel: DocumentAccessLevel;
+  url: string;
 }
 
 // Mock data structure for cases and their documents
@@ -50,7 +52,7 @@ const mockCaseDocuments = [
           size: "2.5 MB",
           uploadDate: "2024-02-20",
           case: "Smith vs. Johnson",
-          accessLevel: "lawyer-only",
+          accessLevel: "lawyer-only" as DocumentAccessLevel,
           url: "/documents/complaint.pdf",
         },
         {
@@ -60,7 +62,7 @@ const mockCaseDocuments = [
           size: "1.8 MB",
           uploadDate: "2024-02-22",
           case: "Smith vs. Johnson",
-          accessLevel: "lawyer-only",
+          accessLevel: "lawyer-only" as DocumentAccessLevel,
           url: "/documents/response.pdf",
         }
       ],
@@ -72,7 +74,7 @@ const mockCaseDocuments = [
           size: "1.2 MB",
           uploadDate: "2024-02-19",
           case: "Smith vs. Johnson",
-          accessLevel: "firm-wide",
+          accessLevel: "firm-wide" as DocumentAccessLevel,
           url: "/documents/evidence.jpg",
         }
       ],
@@ -84,7 +86,7 @@ const mockCaseDocuments = [
           size: "0.5 MB",
           uploadDate: "2024-02-18",
           case: "Smith vs. Johnson",
-          accessLevel: "client-accessible",
+          accessLevel: "client-accessible" as DocumentAccessLevel,
           url: "/documents/auth.pdf",
         }
       ]
@@ -102,7 +104,7 @@ const mockCaseDocuments = [
           size: "3.5 MB",
           uploadDate: "2024-02-15",
           case: "Tech Corp Merger",
-          accessLevel: "lawyer-only",
+          accessLevel: "lawyer-only" as DocumentAccessLevel,
           url: "/documents/merger.pdf",
         }
       ],
@@ -114,7 +116,7 @@ const mockCaseDocuments = [
           size: "2.8 MB",
           uploadDate: "2024-02-16",
           case: "Tech Corp Merger",
-          accessLevel: "lawyer-only",
+          accessLevel: "lawyer-only" as DocumentAccessLevel,
           url: "/documents/finance.pdf",
         }
       ]

@@ -14,6 +14,41 @@ const TIME_SLOTS = [
   "02:00 PM", "03:00 PM", "04:00 PM"
 ]
 
+interface PreviousCase {
+  id: string;
+  title: string;
+  type: string;
+  duration: {
+    startDate: string;
+    endDate: string;
+    totalDays: number;
+  };
+  description: string;
+  lawyer: {
+    name: string;
+    id: string;
+  };
+  documents: {
+    id: string;
+    title: string;
+    type: string;
+    dateAdded: string;
+  }[];
+  disposition: string;
+  judge: string;
+  location: {
+    city: string;
+    state: string;
+    county: string;
+    courthouse: {
+      name: string;
+      address: string;
+      phone: string;
+    };
+  };
+  status: "won" | "lost" | "settled" | "dismissed";
+}
+
 export function LawyerProfile() {
   const [selectedDate, setSelectedDate] = useState<Date>()
   const [selectedTime, setSelectedTime] = useState("")
@@ -64,7 +99,7 @@ export function LawyerProfile() {
             phone: "(555) 555-5555"
           }
         },
-        status: "won"
+        status: "won" as const
       }
     ]
   }

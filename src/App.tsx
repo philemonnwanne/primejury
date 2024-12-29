@@ -35,6 +35,7 @@ import LawyerPublicProfiles from "./pages/lawyers/LawyerPublicProfiles"
 import LawyerProfile from "./pages/lawyers/LawyerProfile"
 import CaseBids from "./pages/client-dashboard/CaseBids"
 import LawyerClients from "./pages/lawyer-dashboard/Clients"
+import MyLawyer from "./pages/client-dashboard/MyLawyer"
 
 const queryClient = new QueryClient()
 
@@ -46,7 +47,7 @@ function App() {
           <Toaster />
           <Sonner />
 
-<Routes>
+          <Routes>
   <Route path="/" element={<Index />} />
   <Route path="/dashboard" element={<DashboardOverview />} />
   <Route path="/dashboard/cases" element={<Cases />} />
@@ -81,7 +82,7 @@ function App() {
   <Route path="/lawyers/:id" element={<LawyerProfile />} />
   <Route path="/lawyer-dashboard/clients" element={<LawyerClients />} />
   <Route path="/lawyer-marketplace" element={<Navigate to="/lawyers" replace />} />
-</Routes>
+          </Routes>
 
         </TooltipProvider>
       </BrowserRouter>
