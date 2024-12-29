@@ -1,9 +1,9 @@
 import { Card } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { lawyerProfiles } from "@/data/lawyerProfiles"
-import { ChevronRight, Star } from "lucide-react"
 import { Toggle } from "@/components/ui/toggle"
+import { Star, ChevronRight } from "lucide-react"
+import { lawyerProfiles } from "@/data/lawyerProfiles"
 
 interface LawyerListProps {
   showCurrentOnly: boolean
