@@ -8,9 +8,10 @@ import { Toggle } from "@/components/ui/toggle"
 interface LawyerListProps {
   showCurrentOnly: boolean
   onSelectLawyer: (id: string) => void
+  onToggleView: (showCurrentOnly: boolean) => void
 }
 
-export function LawyerList({ showCurrentOnly, onSelectLawyer }: LawyerListProps) {
+export function LawyerList({ showCurrentOnly, onSelectLawyer, onToggleView }: LawyerListProps) {
   // In a real app, this would be filtered based on the client's case history
   const currentLawyer = lawyerProfiles[0]
   const previousLawyers = lawyerProfiles.slice(1)
@@ -19,6 +20,16 @@ export function LawyerList({ showCurrentOnly, onSelectLawyer }: LawyerListProps)
 
   return (
     <div className="space-y-4">
+      <div className="flex justify-end">
+        <Toggle 
+          pressed={showCurrentOnly}
+          onPressedChange={onToggleView}
+          className="data-[state=on]:bg-primary"
+        >
+          {showCurrentOnly ? "Current Lawyer" : "All Lawyers"}
+        </Toggle>
+      </div>
+
       {displayedLawyers.map((lawyer) => (
         <Card
           key={lawyer.id}

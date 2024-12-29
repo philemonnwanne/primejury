@@ -7,7 +7,6 @@ import { LawyerList } from "@/components/client-dashboard/my-lawyer/LawyerList"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useState } from "react"
 import { LawyerCalendar } from "@/components/client-dashboard/my-lawyer/LawyerCalendar"
-import { Toggle } from "@/components/ui/toggle"
 
 export default function MyLawyer() {
   const [selectedLawyerId, setSelectedLawyerId] = useState<string | null>(null)
@@ -24,21 +23,11 @@ export default function MyLawyer() {
         </div>
 
         {!selectedLawyerId ? (
-          <div className="space-y-4">
-            <div className="flex justify-end">
-              <Toggle 
-                pressed={showCurrentOnly}
-                onPressedChange={setShowCurrentOnly}
-                className="data-[state=on]:bg-primary"
-              >
-                {showCurrentOnly ? "Current Lawyer" : "All Lawyers"}
-              </Toggle>
-            </div>
-            <LawyerList 
-              showCurrentOnly={showCurrentOnly}
-              onSelectLawyer={(id) => setSelectedLawyerId(id)}
-            />
-          </div>
+          <LawyerList 
+            showCurrentOnly={showCurrentOnly}
+            onSelectLawyer={(id) => setSelectedLawyerId(id)}
+            onToggleView={setShowCurrentOnly}
+          />
         ) : (
           <Tabs defaultValue="profile" className="space-y-4">
             <TabsList>
