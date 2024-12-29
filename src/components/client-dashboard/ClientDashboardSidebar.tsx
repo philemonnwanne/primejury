@@ -1,7 +1,6 @@
 import {
   Briefcase,
   FileText,
-  Folder,
   BarChart2,
   Rss,
   LayoutDashboard,
@@ -15,8 +14,8 @@ import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -38,16 +37,10 @@ const menuItems = [
     url: "/client-dashboard/my-lawyer"
   },
   { 
-    title: "Legal Forms", 
+    title: "Forms & Documents", 
     icon: FileText, 
-    url: "/client-dashboard/forms",
-    badge: { count: 3, variant: "destructive" as const }
-  },
-  { 
-    title: "Document Center", 
-    icon: Folder, 
-    url: "/client-dashboard/documents",
-    badge: { count: 1, variant: "default" as const }
+    url: "/client-dashboard/forms-and-documents",
+    badge: { count: 4, variant: "destructive" as const }
   },
   { title: "Case Insights", icon: BarChart2, url: "/client-dashboard/insights" },
   { 
