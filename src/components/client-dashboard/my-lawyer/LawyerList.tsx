@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { lawyerProfiles } from "@/data/lawyerProfiles"
 import { ChevronRight, Star } from "lucide-react"
+import { Toggle } from "@/components/ui/toggle"
 
 interface LawyerListProps {
   showCurrentOnly: boolean
