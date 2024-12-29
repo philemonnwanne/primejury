@@ -1,5 +1,5 @@
 import { CalendarEvent } from "@/types/calendar"
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
+import { Dialog } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -13,16 +13,15 @@ interface AddEventDialogProps {
 
 export function AddEventDialog({ isOpen, onClose, onAddEvent }: AddEventDialogProps) {
   const [title, setTitle] = useState("")
-  const [startTime, setStartTime] = useState("")
-  const [endTime, setEndTime] = useState("")
+  const [date, setDate] = useState("")
+  const [time, setTime] = useState("")
 
   const handleSubmit = () => {
     const newEvent: CalendarEvent = {
       id: Date.now().toString(),
       title,
-      type: "meeting",
-      start: new Date(startTime),
-      end: new Date(endTime),
+      date,
+      time,
     }
     onAddEvent(newEvent)
     onClose()
@@ -30,8 +29,9 @@ export function AddEventDialog({ isOpen, onClose, onAddEvent }: AddEventDialogPr
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
-        <DialogTitle>Add Event</DialogTitle>
+      <Dialog.Overlay />
+      <Dialog.Content>
+        <Dialog.Title>Add Event</Dialog.Title>
         <div className="space-y-4">
           <div>
             <Label htmlFor="title">Event Title</Label>
@@ -43,21 +43,21 @@ export function AddEventDialog({ isOpen, onClose, onAddEvent }: AddEventDialogPr
             />
           </div>
           <div>
-            <Label htmlFor="start">Start Time</Label>
+            <Label htmlFor="date">Event Date</Label>
             <Input
-              id="start"
-              type="datetime-local"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
+              id="date"
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
             />
           </div>
           <div>
-            <Label htmlFor="end">End Time</Label>
+            <Label htmlFor="time">Event Time</Label>
             <Input
-              id="end"
-              type="datetime-local"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
+              id="time"
+              type="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
             />
           </div>
         </div>
@@ -67,7 +67,7 @@ export function AddEventDialog({ isOpen, onClose, onAddEvent }: AddEventDialogPr
           </Button>
           <Button onClick={handleSubmit}>Add Event</Button>
         </div>
-      </DialogContent>
+      </Dialog.Content>
     </Dialog>
   )
 }

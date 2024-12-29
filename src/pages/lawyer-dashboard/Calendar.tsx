@@ -245,7 +245,7 @@ export default function LawyerCalendar() {
       <AddEventDialog
         isOpen={isAddEventOpen}
         onClose={() => setIsAddEventOpen(false)}
-        onAddEvent={handleAddEvent}
+        onEventAdd={handleAddEvent}
       />
     </LawyerDashboardLayout>
   )

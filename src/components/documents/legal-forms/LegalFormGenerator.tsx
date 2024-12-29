@@ -172,7 +172,7 @@ export function LegalFormGenerator() {
                                     fileName={`${documentType}-${selectedCase}.pdf`}
                                 >
                                     {({ loading }) => (
-                                        <Button disabled={loading} type="button">
+                                        <Button disabled={loading}>
                                             {loading ? "Preparing..." : "Download Document"}
                                         </Button>
                                     )}
