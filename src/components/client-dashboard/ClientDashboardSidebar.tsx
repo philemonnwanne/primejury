@@ -9,6 +9,7 @@ import {
   CreditCard,
   Gavel,
   UserRound,
+  ShoppingBag,
 } from "lucide-react"
 import {
   Sidebar,
@@ -62,6 +63,7 @@ const menuItems = [
     badge: { count: 3, variant: "destructive" as const }
   },
   { title: "Billing", icon: CreditCard, url: "/client-dashboard/billing" },
+  { title: "Marketplace", icon: ShoppingBag, url: "/lawyer-marketplace" },
 ]
 
 export function ClientDashboardSidebar() {
