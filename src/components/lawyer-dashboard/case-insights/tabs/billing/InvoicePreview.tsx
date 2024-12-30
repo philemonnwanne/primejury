@@ -66,28 +66,29 @@ export function InvoicePreviewDocument({ invoice, logoUrl }: InvoicePreviewProps
           <View>
             <Text style={styles.title}>INVOICE</Text>
             <Text>Invoice #{invoice.id}</Text>
-            <Text>Date: {new Date().toLocaleDateString()}</Text>
+            <Text>Date: {new Date(invoice.date).toLocaleDateString()}</Text>
           </View>
         </View>
 
         <View style={styles.info}>
-          <Text>Description: {invoice.description}</Text>
+          <Text>Client: {invoice.clientName}</Text>
+          <Text>Case: {invoice.caseTitle}</Text>
           <Text>Due Date: {new Date(invoice.dueDate).toLocaleDateString()}</Text>
         </View>
 
         <View style={styles.table}>
           <View style={[styles.tableRow, styles.tableHeader]}>
             <Text style={styles.tableCell}>Description</Text>
-            <Text style={styles.tableCell}>Hours</Text>
-            <Text style={styles.tableCell}>Rate</Text>
+            <Text style={styles.tableCell}>Quantity</Text>
             <Text style={styles.tableCell}>Amount</Text>
+            <Text style={styles.tableCell}>Total</Text>
           </View>
           {invoice.items?.map((item, index) => (
             <View key={index} style={styles.tableRow}>
               <Text style={styles.tableCell}>{item.description}</Text>
-              <Text style={styles.tableCell}>{item.hours}</Text>
-              <Text style={styles.tableCell}>${item.rate}</Text>
+              <Text style={styles.tableCell}>{item.quantity}</Text>
               <Text style={styles.tableCell}>${item.amount}</Text>
+              <Text style={styles.tableCell}>${item.quantity * item.amount}</Text>
             </View>
           ))}
         </View>

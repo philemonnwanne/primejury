@@ -41,7 +41,9 @@ export function PendingAmountCard({ pendingAmount, pendingInvoices }: PendingAmo
                   <div key={invoice.id} className="flex justify-between items-center p-4 border rounded-lg">
                     <div>
                       <p className="font-medium">Invoice #{invoice.id}</p>
-                      <p className="text-sm text-muted-foreground">{invoice.description}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Client: {invoice.clientName}
+                      </p>
                       <p className="text-sm">Due: {new Date(invoice.dueDate).toLocaleDateString()}</p>
                     </div>
                     <div className="text-right">

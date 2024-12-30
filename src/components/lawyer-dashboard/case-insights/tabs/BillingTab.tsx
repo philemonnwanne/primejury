@@ -12,6 +12,7 @@ import { Invoice, BillingData } from "./types"
 import { InvoicePreviewDocument } from "./billing/InvoicePreview"
 import { InvoiceActions } from "./billing/InvoiceActions"
 import { PendingAmountCard } from "./billing/PendingAmountCard"
+import { AddInvoiceDialog } from "./billing/AddInvoiceDialog"
 
 interface BillingTabProps {
   isEditing: boolean
@@ -139,6 +140,13 @@ export function BillingTab({ isEditing, onSave, caseId }: BillingTabProps) {
               pendingInvoices={billingData.pendingInvoices}
             />
           </div>
+
+          {/* Add Invoice Dialog */}
+          <AddInvoiceDialog
+            open={showAddInvoice}
+            onOpenChange={setShowAddInvoice}
+            onCreateInvoice={handleCreateInvoice}
+          />
 
           {/* Invoice Preview Dialog */}
           {currentInvoice && (
