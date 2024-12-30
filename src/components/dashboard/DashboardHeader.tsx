@@ -1,6 +1,12 @@
 import { Bell, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { 
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { DashboardNotificationPanel } from "./notifications/DashboardNotificationPanel"
 
 export function DashboardHeader() {
   return (
@@ -16,10 +22,25 @@ export function DashboardHeader() {
             />
           </div>
         </div>
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-4 w-4" />
-          <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-primary" />
-        </Button>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="relative"
+            >
+              <Bell className="h-4 w-4" />
+              <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500 border-2 border-white" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent 
+            className="w-80 p-0" 
+            align="end"
+            sideOffset={8}
+          >
+            <DashboardNotificationPanel />
+          </PopoverContent>
+        </Popover>
       </div>
     </header>
   )
