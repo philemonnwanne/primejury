@@ -2,68 +2,66 @@ import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue }
-  from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { CreditCard, Calendar, Plus } from "lucide-react"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Textarea } from "@/components/ui/textarea"
+import { Plus } from "lucide-react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { PDFViewer } from "@react-pdf/renderer"
+import { toast } from "sonner"
+import { Invoice, BillingData } from "./types"
+import { InvoicePreviewDocument } from "./billing/InvoicePreview"
+import { InvoiceActions } from "./billing/InvoiceActions"
+import { PendingAmountCard } from "./billing/PendingAmountCard"
 
 interface BillingTabProps {
   isEditing: boolean
-  initialData: any
   onSave: () => void
   caseId: string
 }
 
-interface Invoice {
-  id: string
-  amount: number
-  description: string
-  dueDate: string
-  status: "draft" | "sent" | "paid"
-  createdAt: string
-}
-
-export function BillingTab({ isEditing, initialData, onSave, caseId }: BillingTabProps) {
-  const [billingData, setBillingData] = useState(initialData)
-  const [invoices, setInvoices] = useState<Invoice[]>([])
-  const [newInvoice, setNewInvoice] = useState({
-    amount: "",
-    description: "",
-    dueDate: "",
+export function BillingTab({ isEditing, onSave, caseId }: BillingTabProps) {
+  const [billingData, setBillingData] = useState<BillingData>({
+    billingType: "hourly",
+    rate: "250",
+    totalPaid: 5000,
+    pendingAmount: 2500,
+    pendingInvoices: []
   })
 
-  const handleCreateInvoice = () => {
-    if (!newInvoice.amount || !newInvoice.dueDate) return
+  const [showPreview, setShowPreview] = useState(false)
+  const [currentInvoice, setCurrentInvoice] = useState<Invoice | null>(null)
+  const logoUrl = "/path/to/your/logo.png" // Replace with actual logo path
 
-    const invoice: Invoice = {
-      id: Date.now().toString(),
-      amount: Number(newInvoice.amount),
-      description: newInvoice.description,
-      dueDate: newInvoice.dueDate,
-      status: "draft",
-      createdAt: new Date().toISOString()
-    }
-
-    setInvoices([invoice, ...invoices])
-    setNewInvoice({
-      amount: "",
-      description: "",
-      dueDate: "",
-    })
+  const handleCreateInvoice = (invoiceData: Invoice) => {
+    setCurrentInvoice(invoiceData)
+    setShowPreview(true)
   }
 
-  const handleSendInvoice = (invoiceId: string) => {
-    setInvoices(invoices.map(invoice =>
-      invoice.id === invoiceId ? { ...invoice, status: "sent" } : invoice
-    ))
+  const handleSaveInvoice = async (sendToClient: boolean = false) => {
+    if (!currentInvoice) return
+
+    // Update pending amount
+    const newPendingAmount = billingData.pendingAmount + currentInvoice.amount
+    const newPendingInvoices = [...billingData.pendingInvoices, currentInvoice]
+    
+    setBillingData({
+      ...billingData,
+      pendingAmount: newPendingAmount,
+      pendingInvoices: newPendingInvoices
+    })
+
+    // Save to documents
+    const documentCategory = "invoices"
+    // Here you would implement the actual document saving logic
+
+    toast.success(
+      sendToClient 
+        ? "Invoice saved and sent to client" 
+        : "Invoice saved successfully"
+    )
+    
+    setShowPreview(false)
+    setCurrentInvoice(null)
   }
 
   return (
@@ -126,109 +124,36 @@ export function BillingTab({ isEditing, initialData, onSave, caseId }: BillingTa
               </CardContent>
             </Card>
 
-            <Card className="bg-muted/50">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium">Pending Amount</p>
-                    <p className="text-2xl font-bold">${billingData.pendingAmount}</p>
-                  </div>
-                  <Badge variant="destructive">Pending</Badge>
-                </div>
-              </CardContent>
-            </Card>
+            <PendingAmountCard 
+              pendingAmount={billingData.pendingAmount}
+              pendingInvoices={billingData.pendingInvoices}
+            />
           </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-medium">Invoices</h3>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Create Invoice
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Create New Invoice</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4 py-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Amount</label>
-                      <Input
-                        type="number"
-                        value={newInvoice.amount}
-                        onChange={(e) => setNewInvoice({
-                          ...newInvoice,
-                          amount: e.target.value
-                        })}
-                        placeholder="Enter amount"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Description</label>
-                      <Textarea
-                        value={newInvoice.description}
-                        onChange={(e) => setNewInvoice({
-                          ...newInvoice,
-                          description: e.target.value
-                        })}
-                        placeholder="Enter invoice description"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Due Date</label>
-                      <Input
-                        type="date"
-                        value={newInvoice.dueDate}
-                        onChange={(e) => setNewInvoice({
-                          ...newInvoice,
-                          dueDate: e.target.value
-                        })}
-                      />
-                    </div>
-                    <Button onClick={handleCreateInvoice} className="w-full">
-                      Create Invoice
-                    </Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-
-            <div className="space-y-4">
-              {invoices.map((invoice) => (
-                <div
-                  key={invoice.id}
-                  className="flex items-center justify-between p-4 border rounded-lg"
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">${invoice.amount}</span>
-                      <Badge variant={
-                        invoice.status === "paid" ? "default" :
-                        invoice.status === "sent" ? "secondary" : "outline"
-                      }>
-                        {invoice.status}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{invoice.description}</p>
-                    <p className="text-xs text-muted-foreground">
-                      Due: {new Date(invoice.dueDate).toLocaleDateString()}
-                    </p>
-                  </div>
-                  {invoice.status === "draft" && (
-                    <Button
-                      variant="outline"
-                      onClick={() => handleSendInvoice(invoice.id)}
-                    >
-                      Send to Client
-                    </Button>
-                  )}
+          {/* Invoice Preview Dialog */}
+          {currentInvoice && (
+            <Dialog open={showPreview} onOpenChange={setShowPreview}>
+              <DialogContent className="max-w-4xl">
+                <DialogHeader>
+                  <DialogTitle>Invoice Preview</DialogTitle>
+                </DialogHeader>
+                <div className="h-[600px] mt-4">
+                  <PDFViewer width="100%" height="100%">
+                    <InvoicePreviewDocument 
+                      invoice={currentInvoice}
+                      logoUrl={logoUrl}
+                    />
+                  </PDFViewer>
                 </div>
-              ))}
-            </div>
-          </div>
+                <InvoiceActions
+                  invoice={currentInvoice}
+                  onEdit={() => setShowPreview(false)}
+                  onSave={() => handleSaveInvoice(false)}
+                  onSaveAndSend={() => handleSaveInvoice(true)}
+                />
+              </DialogContent>
+            </Dialog>
+          )}
 
           {isEditing && (
             <Button onClick={onSave} className="w-full">
