@@ -6,6 +6,11 @@ import { Eye, PencilLine } from "lucide-react"
 import { CaseOverviewTab } from "./tabs/CaseOverviewTab"
 import { DocumentsTab } from "./tabs/DocumentsTab"
 import { BillingTab } from "./tabs/BillingTab"
+import { NotesTab } from "./tabs/NotesTab"
+import { TimeEntryTab } from "./tabs/TimeEntryTab"
+import { CaseTasksTab } from "./tabs/CaseTasksTab"
+import { CaseCalendarTab } from "./tabs/CaseCalendarTab"
+import { CaseAnalyticsTab } from "./tabs/CaseAnalyticsTab"
 import { useToast } from "@/hooks/use-toast"
 import { mockCases } from "@/components/cases/mock-data/cases"
 import { FloatingTimer } from "../timer/FloatingTimer"
@@ -18,10 +23,8 @@ export function LawyerCaseDetails({ caseId }: LawyerCaseDetailsProps) {
   const [isEditing, setIsEditing] = useState(false)
   const { toast } = useToast()
   
-  // Find the specific case data based on the caseId
   const selectedCase = mockCases.find(c => c.id === caseId)
 
-  // Mock data specific to the selected case
   const caseSpecificData = selectedCase ? {
     title: selectedCase.title,
     type: selectedCase.type,
@@ -80,11 +83,16 @@ export function LawyerCaseDetails({ caseId }: LawyerCaseDetailsProps) {
       </div>
 
       <Tabs defaultValue="overview">
-        <TabsList>
+        <TabsList className="grid grid-cols-4 lg:grid-cols-9 gap-2">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="documents">Documents</TabsTrigger>
           <TabsTrigger value="billing">Billing</TabsTrigger>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
+          <TabsTrigger value="notes">Notes</TabsTrigger>
+          <TabsTrigger value="time">Time Entry</TabsTrigger>
+          <TabsTrigger value="tasks">Tasks</TabsTrigger>
+          <TabsTrigger value="calendar">Calendar</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview">
@@ -127,6 +135,7 @@ export function LawyerCaseDetails({ caseId }: LawyerCaseDetailsProps) {
               ]
             }}
             onSave={handleSave}
+            caseId={caseId}
           />
         </TabsContent>
 
@@ -165,6 +174,26 @@ export function LawyerCaseDetails({ caseId }: LawyerCaseDetailsProps) {
               })
             } : undefined}
           />
+        </TabsContent>
+
+        <TabsContent value="notes">
+          <NotesTab caseId={caseId} />
+        </TabsContent>
+
+        <TabsContent value="time">
+          <TimeEntryTab caseId={caseId} />
+        </TabsContent>
+
+        <TabsContent value="tasks">
+          <CaseTasksTab caseId={caseId} />
+        </TabsContent>
+
+        <TabsContent value="calendar">
+          <CaseCalendarTab caseId={caseId} />
+        </TabsContent>
+
+        <TabsContent value="analytics">
+          <CaseAnalyticsTab caseId={caseId} />
         </TabsContent>
       </Tabs>
     </div>
