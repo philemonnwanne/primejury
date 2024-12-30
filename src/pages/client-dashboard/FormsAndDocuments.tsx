@@ -8,6 +8,7 @@ import { DocumentUploadDialog } from "@/components/documents/DocumentUploadDialo
 import { FormFilters } from "@/components/forms/FormFilters"
 import { SuggestedForms } from "@/components/forms/SuggestedForms"
 import { FormList } from "@/components/forms/FormList"
+import { SavedFormsList } from "@/components/forms/SavedFormsList"
 import { useState } from "react"
 
 // Mock data for current case and forms
@@ -57,10 +58,43 @@ const allForms = [
   }
 ]
 
+// Mock data for saved forms
+const savedForms = [
+  {
+    id: "1",
+    title: "Civil Complaint Draft",
+    lastModified: "2024-03-10",
+    status: "draft" as const,
+  },
+  {
+    id: "2",
+    title: "Motion for Summary Judgment",
+    lastModified: "2024-03-08",
+    status: "submitted" as const,
+  },
+]
+
+// Mock user profile data
+const userProfile = {
+  firstName: "John",
+  lastName: "Doe",
+  email: "john.doe@example.com",
+  phone: "(555) 123-4567",
+  address: "123 Main St",
+  city: "Anytown",
+  state: "CA",
+  zipCode: "12345",
+}
+
 export default function FormsAndDocuments() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [selectedLanguage, setSelectedLanguage] = useState("all")
+
+  const handleFormSelect = (formId: string) => {
+    // In a real app, this would load the saved form data
+    console.log("Loading saved form:", formId)
+  }
 
   return (
     <ClientDashboardLayout>
@@ -85,6 +119,11 @@ export default function FormsAndDocuments() {
               onLanguageChange={setSelectedLanguage}
             />
             
+            <SavedFormsList
+              forms={savedForms}
+              onFormSelect={handleFormSelect}
+            />
+
             <SuggestedForms
               caseType={currentCase.title}
               forms={suggestedForms}
@@ -95,6 +134,7 @@ export default function FormsAndDocuments() {
               searchTerm={searchTerm}
               selectedCategory={selectedCategory}
               selectedLanguage={selectedLanguage}
+              userProfile={userProfile}
             />
           </TabsContent>
 
