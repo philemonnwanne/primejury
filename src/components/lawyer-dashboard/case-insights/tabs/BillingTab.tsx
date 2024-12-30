@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Plus } from "lucide-react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { PDFViewer } from "@react-pdf/renderer"
 import { toast } from "sonner"
 import { Invoice, BillingData } from "./types"
@@ -30,6 +30,7 @@ export function BillingTab({ isEditing, onSave, caseId }: BillingTabProps) {
 
   const [showPreview, setShowPreview] = useState(false)
   const [currentInvoice, setCurrentInvoice] = useState<Invoice | null>(null)
+  const [showAddInvoice, setShowAddInvoice] = useState(false)
   const logoUrl = "/path/to/your/logo.png" // Replace with actual logo path
 
   const handleCreateInvoice = (invoiceData: Invoice) => {
@@ -62,10 +63,19 @@ export function BillingTab({ isEditing, onSave, caseId }: BillingTabProps) {
     
     setShowPreview(false)
     setCurrentInvoice(null)
+    setShowAddInvoice(false)
   }
 
   return (
     <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Billing Information</h2>
+        <Button onClick={() => setShowAddInvoice(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Add Invoice
+        </Button>
+      </div>
+
       <Card>
         <CardHeader>
           <CardTitle>Billing Information</CardTitle>

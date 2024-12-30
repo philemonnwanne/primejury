@@ -1,17 +1,16 @@
-export interface InvoiceItem {
-  description: string
-  hours?: number
-  rate?: number
-  amount: number
-}
-
 export interface Invoice {
   id: string
   amount: number
-  description: string
+  date: string
   dueDate: string
-  status: "draft" | "sent" | "paid" | "overdue"
-  items?: InvoiceItem[]
+  items: Array<{
+    description: string
+    amount: number
+    quantity: number
+  }>
+  status: 'draft' | 'pending' | 'paid'
+  clientName: string
+  caseTitle: string
 }
 
 export interface BillingData {
