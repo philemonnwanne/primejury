@@ -1,68 +1,41 @@
-import { ClientDashboardLayout } from "@/layouts/ClientDashboardLayout"
-import { LawyerProfile } from "@/components/client-dashboard/my-lawyer/LawyerProfile"
-import { LawyerCommunication } from "@/components/client-dashboard/my-lawyer/LawyerCommunication"
-import { LawyerReviews } from "@/components/client-dashboard/my-lawyer/LawyerReviews"
-import { LawyerReferral } from "@/components/client-dashboard/my-lawyer/LawyerReferral"
-import { LawyerList } from "@/components/client-dashboard/my-lawyer/LawyerList"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useState } from "react"
-import { LawyerCalendar } from "@/components/client-dashboard/my-lawyer/LawyerCalendar"
+import { LawyerDashboardLayout } from "@/layouts/LawyerDashboardLayout"
+import { ClientDirectory } from "@/components/lawyer-dashboard/clients/ClientDirectory"
+import { PaymentHistoryTable } from "@/components/lawyer-dashboard/clients/PaymentHistoryTable"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Search } from "lucide-react"
+import { Link } from "react-router-dom"
 
-export default function MyLawyer() {
-  const [selectedLawyerId, setSelectedLawyerId] = useState<string | null>(null)
-  const [showCurrentOnly, setShowCurrentOnly] = useState(true)
-
+export default function LawyerClients() {
   return (
-    <ClientDashboardLayout>
+    <LawyerDashboardLayout>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">My Lawyer</h1>
-          <p className="text-muted-foreground">
-            Manage your legal representation and communication
-          </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">My Lawyer</h1>
+            <p className="text-muted-foreground">
+              Manage your legal representation and communication.
+            </p>
+          </div>
+          <Button asChild className="gap-2">
+            <Link to="/lawyers/marketplace">
+              <Search className="h-4 w-4" />
+              Search for a New Lawyer
+            </Link>
+          </Button>
         </div>
+        
+        <ClientDirectory />
 
-        {!selectedLawyerId ? (
-          <LawyerList 
-            showCurrentOnly={showCurrentOnly}
-            onSelectLawyer={(id) => setSelectedLawyerId(id)}
-            onToggleView={(value) => setShowCurrentOnly(value)}
-          />
-        ) : (
-          <Tabs defaultValue="profile" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="profile">Profile</TabsTrigger>
-              <TabsTrigger value="communication">Communication</TabsTrigger>
-              <TabsTrigger value="calendar">Calendar</TabsTrigger>
-              <TabsTrigger value="reviews">Reviews</TabsTrigger>
-              <TabsTrigger value="referral">Referral</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="profile" className="space-y-4">
-              <LawyerProfile 
-                lawyerId={selectedLawyerId}
-                onBack={() => setSelectedLawyerId(null)}
-              />
-            </TabsContent>
-
-            <TabsContent value="communication" className="space-y-4">
-              <LawyerCommunication />
-            </TabsContent>
-
-            <TabsContent value="calendar" className="space-y-4">
-              <LawyerCalendar lawyerId={selectedLawyerId} />
-            </TabsContent>
-
-            <TabsContent value="reviews" className="space-y-4">
-              <LawyerReviews lawyerId={selectedLawyerId} />
-            </TabsContent>
-
-            <TabsContent value="referral" className="space-y-4">
-              <LawyerReferral />
-            </TabsContent>
-          </Tabs>
-        )}
+        <Card>
+          <CardHeader>
+            <CardTitle>Payment History</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <PaymentHistoryTable />
+          </CardContent>
+        </Card>
       </div>
-    </ClientDashboardLayout>
+    </LawyerDashboardLayout>
   )
 }
