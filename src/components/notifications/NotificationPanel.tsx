@@ -100,20 +100,9 @@ export function NotificationPanel() {
           <Bell className="h-5 w-5" />
           <h2 className="text-lg font-semibold">Notifications</h2>
         </div>
-        <div className="flex gap-2">
-          <Button 
-            variant="ghost" 
-            size="sm"
-            onClick={() => setShowHistory(!showHistory)}
-            className="flex items-center gap-1"
-          >
-            <History className="h-4 w-4" />
-            {showHistory ? "Hide History" : "Show History"}
-          </Button>
-          <Button variant="ghost" size="sm">
-            Mark all as read
-          </Button>
-        </div>
+        <Button variant="ghost" size="sm">
+          Mark all as read
+        </Button>
       </div>
 
       <div className="space-y-4">
@@ -142,6 +131,16 @@ export function NotificationPanel() {
           </Card>
         ))}
       </div>
+
+      <Button 
+        variant="ghost" 
+        size="sm"
+        onClick={() => setShowHistory(!showHistory)}
+        className="flex items-center gap-1 w-full mt-4 justify-center"
+      >
+        <History className="h-4 w-4" />
+        {showHistory ? "Hide History" : "Show History"}
+      </Button>
     </div>
   )
 }
