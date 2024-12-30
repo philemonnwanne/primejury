@@ -9,19 +9,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { 
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { UserRound, Settings, Lock, HelpCircle, FileText, Bell } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
+import { NotificationPanel } from "@/components/notifications/NotificationPanel"
 
 export function ClientDashboardHeader() {
   const { toast } = useToast()
   const navigate = useNavigate()
-
-  const handleNotificationClick = () => {
-    toast({
-      title: "Notifications",
-      description: "Notification feature coming soon",
-    })
-  }
 
   const handleMenuItemClick = (path: string) => {
     navigate(path)
@@ -33,14 +32,25 @@ export function ClientDashboardHeader() {
         <div className="flex-1">
           <h2 className="text-lg font-semibold">Client Dashboard</h2>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleNotificationClick}
-          className="mr-2"
-        >
-          <Bell className="h-4 w-4" />
-        </Button>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="relative"
+            >
+              <Bell className="h-4 w-4" />
+              <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500 border-2 border-white" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent 
+            className="w-80 p-0" 
+            align="end"
+            sideOffset={8}
+          >
+            <NotificationPanel />
+          </PopoverContent>
+        </Popover>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
