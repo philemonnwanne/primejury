@@ -18,7 +18,7 @@ interface FormField {
 interface FormEditorProps {
   formId: string
   title: string
-  fields: FormField[]
+  fields?: FormField[]
   onSave: (formData: { [key: string]: string }) => void
   onPrint: () => void
   onEFile: () => void
@@ -28,7 +28,7 @@ interface FormEditorProps {
 export function FormEditor({
   formId,
   title,
-  fields,
+  fields = [], // Add default empty array
   onSave,
   onPrint,
   onEFile,

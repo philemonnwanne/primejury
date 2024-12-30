@@ -5,20 +5,22 @@ import { FormEditor } from "./FormEditor"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { useToast } from "@/components/ui/use-toast"
 
+interface FormField {
+  id: string
+  label: string
+  type: "text" | "date" | "select" | "checkbox"
+  value: string
+  options?: string[]
+  required?: boolean
+}
+
 interface Form {
   id: string
   title: string
   description: string
   category: string
   language: string
-  fields: Array<{
-    id: string
-    label: string
-    type: "text" | "date" | "select" | "checkbox"
-    value: string
-    options?: string[]
-    required?: boolean
-  }>
+  fields: FormField[]
 }
 
 interface FormListProps {

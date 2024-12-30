@@ -40,21 +40,76 @@ const allForms = [
     title: "Civil Complaint Form",
     description: "Standard form for filing civil complaints",
     category: "civil",
-    language: "english"
+    language: "english",
+    fields: [
+      {
+        id: "plaintiff_name",
+        label: "Plaintiff Name",
+        type: "text",
+        value: "",
+        required: true
+      },
+      {
+        id: "defendant_name",
+        label: "Defendant Name",
+        type: "text",
+        value: "",
+        required: true
+      },
+      {
+        id: "filing_date",
+        label: "Filing Date",
+        type: "date",
+        value: "",
+        required: true
+      }
+    ]
   },
   {
     id: "2",
     title: "Criminal Defense Questionnaire",
     description: "Initial case assessment form",
     category: "criminal",
-    language: "english"
+    language: "english",
+    fields: [
+      {
+        id: "defendant_name",
+        label: "Defendant Name",
+        type: "text",
+        value: "",
+        required: true
+      },
+      {
+        id: "incident_date",
+        label: "Date of Incident",
+        type: "date",
+        value: "",
+        required: true
+      }
+    ]
   },
   {
     id: "3",
     title: "Formulario de Divorcio",
     description: "Divorce petition form in Spanish",
     category: "family",
-    language: "spanish"
+    language: "spanish",
+    fields: [
+      {
+        id: "petitioner_name",
+        label: "Nombre del Peticionario",
+        type: "text",
+        value: "",
+        required: true
+      },
+      {
+        id: "respondent_name",
+        label: "Nombre del Demandado",
+        type: "text",
+        value: "",
+        required: true
+      }
+    ]
   }
 ]
 
