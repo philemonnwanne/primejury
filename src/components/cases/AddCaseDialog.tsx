@@ -2,11 +2,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button"
 import { CaseTypeForm } from "./CaseTypeForm"
 
-export function AddCaseDialog() {
+interface AddCaseDialogProps {
+  children?: React.ReactNode
+}
+
+export function AddCaseDialog({ children }: AddCaseDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Add Case</Button>
+        {children || <Button>Add Case</Button>}
       </DialogTrigger>
       <DialogContent className="max-w-3xl">
         <DialogHeader>

@@ -7,7 +7,11 @@ import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { Send } from "lucide-react"
 
-export function IntakeFormDialog() {
+interface IntakeFormDialogProps {
+  children?: React.ReactNode
+}
+
+export function IntakeFormDialog({ children }: IntakeFormDialogProps) {
   const { toast } = useToast()
   const [clientEmail, setClientEmail] = useState("")
   const [additionalNotes, setAdditionalNotes] = useState("")
@@ -23,10 +27,12 @@ export function IntakeFormDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          <Send className="mr-2 h-4 w-4" />
-          Send Intake Form
-        </Button>
+        {children || (
+          <Button variant="outline">
+            <Send className="mr-2 h-4 w-4" />
+            Send Intake Form
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

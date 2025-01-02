@@ -8,6 +8,7 @@ import { RelatedForms } from "./sections/RelatedForms"
 import { PendingItems } from "./sections/PendingItems"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
+import { CaseActionsDropdown } from "./CaseActionsDropdown"
 
 interface CaseDetailsProps {
   caseId: string
@@ -74,6 +75,9 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
         <div className="flex items-center gap-2 mt-2">
           <Badge variant="secondary">{caseDetails.type}</Badge>
           <Badge variant="outline">{caseDetails.status}</Badge>
+          <div className="ml-auto">
+            <CaseActionsDropdown />
+          </div>
         </div>
       </div>
 
