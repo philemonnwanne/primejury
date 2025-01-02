@@ -71,13 +71,13 @@ export function CaseDetails({ caseId }: CaseDetailsProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">{caseDetails.title}</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold">{caseDetails.title}</h2>
+          <CaseActionsDropdown />
+        </div>
         <div className="flex items-center gap-2 mt-2">
           <Badge variant="secondary">{caseDetails.type}</Badge>
           <Badge variant="outline">{caseDetails.status}</Badge>
-          <div className="ml-auto">
-            <CaseActionsDropdown />
-          </div>
         </div>
       </div>
 
