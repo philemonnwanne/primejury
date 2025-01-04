@@ -1,0 +1,204 @@
+openapi: 3.0.1
+info:
+  title: PrimeJury API Documentation
+  description: API endpoints for Authentication, Cases, Clients, Billing, Documents, Communications, and Marketplace.
+  version: 1.0.0
+servers:
+  - url: https://api.example.com
+    description: Production Server
+paths:
+  /api/auth/login:
+    post:
+      summary: User Login
+      description: Authenticates a user and generates an access token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: User's email address.
+                password:
+                  type: string
+                  description: User's password.
+      responses:
+        '200':
+          description: Login successful.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Access token.
+                  expires_in:
+                    type: integer
+                    description: Token expiry time in seconds.
+        '401':
+          description: Unauthorized. Invalid email or password.
+  /api/auth/register:
+    post:
+      summary: Register a User
+      description: Registers a new user in the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: User's email address.
+                password:
+                  type: string
+                  description: User's password.
+                name:
+                  type: string
+                  description: User's full name.
+      responses:
+        '201':
+          description: User registered successfully.
+        '400':
+          description: Bad request. Missing or invalid input fields.
+  /api/cases:
+    get:
+      summary: List Cases
+      description: Retrieves a list of all cases.
+      responses:
+        '200':
+          description: List of cases retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Case ID.
+                    title:
+                      type: string
+                      description: Case title.
+                    status:
+                      type: string
+                      description: Current status of the case.
+    post:
+      summary: Create a Case
+      description: Adds a new case to the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Title of the case.
+                description:
+                  type: string
+                  description: Description of the case.
+                status:
+                  type: string
+                  description: Status of the case.
+      responses:
+        '201':
+          description: Case created successfully.
+        '400':
+          description: Invalid input or missing required fields.
+  /api/cases/{id}:
+    get:
+      summary: Get Case Details
+      description: Retrieves details of a specific case by ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the case.
+      responses:
+        '200':
+          description: Case details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Case ID.
+                  title:
+                    type: string
+                    description: Title of the case.
+                  description:
+                    type: string
+                    description: Description of the case.
+                  status:
+                    type: string
+                    description: Status of the case.
+        '404':
+          description: Case not found.
+    put:
+      summary: Update a Case
+      description: Updates the details of a specific case by ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the case.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: New title for the case.
+                description:
+                  type: string
+                  description: New description for the case.
+                status:
+                  type: string
+                  description: New status for the case.
+      responses:
+        '200':
+          description: Case updated successfully.
+        '400':
+          description: Invalid input.
+        '404':
+          description: Case not found.
+    delete:
+      summary: Delete a Case
+      description: Deletes a specific case by ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the case.
+      responses:
+        '204':
+          description: Case deleted successfully.
+        '404':
+          description: Case not found.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

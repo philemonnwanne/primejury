@@ -1,0 +1,119 @@
+endpoints:
+  authentication:
+    - method: POST
+      path: /api/auth/login
+      function: Authenticates a user and generates an access token.
+    - method: POST
+      path: /api/auth/register
+      function: Registers a new user account.
+    - method: POST
+      path: /api/auth/logout
+      function: Logs a user out by invalidating their access token.
+    - method: POST
+      path: /api/auth/reset-password
+      function: Resets the user’s password via a reset link or token.
+  cases:
+    - method: GET
+      path: /api/cases
+      function: Retrieves a list of cases.
+    - method: GET
+      path: /api/cases/:id
+      function: Fetches detailed information about a specific case.
+    - method: POST
+      path: /api/cases
+      function: Creates a new case with provided details.
+    - method: PUT
+      path: /api/cases/:id
+      function: Updates the details of an existing case.
+    - method: DELETE
+      path: /api/cases/:id
+      function: Deletes a specific case.
+    - method: GET
+      path: /api/cases/:id/documents
+      function: Retrieves documents related to a specific case.
+    - method: GET
+      path: /api/cases/:id/timeline
+      function: Fetches the timeline of events for a specific case.
+  clients:
+    - method: GET
+      path: /api/clients
+      function: Retrieves a list of clients.
+    - method: GET
+      path: /api/clients/:id
+      function: Fetches detailed information about a specific client.
+    - method: POST
+      path: /api/clients
+      function: Adds a new client to the system.
+    - method: PUT
+      path: /api/clients/:id
+      function: Updates information about an existing client.
+    - method: DELETE
+      path: /api/clients/:id
+      function: Deletes a specific client from the system.
+  billing:
+    - method: GET
+      path: /api/billing/invoices
+      function: Retrieves a list of all invoices.
+    - method: GET
+      path: /api/billing/invoices/:id
+      function: Fetches details of a specific invoice.
+    - method: POST
+      path: /api/billing/invoices
+      function: Creates a new invoice.
+    - method: GET
+      path: /api/billing/expenses
+      function: Retrieves a list of expenses.
+    - method: POST
+      path: /api/billing/expenses
+      function: Records a new expense in the system.
+    - method: GET
+      path: /api/billing/reports
+      function: Generates and retrieves billing reports.
+  documents:
+    - method: GET
+      path: /api/documents
+      function: Retrieves a list of documents.
+    - method: GET
+      path: /api/documents/:id
+      function: Fetches details of a specific document.
+    - method: POST
+      path: /api/documents
+      function: Uploads a new document.
+    - method: PUT
+      path: /api/documents/:id
+      function: Updates an existing document’s metadata or content.
+    - method: DELETE
+      path: /api/documents/:id
+      function: Deletes a specific document.
+    - method: POST
+      path: /api/documents/generate
+      function: Generates a new document based on provided templates or inputs.
+  communications:
+    - method: GET
+      path: /api/messages
+      function: Retrieves a list of messages.
+    - method: POST
+      path: /api/messages
+      function: Sends a new message.
+    - method: GET
+      path: /api/chats
+      function: Retrieves a list of chat sessions.
+    - method: POST
+      path: /api/chats
+      function: Starts a new chat session.
+    - method: GET
+      path: /api/chats/:id/messages
+      function: Fetches messages from a specific chat session.
+  marketplace:
+    - method: GET
+      path: /api/marketplace/cases
+      function: Retrieves a list of cases available in the marketplace.
+    - method: GET
+      path: /api/marketplace/cases/:id
+      function: Fetches details of a specific marketplace case.
+    - method: POST
+      path: /api/marketplace/bids
+      function: Submits a bid for a case in the marketplace.
+    - method: GET
+      path: /api/marketplace/bids
+      function: Retrieves a list of bids submitted by the user.
